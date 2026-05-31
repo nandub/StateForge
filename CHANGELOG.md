@@ -1,0 +1,339 @@
+# Changelog
+
+## 0.12.0
+
+- Added key-ring JSON reader.
+- Added key-ring validation command.
+- Added key-ring rotation command.
+- Added `Rotate-StateForgeKeyRing.ps1`.
+- Added `Test-StateForgeKeyRing.ps1`.
+- Added `StateForge.Maintenance`.
+- Added `Invoke-StateForgeMaintenance.ps1`.
+- Added `docs/maintenance.md`.
+
+## 0.11.1
+
+- Added STFG2 KeyId-aware file-format planning primitives.
+- Added `StateForgeKeyedPayload`.
+- Added `StateForgeKeyRingCryptoPlan`.
+
+
+## 0.11.0
+
+- Added `StateForge.Security`.
+- Added AES key-ring model.
+- Added AES key metadata model.
+- Added AES key-ring JSON writer.
+- Added AES key generation and validation helpers.
+- Added `keyring-create` and `keyring-generate-key` CLI commands.
+- Added `New-StateForgeKeyRing.ps1`.
+- Added `docs/key-rotation.md`.
+
+
+## 0.10.1
+
+- Added runtime telemetry recording to the Kestrel harness.
+- Added `StateForgeTelemetryScope` for safe future instrumentation.
+- Added `Test-StateForgeTelemetry.ps1`.
+- Updated telemetry documentation with runtime validation steps.
+
+
+## 0.10.0
+
+- Added `StateForge.Telemetry`.
+- Added `StateForge.Telemetry.AspNetCore`.
+- Added StateForge EventSource provider.
+- Added DiagnosticSource helper.
+- Added in-process metric snapshot counters.
+- Added ASP.NET Core telemetry endpoints.
+- Added `metrics` command to StateForge.Tools.
+- Added `docs/telemetry.md`.
+
+
+## 0.9.1
+
+- Fixed `StateForge.CloudNative` build compatibility with existing option classes.
+- Removed unsupported `StaleLockTimeout` assignment.
+- Updated environment option binding to use safe property detection.
+- Fixed ASP.NET Core distributed cache registration to use `StateForgeDistributedCacheOptions`.
+
+
+## 0.9.0
+
+- Added `StateForge.CloudNative`.
+- Added environment-variable configuration helpers.
+- Added `/livez`, `/readyz`, and `/healthz` endpoint helpers.
+- Added Dockerfile and `.dockerignore`.
+- Added Kubernetes manifests.
+- Added `docs/cloud-native.md`.
+
+
+## 0.8.7
+
+- Expanded ASP.NET Core provider documentation into a complete step-by-step guide.
+- Added complete `ExampleService` registration and usage.
+- Added Minimal API, controller, and ASP.NET Core Session examples.
+- Reviewed and simplified operational docs for clearer step-by-step usage.
+
+
+## 0.8.6
+
+- Rewrote `Test-StateForgeLayout.ps1` with clean Windows PowerShell 5.1 syntax.
+- Fixed parser error caused by a trailing comma in the required-file array.
+- Kept documentation folder consolidated to the canonical documentation set.
+
+
+## 0.8.5
+
+- Consolidated the `docs` folder into the canonical documentation set.
+- Removed one-off version fix documents from the documentation folder.
+- Merged useful operational notes into troubleshooting, testing, CLI, and architecture docs.
+- Updated layout validation to require only the canonical documentation set.
+
+
+## 0.8.4
+
+- Expanded README into a complete operational landing page.
+- Added getting-started documentation.
+- Added architecture documentation.
+- Added configuration documentation.
+- Added ASP.NET provider documentation.
+- Added ASP.NET Core provider documentation.
+- Added Kestrel harness documentation.
+- Added encryption documentation.
+- Added farm-mode documentation.
+- Added CLI reference.
+- Added testing documentation.
+- Added benchmarking documentation.
+- Added troubleshooting documentation.
+- Added production deployment documentation.
+
+
+## 0.8.3
+
+- Fixed ASP.NET provider harness null `HttpContext` usage.
+- Added synthetic `HttpContext` creation to `StateForge.AspNetHarness`.
+- Improved ASP.NET harness failure diagnostics.
+- Fixed Kestrel harness root path handling in PowerShell script.
+- Added harness-fix documentation.
+
+
+## 0.8.2
+
+- Fixed Kestrel harness missing `using` directives.
+- Fixed Kestrel client test missing `using` directives.
+- Removed nullable annotation syntax from Kestrel harness projects.
+- Extended source validation for Kestrel harness source patterns.
+
+
+## 0.8.1
+
+- Regenerated `StateForge.sln` with one unique entry per project.
+- Added `Repair-StateForgeSolution.ps1`.
+- Fixed ASP.NET provider support for `keepBackups`.
+- Added solution maintenance documentation.
+
+
+## 0.8.0
+
+- Added `StateForge.AspNetHarness`.
+- Added direct classic ASP.NET provider lifecycle harness.
+- Added `StateForge.KestrelHarness`.
+- Added `StateForge.KestrelClientTest`.
+- Added Kestrel start/test scripts.
+- Added non-IIS harness documentation.
+
+
+## 0.7.5
+
+- Smoke-test output now prints the deterministic AES demo key.
+- Smoke-test output now includes AES-aware list and stats commands.
+- Added `Show-StateForgeSmokeDemo.ps1`.
+- Added AES enumeration documentation.
+
+
+## 0.7.4
+
+- Added `--protection none|dpapi|aes` to `StateForge.Tools`.
+- Added `--aes-key` to `StateForge.Tools`.
+- Added AES-aware `list`, `stats`, `health`, `validate`, `cleanup`, and `remove` support.
+- Updated JSON list output to include `aesEncrypted`.
+- Added tools AES support documentation.
+
+
+## 0.7.3
+
+- Restored `StringArrayJson()` in `StateForge.Tools`.
+- Restored `CreateAesStore()` in `StateForge.SmokeTests`.
+- Extended `Test-StateForgeSource.ps1` to catch both helper regressions.
+- Added regression-fix documentation.
+
+
+## 0.7.2
+
+- Added `demo-aes` to the consolidated smoke-test demo store.
+- Added `demo-compressed-aes` to the consolidated smoke-test demo store.
+- Added demo-store documentation.
+- Extended source validation to check AES demo records.
+
+
+## 0.7.1
+
+- Fixed missing `CanWriteDirectory()` helper in `StateForgeFileStore`.
+- Extended source validation to check for `CanWriteDirectory()`.
+- Added v0.7.1 build-fix documentation.
+
+
+## 0.7.0
+
+- Added `StateForgeValidationResult`.
+- Added `StateForgeHealthResult`.
+- Added `ValidateConfiguration()` admin API.
+- Added `CheckHealth()` admin API.
+- Added `validate` and `health` commands to `StateForge.Tools`.
+- Added `Test-StateForgeHealth.ps1`.
+- Added health validation documentation.
+
+
+## 0.6.1
+
+- Regenerated `StateForge.sln`.
+- Removed duplicate `StateForge.ResilienceTests` solution entry.
+
+
+## 0.6.0
+
+- Added `StateForge.ResilienceTests`.
+- Added `Invoke-StateForgeResilienceTest.ps1`.
+- Added stale-lock/crash-recovery simulation.
+- Added high-session-count statistics validation.
+- Added provider-style operation sequence test.
+- Added resilience testing documentation.
+
+
+## 0.5.0
+
+- Added `StateForgeStoreStats`.
+- Added `GetStats()` admin API.
+- Added `stats` command to `StateForge.Tools`.
+- Added `StateForge.FarmTests`.
+- Added `Invoke-StateForgeFarmTest.ps1`.
+- Added local AES farm simulation.
+- Added farm testing documentation.
+
+
+## 0.4.2
+
+- Correctly inserted `ResolveProtectionMode()` into `StateForgeFileStore`.
+- Added `Test-StateForgeSource.ps1`.
+- Build and test scripts now run source validation before restore/build/test.
+
+
+## 0.4.1
+
+- Fixed missing `ResolveProtectionMode()` method in `StateForgeFileStore`.
+- Added v0.4.1 build-fix documentation.
+
+
+## 0.4.0
+
+- Added `StateForgeProtectionMode`.
+- Added AES payload protection mode.
+- Added AES metadata flag.
+- Added `AesKeyBase64` option.
+- Added `generate-key` command to `StateForge.Tools`.
+- Added AES benchmark support.
+- Added AES smoke-test coverage.
+- Added protection mode documentation.
+
+
+## 0.3.3
+
+- Benchmark harness now disables backup creation by default.
+- Added `--keep-backups` / `-KeepBackups` benchmark option.
+- Added backup behavior documentation.
+- Updated benchmarking documentation with backup/no-backup comparison commands.
+
+
+## 0.3.2
+
+- Fixed false `Solution validation failed` caused by checking `$LASTEXITCODE` after helper PowerShell scripts.
+- Rewrote `Build-StateForge.ps1` to only check `$LASTEXITCODE` after native `dotnet` commands.
+- Rewrote `Test-StateForge.ps1` with the same safe pattern.
+- Improved `Test-StateForgeSolution.ps1` duplicate name/path diagnostics.
+
+
+## 0.3.1
+
+- Regenerated `StateForge.sln` with unique project entries.
+- Fixed duplicate `StateForge.Benchmarks` solution project entry.
+- Added `Test-StateForgeSolution.ps1`.
+- Build script now validates the solution before restore/build.
+
+
+## 0.3.0
+
+- Added `StateForge.Benchmarks`.
+- Added `Invoke-StateForgeBenchmark.ps1`.
+- Added benchmark scenarios for create, read, update, concurrent read, concurrent update, enumeration, and cleanup.
+- Added `docs/benchmarking.md`.
+
+
+## 0.2.1
+
+- Smoke-test output now prints inspectable paths.
+- Added consolidated demo store.
+- Added `-SkipDemo` support to the smoke-test launcher.
+- Updated local smoke-test documentation.
+
+
+## 0.2.0
+
+- Added `StateForge.SmokeTests`.
+- Added `Invoke-StateForgeSmokeTest.ps1`.
+- Added local smoke tests for persistence, compression, encryption, locking, stale-lock recovery, cleanup, corruption quarantine, and ASP.NET Core cache behavior.
+- Added `docs/local-smoke-testing.md`.
+
+
+## 0.1.12
+
+- Added `global.json`.
+- Pinned the build to .NET SDK 8 using `8.0.100` with `rollForward: latestFeature`.
+- Added SDK pinning documentation.
+
+
+## 0.1.11
+
+- Added missing `System.Configuration` reference to `StateForge.AspNet`.
+- Changed `StateForgeFileStoreOptions` from `sealed` to inheritable so `StateForgeDistributedCacheOptions` can derive from it.
+- Removed duplicated admin method declarations from `IStateForgeStore`.
+- Kept admin methods on `IStateForgeAdminStore`.
+
+
+## 0.1.10
+
+- Added repository-level `NuGet.config`.
+- Updated build script to use `--configfile .\NuGet.config`.
+- Added `Test-NuGetSources.ps1`.
+- Added restore troubleshooting documentation.
+
+## 0.1.9
+
+- Added `IStateForgeAdminStore`.
+- Added JSON output support to `StateForge.Tools`.
+- Added `remove --key` command.
+- Added IIS deployment guide.
+- Added `Install-StateForgeStore.ps1`.
+
+## 0.1.8
+
+- Added repository layout validation.
+- Added package metadata.
+- Added DPAPI security notes.
+- Added `UseWindowsDpapi` option.
+
+## 0.1.7
+
+- Corrected compression/encryption pipeline.
+- Added `System.Security.Cryptography.ProtectedData` package reference.
+- Added combined compression + encryption test.

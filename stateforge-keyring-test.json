@@ -1,0 +1,20 @@
+{
+  "version": "1",
+  "currentKeyId": "key-002",
+  "keys": [
+    {
+      "keyId": "key-001",
+      "keyBase64": "/jcYpJfWVaf2Aub5rh7P5MljGvtCYV11AHkpO9FIw/Y=",
+      "createdUtc": "2026-05-31T19:11:23.2621597Z",
+      "notBeforeUtc": "2026-05-31T19:11:23.2621597Z",
+      "retiredUtc": null
+    },
+    {
+      "keyId": "key-002",
+      "keyBase64": "TCrHd2125V/yQ+RoMwS4Q+zfEWs1LDwGkQJFarJZMJ8=",
+      "createdUtc": "2026-05-31T19:11:28.2911098Z",
+      "notBeforeUtc": "2026-05-31T19:11:28.2911098Z",
+      "retiredUtc": null
+    }
+  ]
+}

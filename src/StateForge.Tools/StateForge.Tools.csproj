@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net481</TargetFramework>
+    <RootNamespace>StateForge.Tools</RootNamespace>
+    <AssemblyName>StateForge.Tools</AssemblyName>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <Version>0.12.0</Version>
+    <Authors>StateForge</Authors>
+    <Company>StateForge</Company>
+    <Product>StateForge</Product>
+    <Description>Persistent session-state storage components for ASP.NET and ASP.NET Core.</Description>
+
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
+    <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+      <ProjectReference Include="..\StateForge.Telemetry\StateForge.Telemetry.csproj" />
+      <ProjectReference Include="..\StateForge.Security\StateForge.Security.csproj" />
+  </ItemGroup>
+</Project>

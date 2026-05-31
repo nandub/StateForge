@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>StateForge.CloudNative</RootNamespace>
+    <AssemblyName>StateForge.CloudNative</AssemblyName>
+    <Nullable>disable</Nullable>
+    <Version>0.12.0</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
+    <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+    <ProjectReference Include="..\StateForge.AspNetCore\StateForge.AspNetCore.csproj" />
+  </ItemGroup>
+</Project>

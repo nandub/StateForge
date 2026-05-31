@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>StateForge.Telemetry.AspNetCore</RootNamespace>
+    <AssemblyName>StateForge.Telemetry.AspNetCore</AssemblyName>
+    <Nullable>disable</Nullable>
+    <Version>0.12.0</Version>
+    <Authors>StateForge</Authors>
+    <Company>StateForge</Company>
+    <Product>StateForge</Product>
+    <Description>ASP.NET Core telemetry endpoints for StateForge.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="..\StateForge.Telemetry\StateForge.Telemetry.csproj" />
+  </ItemGroup>
+</Project>

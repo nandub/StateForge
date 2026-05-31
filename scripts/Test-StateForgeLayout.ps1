@@ -1,0 +1,118 @@
+<#
+.SYNOPSIS
+Validates the expected StateForge repository layout.
+
+.DESCRIPTION
+Checks that the required StateForge source, test, script, and documentation files exist.
+This script intentionally uses an explicit file list so accidental deletions are caught early.
+
+.EXAMPLE
+.\scripts\Test-StateForgeLayout.ps1
+
+.INPUTS
+None.
+
+.OUTPUTS
+System.Management.Automation.PSCustomObject.
+
+.NOTES
+Compatible with Windows PowerShell 5.1.
+#>
+[CmdletBinding()]
+param()
+
+Set-StrictMode -Version 2.0
+$ErrorActionPreference = 'Stop'
+
+try {
+    $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+    $repoRoot = Split-Path -Parent $scriptRoot
+
+    $requiredFiles = @(
+        'README.md',
+        'CHANGELOG.md',
+        'NuGet.config',
+        'StateForge.sln',
+
+        'src\StateForge.Core\StateForge.Core.csproj',
+        'src\StateForge.FileStore\StateForge.FileStore.csproj',
+        'src\StateForge.AspNet\StateForge.AspNet.csproj',
+        'src\StateForge.AspNetCore\StateForge.AspNetCore.csproj',
+        'src\StateForge.Maintenance\StateForge.Maintenance.csproj',
+        'src\StateForge.Security\StateForge.Security.csproj',
+        'src\StateForge.Telemetry\StateForge.Telemetry.csproj',
+        'src\StateForge.Telemetry.AspNetCore\StateForge.Telemetry.AspNetCore.csproj',
+        'src\StateForge.Tools\StateForge.Tools.csproj',
+        'src\StateForge.SmokeTests\StateForge.SmokeTests.csproj',
+        'src\StateForge.Benchmarks\StateForge.Benchmarks.csproj',
+        'src\StateForge.FarmTests\StateForge.FarmTests.csproj',
+        'src\StateForge.ResilienceTests\StateForge.ResilienceTests.csproj',
+        'src\StateForge.AspNetHarness\StateForge.AspNetHarness.csproj',
+        'src\StateForge.KestrelHarness\StateForge.KestrelHarness.csproj',
+        'src\StateForge.KestrelClientTest\StateForge.KestrelClientTest.csproj',
+        'tests\StateForge.FileStore.Tests\StateForge.FileStore.Tests.csproj',
+
+        'scripts\Build-StateForge.ps1',
+        'scripts\Repair-StateForgeSolution.ps1',
+        'scripts\Test-StateForgeLayout.ps1',
+        'scripts\Test-StateForgeSolution.ps1',
+        'scripts\Test-StateForgeSource.ps1',
+        'scripts\Test-NuGetSources.ps1',
+        'scripts\Test-StateForge.ps1',
+        'scripts\Invoke-StateForgeSmokeTest.ps1',
+        'scripts\Invoke-StateForgeBenchmark.ps1',
+        'scripts\Invoke-StateForgeFarmTest.ps1',
+        'scripts\Invoke-StateForgeResilienceTest.ps1',
+        'scripts\Invoke-StateForgeAspNetHarness.ps1',
+        'scripts\Start-StateForgeKestrelHarness.ps1',
+        'scripts\Test-StateForgeKestrelHarness.ps1',
+        'scripts\Test-StateForgeTelemetry.ps1',
+        'scripts\New-StateForgeKeyRing.ps1',
+        'scripts\Invoke-StateForgeMaintenance.ps1',
+        'scripts\Test-StateForgeKeyRing.ps1',
+        'scripts\Rotate-StateForgeKeyRing.ps1',
+        'scripts\Test-StateForgeHealth.ps1',
+        'scripts\Show-StateForgeSmokeDemo.ps1',
+
+        'docs\getting-started.md',
+        'docs\architecture.md',
+        'docs\configuration.md',
+        'docs\aspnet-provider.md',
+        'docs\aspnetcore-provider.md',
+        'docs\kestrel-harness.md',
+        'docs\encryption.md',
+        'docs\farm-mode.md',
+        'docs\cli-reference.md',
+        'docs\testing.md',
+        'docs\benchmarking.md',
+        'docs\troubleshooting.md',
+        'docs\telemetry.md',
+        'docs\key-rotation.md',
+        'docs\maintenance.md',
+        'docs\production-deployment.md'
+    )
+
+    $missing = New-Object System.Collections.Generic.List[string]
+
+    foreach ($relativePath in $requiredFiles) {
+        $fullPath = Join-Path -Path $repoRoot -ChildPath $relativePath
+
+        if (-not (Test-Path -LiteralPath $fullPath)) {
+            $missing.Add($relativePath)
+        }
+    }
+
+    [PSCustomObject]@{
+        RepositoryRoot = $repoRoot
+        RequiredFiles  = $requiredFiles.Count
+        MissingFiles   = $missing.Count
+        Success        = ($missing.Count -eq 0)
+    }
+
+    if ($missing.Count -gt 0) {
+        Write-Error ("Missing required file(s): {0}" -f ($missing -join ', '))
+    }
+}
+catch {
+    Write-Error -ErrorRecord $_
+}

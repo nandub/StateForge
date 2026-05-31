@@ -1,0 +1,693 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using StateForge.Core;
+
+namespace StateForge.FileStore
+{
+    public sealed class StateForgeFileStore : IStateForgeStore
+    {
+        private readonly StateForgeFileStoreOptions _options;
+        private readonly string _rootPath;
+        private readonly string _sessionsPath;
+        private readonly string _tempPath;
+        private readonly string _backupPath;
+        private readonly string _quarantinePath;
+
+        public StateForgeFileStore(StateForgeFileStoreOptions options)
+        {
+            if (options == null) { throw new ArgumentNullException("options"); }
+            if (string.IsNullOrWhiteSpace(options.RootPath)) { throw new ArgumentException("RootPath is required.", "options"); }
+
+            _options = options;
+            _rootPath = options.RootPath;
+            _sessionsPath = Path.Combine(options.RootPath, "sessions");
+            _tempPath = Path.Combine(options.RootPath, "temp");
+            _backupPath = Path.Combine(options.RootPath, "backups");
+            _quarantinePath = Path.Combine(options.RootPath, "quarantine");
+
+            Directory.CreateDirectory(_sessionsPath);
+            Directory.CreateDirectory(_tempPath);
+            Directory.CreateDirectory(_backupPath);
+            Directory.CreateDirectory(_quarantinePath);
+
+            CleanupTemporaryFiles();
+        }
+
+        public StateForgeEntry Get(string key)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                StateForgeEntry entry = ReadEntryByHash(hash);
+                if (entry == null) { return null; }
+
+                if (entry.IsExpired(DateTimeOffset.UtcNow))
+                {
+                    RemoveByHash(hash);
+                    return null;
+                }
+
+                return entry;
+            }
+        }
+
+        public StateForgeLockResult GetAndLock(string key, TimeSpan lockTimeout)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                StateForgeEntry entry = ReadEntryByHash(hash);
+                if (entry == null) { return StateForgeLockResult.NotFound(); }
+
+                if (entry.IsExpired(DateTimeOffset.UtcNow))
+                {
+                    RemoveByHash(hash);
+                    return StateForgeLockResult.NotFound();
+                }
+
+                DateTimeOffset now = DateTimeOffset.UtcNow;
+
+                if (entry.Locked && entry.LockDateUtc.HasValue)
+                {
+                    TimeSpan lockAge = now.Subtract(entry.LockDateUtc.Value);
+                    if (lockAge < lockTimeout)
+                    {
+                        return StateForgeLockResult.Locked(lockAge, entry.LockId);
+                    }
+                }
+
+                entry.Locked = true;
+                entry.LockDateUtc = now;
+                entry.LockId = entry.LockId + 1;
+                entry.UpdatedUtc = now;
+
+                WriteEntryAtomicByHash(entry, hash);
+                return StateForgeLockResult.Acquired(entry);
+            }
+        }
+
+        public void Set(string key, byte[] value, TimeSpan timeout)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                DateTimeOffset now = DateTimeOffset.UtcNow;
+                StateForgeEntry existing = ReadEntryByHash(hash);
+
+                StateForgeEntry entry = new StateForgeEntry();
+                entry.Key = key;
+                entry.Value = value ?? new byte[0];
+                entry.CreatedUtc = existing == null ? now : existing.CreatedUtc;
+                entry.UpdatedUtc = now;
+                entry.ExpiresUtc = now.Add(timeout);
+                entry.Locked = false;
+                entry.LockId = existing == null ? 0 : existing.LockId;
+                entry.LockDateUtc = null;
+
+                WriteEntryAtomicByHash(entry, hash);
+            }
+        }
+
+        public bool SetAndUnlock(string key, byte[] value, TimeSpan timeout, long lockId)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                DateTimeOffset now = DateTimeOffset.UtcNow;
+                StateForgeEntry existing = ReadEntryByHash(hash);
+
+                if (existing != null && existing.Locked && existing.LockId != lockId)
+                {
+                    return false;
+                }
+
+                StateForgeEntry entry = new StateForgeEntry();
+                entry.Key = key;
+                entry.Value = value ?? new byte[0];
+                entry.CreatedUtc = existing == null ? now : existing.CreatedUtc;
+                entry.UpdatedUtc = now;
+                entry.ExpiresUtc = now.Add(timeout);
+                entry.Locked = false;
+                entry.LockId = existing == null ? lockId : existing.LockId;
+                entry.LockDateUtc = null;
+
+                WriteEntryAtomicByHash(entry, hash);
+                return true;
+            }
+        }
+
+        public bool Unlock(string key, long lockId)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                StateForgeEntry entry = ReadEntryByHash(hash);
+                if (entry == null) { return false; }
+
+                if (entry.Locked && entry.LockId == lockId)
+                {
+                    entry.Locked = false;
+                    entry.LockDateUtc = null;
+                    entry.UpdatedUtc = DateTimeOffset.UtcNow;
+                    WriteEntryAtomicByHash(entry, hash);
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool ForceRemove(string key)
+        {
+            return Remove(key);
+        }
+
+        public bool Remove(string key)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                return RemoveByHash(hash);
+            }
+        }
+
+        public bool Refresh(string key, TimeSpan timeout)
+        {
+            string hash = SafeKey.Hash(key);
+            using (new StateForgeKeyMutex(hash, _options.MutexTimeoutMilliseconds))
+            {
+                StateForgeEntry entry = ReadEntryByHash(hash);
+                if (entry == null) { return false; }
+
+                entry.ExpiresUtc = DateTimeOffset.UtcNow.Add(timeout);
+                entry.UpdatedUtc = DateTimeOffset.UtcNow;
+                WriteEntryAtomicByHash(entry, hash);
+                return true;
+            }
+        }
+
+        public StateForgeCleanupResult CleanupExpired(bool quarantineInvalid)
+        {
+            StateForgeCleanupResult result = new StateForgeCleanupResult();
+
+            foreach (string file in Directory.GetFiles(_sessionsPath, "*.stfg", SearchOption.AllDirectories))
+            {
+                bool invalid;
+                StateForgeEntry entry = ReadEntryFromPath(file, out invalid);
+
+                if (invalid)
+                {
+                    if (quarantineInvalid)
+                    {
+                        if (Quarantine(file)) { result.InvalidQuarantined++; } else { result.Failed++; }
+                    }
+                    else
+                    {
+                        if (TryDelete(file)) { result.InvalidDeleted++; } else { result.Failed++; }
+                    }
+
+                    continue;
+                }
+
+                if (entry != null && entry.IsExpired(DateTimeOffset.UtcNow))
+                {
+                    if (TryDelete(file)) { result.ExpiredDeleted++; } else { result.Failed++; }
+                }
+            }
+
+            return result;
+        }
+
+        public IEnumerable<StateForgeEntryInfo> Enumerate()
+        {
+            foreach (string file in Directory.GetFiles(_sessionsPath, "*.stfg", SearchOption.AllDirectories))
+            {
+                bool invalid;
+                int flags;
+                StateForgeEntry entry = ReadEntryFromPath(file, out invalid, out flags);
+
+                if (entry == null) { continue; }
+
+                StateForgeEntryInfo info = new StateForgeEntryInfo();
+                info.Key = entry.Key;
+                info.CreatedUtc = entry.CreatedUtc;
+                info.UpdatedUtc = entry.UpdatedUtc;
+                info.ExpiresUtc = entry.ExpiresUtc;
+                info.Locked = entry.Locked;
+                info.LockId = entry.LockId;
+                info.PhysicalPath = file;
+                info.PayloadLength = entry.Value == null ? 0 : entry.Value.LongLength;
+                info.Expired = entry.IsExpired(DateTimeOffset.UtcNow);
+                info.Compressed = (flags & StateForgeConstants.FlagCompressed) == StateForgeConstants.FlagCompressed;
+                info.Encrypted = (flags & StateForgeConstants.FlagEncrypted) == StateForgeConstants.FlagEncrypted || (flags & StateForgeConstants.FlagAesEncrypted) == StateForgeConstants.FlagAesEncrypted;
+                info.AesEncrypted = (flags & StateForgeConstants.FlagAesEncrypted) == StateForgeConstants.FlagAesEncrypted;
+                yield return info;
+            }
+        }
+
+
+        public StateForgeStoreStats GetStats()
+        {
+            StateForgeStoreStats stats = new StateForgeStoreStats();
+
+            foreach (StateForgeEntryInfo item in Enumerate())
+            {
+                stats.TotalSessions++;
+                stats.TotalPayloadBytes += item.PayloadLength;
+
+                if (item.Expired)
+                {
+                    stats.ExpiredSessions++;
+                }
+
+                if (item.Locked)
+                {
+                    stats.LockedSessions++;
+                }
+
+                if (item.Compressed)
+                {
+                    stats.CompressedSessions++;
+                }
+
+                if (item.Encrypted)
+                {
+                    stats.EncryptedSessions++;
+                }
+
+                if (item.AesEncrypted)
+                {
+                    stats.AesEncryptedSessions++;
+                }
+            }
+
+            if (stats.TotalSessions > 0)
+            {
+                stats.AveragePayloadBytes = stats.TotalPayloadBytes / stats.TotalSessions;
+            }
+
+            return stats;
+        }
+
+
+        public StateForgeValidationResult ValidateConfiguration()
+        {
+            StateForgeValidationResult result = new StateForgeValidationResult();
+
+            if (string.IsNullOrWhiteSpace(_options.RootPath))
+            {
+                result.AddError("RootPath is required.");
+                return result;
+            }
+
+            if (!Directory.Exists(_rootPath))
+            {
+                result.AddError("RootPath does not exist: " + _rootPath);
+            }
+
+            if (_options.ShardDepth < 0 || _options.ShardDepth > 2)
+            {
+                result.AddWarning("ShardDepth outside recommended range 0-2. Runtime clamps to 0-2.");
+            }
+
+            if (_options.MutexTimeoutMilliseconds < 1000)
+            {
+                result.AddWarning("MutexTimeoutMilliseconds is low. Recommended minimum is 1000.");
+            }
+
+            if (_options.EnableEncryption && ResolveProtectionMode() == StateForgeProtectionMode.Aes)
+            {
+                try
+                {
+                    byte[] key = System.Convert.FromBase64String(_options.AesKeyBase64 ?? string.Empty);
+
+                    if (key.Length != 16 && key.Length != 24 && key.Length != 32)
+                    {
+                        result.AddError("AesKeyBase64 must decode to 16, 24, or 32 bytes.");
+                    }
+                }
+                catch
+                {
+                    result.AddError("AesKeyBase64 is not valid Base64.");
+                }
+            }
+
+            if (!CanWriteDirectory(_rootPath))
+            {
+                result.AddError("RootPath is not writable: " + _rootPath);
+            }
+
+            return result;
+        }
+
+        public StateForgeHealthResult CheckHealth()
+        {
+            StateForgeHealthResult result = new StateForgeHealthResult();
+            string key = "__stateforge_health_" + Guid.NewGuid().ToString("N");
+
+            try
+            {
+                Set(key, new byte[] { 1, 2, 3 }, TimeSpan.FromMinutes(1));
+                result.CanWrite = true;
+
+                StateForgeEntry entry = Get(key);
+                result.CanRead = entry != null && entry.Value != null && entry.Value.Length == 3;
+
+                StateForgeLockResult lockResult = GetAndLock(key, TimeSpan.FromSeconds(10));
+                result.CanLock = lockResult.Found && !lockResult.LockedByOtherRequest;
+
+                if (lockResult.Found && !lockResult.LockedByOtherRequest)
+                {
+                    SetAndUnlock(key, new byte[] { 4, 5, 6 }, TimeSpan.FromMinutes(1), lockResult.LockId);
+                }
+
+                int count = 0;
+                foreach (StateForgeEntryInfo item in Enumerate())
+                {
+                    count++;
+                    if (count > 0)
+                    {
+                        break;
+                    }
+                }
+
+                result.CanEnumerate = true;
+
+                CleanupExpired(true);
+                result.CanCleanup = true;
+
+                Remove(key);
+            }
+            catch (Exception ex)
+            {
+                result.AddError(ex.GetType().Name + ": " + ex.Message);
+                try { Remove(key); } catch { }
+            }
+
+            return result;
+        }
+
+        public StateForgeStoreDiagnostics GetDiagnostics()
+        {
+            StateForgeStoreDiagnostics diagnostics = new StateForgeStoreDiagnostics();
+            diagnostics.RootPath = _rootPath;
+            diagnostics.SessionsPath = _sessionsPath;
+            diagnostics.TempPath = _tempPath;
+            diagnostics.BackupPath = _backupPath;
+            diagnostics.QuarantinePath = _quarantinePath;
+            diagnostics.SessionFileCount = CountFiles(_sessionsPath, "*.stfg", SearchOption.AllDirectories);
+            diagnostics.TempFileCount = CountFiles(_tempPath, "*.tmp", SearchOption.TopDirectoryOnly);
+            diagnostics.BackupFileCount = CountFiles(_backupPath, "*.bak", SearchOption.TopDirectoryOnly);
+            diagnostics.QuarantineFileCount = CountFiles(_quarantinePath, "*.*", SearchOption.TopDirectoryOnly);
+            return diagnostics;
+        }
+
+        private StateForgeEntry ReadEntryByHash(string hash)
+        {
+            bool invalid;
+            return ReadEntryFromPath(GetPathForHash(hash), out invalid);
+        }
+
+        private StateForgeEntry ReadEntryFromPath(string path, out bool invalid)
+        {
+            int flags;
+            return ReadEntryFromPath(path, out invalid, out flags);
+        }
+
+        private StateForgeEntry ReadEntryFromPath(string path, out bool invalid, out int flags)
+        {
+            invalid = false;
+            flags = 0;
+
+            if (!File.Exists(path)) { return null; }
+
+            try
+            {
+                using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                using (BinaryReader reader = new BinaryReader(stream))
+                {
+                    int magic = reader.ReadInt32();
+                    int version = reader.ReadInt32();
+
+                    if (magic != StateForgeConstants.FileMagic || version != StateForgeConstants.FileVersion)
+                    {
+                        invalid = true;
+                        return null;
+                    }
+
+                    flags = reader.ReadInt32();
+
+                    StateForgeEntry entry = new StateForgeEntry();
+                    entry.Key = reader.ReadString();
+                    entry.CreatedUtc = DateTimeOffset.FromUnixTimeMilliseconds(reader.ReadInt64());
+                    entry.UpdatedUtc = DateTimeOffset.FromUnixTimeMilliseconds(reader.ReadInt64());
+                    entry.ExpiresUtc = DateTimeOffset.FromUnixTimeMilliseconds(reader.ReadInt64());
+                    entry.Locked = reader.ReadBoolean();
+                    entry.LockId = reader.ReadInt64();
+
+                    bool hasLockDate = reader.ReadBoolean();
+                    if (hasLockDate)
+                    {
+                        entry.LockDateUtc = DateTimeOffset.FromUnixTimeMilliseconds(reader.ReadInt64());
+                    }
+
+                    int length = reader.ReadInt32();
+                    if (length < 0 || length > _options.MaxPayloadBytes)
+                    {
+                        invalid = true;
+                        return null;
+                    }
+
+                    byte[] payload = reader.ReadBytes(length);
+                    if (payload.Length != length)
+                    {
+                        invalid = true;
+                        return null;
+                    }
+
+                    // Reverse the write pipeline: decrypt first, then decompress.
+                    if ((flags & StateForgeConstants.FlagAesEncrypted) == StateForgeConstants.FlagAesEncrypted)
+                    {
+                        payload = AesPayloadProtector.Unprotect(payload, _options.AesKeyBase64);
+                    }
+                    else if ((flags & StateForgeConstants.FlagEncrypted) == StateForgeConstants.FlagEncrypted)
+                    {
+                        payload = DpapiPayloadProtector.Unprotect(payload);
+                    }
+
+                    if ((flags & StateForgeConstants.FlagCompressed) == StateForgeConstants.FlagCompressed)
+                    {
+                        payload = CompressionUtility.Decompress(payload);
+                    }
+
+                    entry.Value = payload;
+                    return entry;
+                }
+            }
+            catch
+            {
+                invalid = true;
+                return null;
+            }
+        }
+
+        private void WriteEntryAtomicByHash(StateForgeEntry entry, string hash)
+        {
+            string path = GetPathForHash(hash);
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+            string tempPath = Path.Combine(_tempPath, Guid.NewGuid().ToString("N") + ".tmp");
+            string backupPath = Path.Combine(_backupPath, hash + ".bak");
+
+            byte[] value = entry.Value ?? new byte[0];
+            if (value.Length > _options.MaxPayloadBytes)
+            {
+                throw new InvalidOperationException("StateForge payload exceeds MaxPayloadBytes.");
+            }
+
+            int flags = 0;
+            byte[] storedValue = value;
+
+            // Write pipeline: compress first, then encrypt.
+            if (_options.EnableCompression && storedValue.Length > 0)
+            {
+                storedValue = CompressionUtility.Compress(storedValue);
+                flags = flags | StateForgeConstants.FlagCompressed;
+            }
+
+            if (storedValue.Length > 0)
+            {
+                StateForgeProtectionMode mode = ResolveProtectionMode();
+
+                if (mode == StateForgeProtectionMode.Aes)
+                {
+                    storedValue = AesPayloadProtector.Protect(storedValue, _options.AesKeyBase64);
+                    flags = flags | StateForgeConstants.FlagAesEncrypted;
+                }
+                else if (mode == StateForgeProtectionMode.Dpapi)
+                {
+                    storedValue = DpapiPayloadProtector.Protect(storedValue);
+                    flags = flags | StateForgeConstants.FlagEncrypted;
+                }
+            }
+
+            using (FileStream stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            using (BinaryWriter writer = new BinaryWriter(stream))
+            {
+                writer.Write(StateForgeConstants.FileMagic);
+                writer.Write(StateForgeConstants.FileVersion);
+                writer.Write(flags);
+                writer.Write(entry.Key ?? string.Empty);
+                writer.Write(entry.CreatedUtc.ToUnixTimeMilliseconds());
+                writer.Write(entry.UpdatedUtc.ToUnixTimeMilliseconds());
+                writer.Write(entry.ExpiresUtc.ToUnixTimeMilliseconds());
+                writer.Write(entry.Locked);
+                writer.Write(entry.LockId);
+                writer.Write(entry.LockDateUtc.HasValue);
+
+                if (entry.LockDateUtc.HasValue)
+                {
+                    writer.Write(entry.LockDateUtc.Value.ToUnixTimeMilliseconds());
+                }
+
+                writer.Write(storedValue.Length);
+                writer.Write(storedValue);
+            }
+
+            try
+            {
+                if (File.Exists(path))
+                {
+                    if (_options.KeepBackups)
+                    {
+                        File.Replace(tempPath, path, backupPath, true);
+                    }
+                    else
+                    {
+                        File.Delete(path);
+                        File.Move(tempPath, path);
+                    }
+                }
+                else
+                {
+                    File.Move(tempPath, path);
+                }
+            }
+            finally
+            {
+                TryDelete(tempPath);
+            }
+        }
+
+
+
+        private static bool CanWriteDirectory(string path)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+                {
+                    return false;
+                }
+
+                string testFile = Path.Combine(path, ".stateforge-write-test-" + Guid.NewGuid().ToString("N") + ".tmp");
+                File.WriteAllText(testFile, "test");
+                File.Delete(testFile);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private StateForgeProtectionMode ResolveProtectionMode()
+        {
+            if (!_options.EnableEncryption)
+            {
+                return StateForgeProtectionMode.None;
+            }
+
+            if (_options.ProtectionMode == StateForgeProtectionMode.Aes)
+            {
+                return StateForgeProtectionMode.Aes;
+            }
+
+            if (_options.ProtectionMode == StateForgeProtectionMode.Dpapi)
+            {
+                return StateForgeProtectionMode.Dpapi;
+            }
+
+            if (_options.UseWindowsDpapi)
+            {
+                return StateForgeProtectionMode.Dpapi;
+            }
+
+            return StateForgeProtectionMode.None;
+        }
+
+        private bool RemoveByHash(string hash)
+        {
+            return TryDelete(GetPathForHash(hash));
+        }
+
+        private string GetPathForHash(string hash)
+        {
+            string path = _sessionsPath;
+            int depth = _options.ShardDepth;
+            if (depth < 0) { depth = 0; }
+            if (depth > 2) { depth = 2; }
+
+            for (int i = 0; i < depth; i++)
+            {
+                path = Path.Combine(path, hash.Substring(i * 2, 2));
+            }
+
+            return Path.Combine(path, hash + ".stfg");
+        }
+
+        private bool Quarantine(string path)
+        {
+            try
+            {
+                string name = Path.GetFileNameWithoutExtension(path) + "." + DateTime.UtcNow.ToString("yyyyMMddHHmmss") + ".bad";
+                File.Move(path, Path.Combine(_quarantinePath, name));
+                return true;
+            }
+            catch { return false; }
+        }
+
+        private void CleanupTemporaryFiles()
+        {
+            foreach (string file in Directory.GetFiles(_tempPath, "*.tmp", SearchOption.TopDirectoryOnly))
+            {
+                TryDelete(file);
+            }
+        }
+
+        private static int CountFiles(string path, string pattern, SearchOption searchOption)
+        {
+            try
+            {
+                if (!Directory.Exists(path)) { return 0; }
+                return Directory.GetFiles(path, pattern, searchOption).Length;
+            }
+            catch { return 0; }
+        }
+
+        private static bool TryDelete(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                    return true;
+                }
+            }
+            catch { }
+            return false;
+        }
+    }
+}

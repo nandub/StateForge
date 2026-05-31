@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net481</TargetFramework>
+    <RootNamespace>StateForge.AspNet</RootNamespace>
+    <AssemblyName>StateForge.AspNet</AssemblyName>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <Version>0.12.0</Version>
+    <Authors>StateForge</Authors>
+    <Company>StateForge</Company>
+    <Product>StateForge</Product>
+    <Description>Persistent session-state storage components for ASP.NET and ASP.NET Core.</Description>
+
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Configuration" />
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
+    <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+  </ItemGroup>
+</Project>

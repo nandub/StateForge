@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>StateForge.AspNetCore</RootNamespace>
+    <AssemblyName>StateForge.AspNetCore</AssemblyName>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <Version>0.12.0</Version>
+    <Authors>StateForge</Authors>
+    <Company>StateForge</Company>
+    <Product>StateForge</Product>
+    <Description>Persistent session-state storage components for ASP.NET and ASP.NET Core.</Description>
+
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
+    <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+  </ItemGroup>
+</Project>

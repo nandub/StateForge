@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stateforge-kestrel
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: stateforge-kestrel
+  template:
+    metadata:
+      labels:
+        app: stateforge-kestrel
+    spec:
+      containers:
+        - name: stateforge-kestrel
+          image: stateforge-kestrel:0.9.0
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: stateforge-config
+            - secretRef:
+                name: stateforge-secret
+          volumeMounts:
+            - name: stateforge-data
+              mountPath: /data/stateforge
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+      volumes:
+        - name: stateforge-data
+          persistentVolumeClaim:
+            claimName: stateforge-data

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net481</TargetFramework>
+    <RootNamespace>StateForge.AspNetHarness</RootNamespace>
+    <AssemblyName>StateForge.AspNetHarness</AssemblyName>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <Version>0.12.0</Version>
+    <Authors>StateForge</Authors>
+    <Company>StateForge</Company>
+    <Product>StateForge</Product>
+    <Description>Classic ASP.NET provider lifecycle harness for StateForge.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Configuration" />
+    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
+    <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+    <ProjectReference Include="..\StateForge.AspNet\StateForge.AspNet.csproj" />
+  </ItemGroup>
+</Project>
