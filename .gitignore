@@ -1,3 +1,4 @@
 bin
 obj
 stateforge-keyring.json
+stateforge-keyring*.json
