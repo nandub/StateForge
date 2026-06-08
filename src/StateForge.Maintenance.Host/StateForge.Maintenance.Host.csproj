@@ -2,15 +2,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.Maintenance</RootNamespace>
-    <AssemblyName>StateForge.Maintenance</AssemblyName>
+    <RootNamespace>StateForge.Maintenance.Host</RootNamespace>
+    <AssemblyName>StateForge.Maintenance.Host</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.14.1</Version>
-    <Authors>StateForge</Authors>
-    <Company>StateForge</Company>
-    <Product>StateForge</Product>
-    <Description>Maintenance utility for StateForge cleanup, health, and statistics.</Description>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />

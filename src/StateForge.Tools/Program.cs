@@ -67,6 +67,51 @@ namespace StateForge.Tools
 
 
 
+
+            if (EqualsIgnoreCase(command, "stfg2-migrate-store"))
+            {
+                string rootPath = ReadOption(args, "--root");
+                string keyId = ReadOption(args, "--key-id");
+                string searchPattern = ReadOption(args, "--pattern");
+                bool dryRun = HasSwitch(args, "--dry-run");
+                bool apply = HasSwitch(args, "--apply");
+
+                if (string.IsNullOrWhiteSpace(rootPath))
+                {
+                    Console.Error.WriteLine("Missing required --root option.");
+                    return 2;
+                }
+
+                if (!dryRun && !apply)
+                {
+                    Console.Error.WriteLine("Specify either --dry-run or --apply.");
+                    return 2;
+                }
+
+                StateForgeStfg2StoreMigrationResult result = StateForgeStfg2StoreMigrator.MigrateStore(
+                    rootPath,
+                    keyId,
+                    dryRun,
+                    apply,
+                    searchPattern);
+
+                Console.WriteLine("RootPath={0}", result.RootPath);
+                Console.WriteLine("DryRun={0}", result.DryRun);
+                Console.WriteLine("Applied={0}", result.Applied);
+                Console.WriteLine("FilesScanned={0}", result.FilesScanned);
+                Console.WriteLine("LegacyFilesFound={0}", result.LegacyFilesFound);
+                Console.WriteLine("Stfg2FilesSkipped={0}", result.Stfg2FilesSkipped);
+                Console.WriteLine("MigratedFiles={0}", result.MigratedFiles);
+                Console.WriteLine("FailedFiles={0}", result.FailedFiles);
+
+                foreach (string error in result.Errors)
+                {
+                    Console.WriteLine("Error={0}", error);
+                }
+
+                return result.FailedFiles == 0 ? 0 : 1;
+            }
+
             if (EqualsIgnoreCase(command, "stfg2-migrate"))
             {
                 string source = ReadOption(args, "--source");
@@ -584,6 +629,7 @@ namespace StateForge.Tools
             Console.WriteLine("  stfg2-inspect --file FILE");
             Console.WriteLine("  stfg2-create --out FILE [--key-id KEYID] [--text TEXT]");
             Console.WriteLine("  stfg2-migrate --source FILE --destination FILE [--key-id KEYID] [--overwrite]");
+            Console.WriteLine("  stfg2-migrate-store --root PATH [--key-id KEYID] [--pattern PATTERN] (--dry-run|--apply)");
             Console.WriteLine("  generate-key [--bytes 16|24|32]");
         }
     }

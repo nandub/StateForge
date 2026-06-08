@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.14.1
+
+- Added Maintenance Host explicit job selection: cleanup-only, health-only, stats-only, migration-only.
+- Added Maintenance Host configuration validation mode.
+- Added `Test-StateForgeMaintenanceConfig.ps1`.
+- Added `Test-StateForgeMaintenanceTask.ps1`.
+- Added log rotation configuration fields.
+- Expanded Maintenance Host documentation.
+
+
+## 0.14.0
+
+- Added `StateForge.Maintenance.Host`.
+- Added Maintenance Host once and loop modes.
+- Added JSON output support.
+- Added JSON config file support.
+- Added optional STFG2 migration job support.
+- Added Scheduled Task registration scripts.
+- Added `Test-StateForgeMaintenanceHost.ps1`.
+- Added `docs/maintenance-host.md`.
+
+
+## 0.13.5
+
+- Added recursive STFG2 store migration.
+- Added `StateForgeStfg2StoreMigrator`.
+- Added `StateForgeStfg2StoreMigrationResult`.
+- Added `stfg2-migrate-store` CLI command.
+- Added `StateForge.StoreMigrationHarness`.
+- Added `Test-StateForgeStfg2StoreMigration.ps1`.
+- Added `docs/stfg2-store-migration.md`.
+
+
 ## 0.13.4
 
 - Fixed STFG2 migration harness payload mismatch caused by UTF-8 BOM-sensitive test data.

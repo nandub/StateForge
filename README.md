@@ -6,7 +6,7 @@ It is designed for environments where session state should survive process crash
 
 ## Status
 
-Current version: **0.13.4**
+Current version: **0.14.1**
 
 StateForge is currently in pre-release validation. The core storage engine, ASP.NET Core cache adapter, classic ASP.NET SessionState provider, diagnostics, smoke tests, farm tests, resilience tests, Kestrel harness, and ASP.NET provider harness have all been added and are under active validation.
 
@@ -424,3 +424,15 @@ StateForge v0.13.3 adds `StateForgeStfg2Migrator`, `StateForge.MigrationHarness`
 ## v0.13.4
 
 Fixes the STFG2 migration harness payload mismatch by writing the legacy test payload as raw UTF-8 bytes instead of using `File.WriteAllText(..., Encoding.UTF8)`.
+
+## STFG2 Store Migration
+
+StateForge v0.13.5 adds recursive `stfg2-migrate-store` dry-run/apply support. See `docs/stfg2-store-migration.md`.
+
+## Maintenance Host
+
+StateForge v0.14.0 adds `StateForge.Maintenance.Host`, once/loop mode, JSON output, config support, and Scheduled Task helper scripts. See `docs/maintenance-host.md`.
+
+## v0.14.1 Maintenance Host Hardening
+
+Adds explicit job selection, config validation, log rotation fields, and Scheduled Task helper validation.

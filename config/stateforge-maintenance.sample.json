@@ -1,0 +1,16 @@
+{
+  "rootPath": "..\\StateForgeSmoke\\demo",
+  "intervalSeconds": 900,
+  "cleanupEnabled": true,
+  "healthEnabled": true,
+  "statsEnabled": true,
+  "stfg2MigrationEnabled": false,
+  "stfg2MigrationDryRun": true,
+  "stfg2MigrationApply": false,
+  "stfg2MigrationKeyId": "key-maintenance",
+  "stfg2MigrationPattern": "*.stfg",
+  "logPath": ".\\logs\\stateforge-maintenance.log",
+  "json": false,
+  "maxLogSizeMb": 50,
+  "maxLogFiles": 10
+}

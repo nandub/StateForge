@@ -101,3 +101,15 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Test-StateForgeStfg2Migration.ps1
 ```
+
+## STFG2 Store Migration Test
+
+```powershell
+.\scripts\Test-StateForgeStfg2StoreMigration.ps1
+```
+
+## Maintenance Host Test
+
+```powershell
+.\scripts\Test-StateForgeMaintenanceHost.ps1
+```

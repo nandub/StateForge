@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.ResilienceTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.13.4</Version>
+    <Version>0.14.1</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
