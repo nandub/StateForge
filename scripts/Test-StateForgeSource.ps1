@@ -223,3 +223,25 @@ if ((Test-Path -LiteralPath $kestrelStartScript) -and ((Get-Content -LiteralPath
 if ((Test-Path -LiteralPath $aspNetHarnessScript) -and ((Get-Content -LiteralPath $aspNetHarnessScript -Raw) -notmatch 'GetUnresolvedProviderPathFromPSPath')) {
     throw "Invoke-StateForgeAspNetHarness.ps1 does not resolve RootPath before passing it to dotnet run."
 }
+
+# Validate StateForge.Tools imports System.IO when File APIs are used.
+$toolsProgramPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Tools\Program.cs'
+
+if (Test-Path -LiteralPath $toolsProgramPath) {
+    $toolsProgramSource = Get-Content -LiteralPath $toolsProgramPath -Raw
+
+    if ($toolsProgramSource -match '\bFile\.' -and $toolsProgramSource -notmatch 'using\s+System\.IO;') {
+        throw "StateForge.Tools uses File APIs but lacks using System.IO;"
+    }
+}
+
+# Validate migration harness writes deterministic byte payloads without UTF-8 BOM.
+$migrationHarnessPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.MigrationHarness\Program.cs'
+
+if (Test-Path -LiteralPath $migrationHarnessPath) {
+    $migrationHarnessSource = Get-Content -LiteralPath $migrationHarnessPath -Raw
+
+    if ($migrationHarnessSource -match 'File\.WriteAllText\(.+Encoding\.UTF8') {
+        throw "StateForge.MigrationHarness must use File.WriteAllBytes with Encoding.UTF8.GetBytes to avoid BOM-sensitive payload tests."
+    }
+}

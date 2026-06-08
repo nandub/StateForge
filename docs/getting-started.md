@@ -89,3 +89,15 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Invoke-StateForgeMaintenance.ps1 -RootPath ..\StateForgeSmoke\demo -Once all
 ```
+
+## STFG2 Envelope Test
+
+```powershell
+.\scripts\Test-StateForgeStfg2Envelope.ps1
+```
+
+## STFG2 Migration Test
+
+```powershell
+.\scripts\Test-StateForgeStfg2Migration.ps1
+```

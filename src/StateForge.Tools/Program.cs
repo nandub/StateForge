@@ -1,10 +1,12 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Text;
 using StateForge.Core;
 using StateForge.FileStore;
 using StateForge.Telemetry;
 using StateForge.Security;
+using StateForge.Format;
 
 namespace StateForge.Tools
 {
@@ -61,6 +63,104 @@ namespace StateForge.Tools
                 return 0;
             }
 
+
+
+
+
+            if (EqualsIgnoreCase(command, "stfg2-migrate"))
+            {
+                string source = ReadOption(args, "--source");
+                string destination = ReadOption(args, "--destination");
+                string keyId = ReadOption(args, "--key-id");
+                bool overwrite = HasSwitch(args, "--overwrite");
+
+                if (string.IsNullOrWhiteSpace(source))
+                {
+                    Console.Error.WriteLine("Missing required --source option.");
+                    return 2;
+                }
+
+                if (string.IsNullOrWhiteSpace(destination))
+                {
+                    Console.Error.WriteLine("Missing required --destination option.");
+                    return 2;
+                }
+
+                StateForgeStfg2MigrationResult result = StateForgeStfg2Migrator.MigrateFile(
+                    source,
+                    destination,
+                    keyId,
+                    overwrite);
+
+                Console.WriteLine("SourcePath={0}", result.SourcePath);
+                Console.WriteLine("DestinationPath={0}", result.DestinationPath);
+                Console.WriteLine("SourceWasStfg2={0}", result.SourceWasStfg2);
+                Console.WriteLine("Migrated={0}", result.Migrated);
+                Console.WriteLine("KeyId={0}", result.KeyId);
+                Console.WriteLine("OriginalLength={0}", result.OriginalLength);
+                Console.WriteLine("NewLength={0}", result.NewLength);
+                return 0;
+            }
+
+            if (EqualsIgnoreCase(command, "stfg2-create"))
+            {
+                string outFile = ReadOption(args, "--out");
+                string keyId = ReadOption(args, "--key-id");
+                string text = ReadOption(args, "--text");
+
+                if (string.IsNullOrWhiteSpace(outFile))
+                {
+                    Console.Error.WriteLine("Missing required --out option.");
+                    return 2;
+                }
+
+                if (text == null)
+                {
+                    text = string.Empty;
+                }
+
+                byte[] payload = System.Text.Encoding.UTF8.GetBytes(text);
+                byte[] bytes = StateForgeStfg2.Write(
+                    payload,
+                    StateForgeFormatFlags.Compressed | StateForgeFormatFlags.Encrypted | StateForgeFormatFlags.Aes,
+                    keyId);
+
+                File.WriteAllBytes(outFile, bytes);
+
+                Console.WriteLine("Created={0}", outFile);
+                Console.WriteLine("KeyId={0}", keyId);
+                Console.WriteLine("PayloadLength={0}", payload.Length);
+                return 0;
+            }
+
+            if (EqualsIgnoreCase(command, "stfg2-inspect"))
+            {
+                string file = ReadOption(args, "--file");
+
+                if (string.IsNullOrWhiteSpace(file))
+                {
+                    Console.Error.WriteLine("Missing required --file option.");
+                    return 2;
+                }
+
+                byte[] bytes = File.ReadAllBytes(file);
+
+                if (!StateForgeStfg2.IsStfg2(bytes))
+                {
+                    Console.WriteLine("IsStfg2=False");
+                    return 1;
+                }
+
+                StateForgeStfg2ReadResult result = StateForgeStfg2.Read(bytes);
+                Console.WriteLine("IsStfg2=True");
+                Console.WriteLine("Version={0}", result.Version);
+                Console.WriteLine("Flags={0}", result.Flags);
+                Console.WriteLine("KeyId={0}", result.KeyId);
+                Console.WriteLine("ChecksumValid={0}", result.ChecksumValid);
+                Console.WriteLine("PayloadLength={0}", result.Payload == null ? 0 : result.Payload.Length);
+                Console.WriteLine("Checksum={0}", StateForgeStfg2.ToHex(result.Checksum));
+                return result.ChecksumValid ? 0 : 1;
+            }
 
             if (EqualsIgnoreCase(command, "keyring-rotate"))
             {
@@ -481,6 +581,9 @@ namespace StateForge.Tools
             Console.WriteLine("  keyring-generate-key [--key-id KEYID] [--format table|json]");
             Console.WriteLine("  keyring-rotate --ring FILE [--new-key-id KEYID] [--retire-previous]");
             Console.WriteLine("  keyring-validate --ring FILE");
+            Console.WriteLine("  stfg2-inspect --file FILE");
+            Console.WriteLine("  stfg2-create --out FILE [--key-id KEYID] [--text TEXT]");
+            Console.WriteLine("  stfg2-migrate --source FILE --destination FILE [--key-id KEYID] [--overwrite]");
             Console.WriteLine("  generate-key [--bytes 16|24|32]");
         }
     }

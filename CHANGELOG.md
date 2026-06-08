@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.13.4
+
+- Fixed STFG2 migration harness payload mismatch caused by UTF-8 BOM-sensitive test data.
+- Added source validation to prevent BOM-sensitive migration harness test writes.
+
+
+## 0.13.3
+
+- Added `StateForgeStfg2Migrator`.
+- Added `StateForgeStfg2MigrationResult`.
+- Added `StateForge.MigrationHarness`.
+- Added `Test-StateForgeStfg2Migration.ps1`.
+- Added `stfg2-migrate` CLI command.
+- Added `docs/stfg2-migration.md`.
+
+
+## 0.13.2
+
+- Added opt-in STFG2 envelope compatibility layer.
+- Added `StateForgeStfg2Envelope`.
+- Added `StateForge.FormatHarness`.
+- Added `Test-StateForgeStfg2Envelope.ps1`.
+- Added `stfg2-create` CLI command.
+- Added `docs/stfg2-envelope.md`.
+
+
+## 0.13.1
+
+- Fixed `StateForge.Tools` missing `using System.IO;` for `stfg2-inspect`.
+- Added source validation for File API imports.
+
+
+## 0.13.0
+
+- Added `StateForge.Format`.
+- Added STFG2 flags, serializer, parser, KeyId support, and SHA-256 checksum validation.
+- Added `StateForge.FormatTests`.
+- Added `stfg2-inspect` CLI command.
+- Added `Test-StateForgeFormat.ps1`.
+- Added `docs/stfg2-format.md`.
+
+
 ## 0.12.0
 
 - Added key-ring JSON reader.

@@ -35,6 +35,10 @@ try {
         'StateForge.sln',
 
         'src\StateForge.Core\StateForge.Core.csproj',
+        'src\StateForge.Format\StateForge.Format.csproj',
+        'src\StateForge.FormatTests\StateForge.FormatTests.csproj',
+        'src\StateForge.FormatHarness\StateForge.FormatHarness.csproj',
+        'src\StateForge.MigrationHarness\StateForge.MigrationHarness.csproj',
         'src\StateForge.FileStore\StateForge.FileStore.csproj',
         'src\StateForge.AspNet\StateForge.AspNet.csproj',
         'src\StateForge.AspNetCore\StateForge.AspNetCore.csproj',
@@ -70,6 +74,9 @@ try {
         'scripts\New-StateForgeKeyRing.ps1',
         'scripts\Invoke-StateForgeMaintenance.ps1',
         'scripts\Test-StateForgeKeyRing.ps1',
+        'scripts\Test-StateForgeFormat.ps1',
+        'scripts\Test-StateForgeStfg2Envelope.ps1',
+        'scripts\Test-StateForgeStfg2Migration.ps1',
         'scripts\Rotate-StateForgeKeyRing.ps1',
         'scripts\Test-StateForgeHealth.ps1',
         'scripts\Show-StateForgeSmokeDemo.ps1',
@@ -88,6 +95,9 @@ try {
         'docs\troubleshooting.md',
         'docs\telemetry.md',
         'docs\key-rotation.md',
+        'docs\stfg2-format.md',
+        'docs\stfg2-envelope.md',
+        'docs\stfg2-migration.md',
         'docs\maintenance.md',
         'docs\production-deployment.md'
     )

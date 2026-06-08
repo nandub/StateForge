@@ -6,7 +6,7 @@ It is designed for environments where session state should survive process crash
 
 ## Status
 
-Current version: **0.12.0**
+Current version: **0.13.4**
 
 StateForge is currently in pre-release validation. The core storage engine, ASP.NET Core cache adapter, classic ASP.NET SessionState provider, diagnostics, smoke tests, farm tests, resilience tests, Kestrel harness, and ASP.NET provider harness have all been added and are under active validation.
 
@@ -404,3 +404,23 @@ StateForge v0.11.0 adds `StateForge.Security` and AES key-ring management founda
 ## Maintenance
 
 StateForge v0.12.0 adds `StateForge.Maintenance` and `Invoke-StateForgeMaintenance.ps1` for cleanup, health, and stats jobs. See `docs/maintenance.md`.
+
+## STFG2 File Format
+
+StateForge v0.13.0 adds `StateForge.Format`, STFG2 KeyId support, checksum validation, and format tests. See `docs/stfg2-format.md`.
+
+## v0.13.1
+
+Fixes the `StateForge.Tools` STFG2 inspection build issue by adding the missing `System.IO` import.
+
+## STFG2 Envelope
+
+StateForge v0.13.2 adds an opt-in STFG2 envelope layer for compatibility validation. See `docs/stfg2-envelope.md`.
+
+## STFG2 Migration
+
+StateForge v0.13.3 adds `StateForgeStfg2Migrator`, `StateForge.MigrationHarness`, and the `stfg2-migrate` CLI command. See `docs/stfg2-migration.md`.
+
+## v0.13.4
+
+Fixes the STFG2 migration harness payload mismatch by writing the legacy test payload as raw UTF-8 bytes instead of using `File.WriteAllText(..., Encoding.UTF8)`.

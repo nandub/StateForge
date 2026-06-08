@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.Tools</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.12.0</Version>
+    <Version>0.13.4</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
@@ -18,5 +18,6 @@
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
       <ProjectReference Include="..\StateForge.Telemetry\StateForge.Telemetry.csproj" />
       <ProjectReference Include="..\StateForge.Security\StateForge.Security.csproj" />
+      <ProjectReference Include="..\StateForge.Format\StateForge.Format.csproj" />
   </ItemGroup>
 </Project>
