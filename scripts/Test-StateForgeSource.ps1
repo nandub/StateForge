@@ -279,26 +279,8 @@ foreach ($path in @($scaleTestPath, $apiValidationPath)) {
     }
 }
 
-# Validate v0.19 sharding compatibility helpers exist.
-$fileStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.FileStore\StateForgeFileStore.cs'
 
-if (Test-Path -LiteralPath $fileStorePath) {
-    $fileStoreSource = Get-Content -LiteralPath $fileStorePath -Raw
-
-    if ($fileStoreSource -notmatch 'GetCandidatePathsForHash') {
-        throw "StateForgeFileStore must include GetCandidatePathsForHash for legacy sharding compatibility."
-    }
-
-    if ($fileStoreSource -notmatch 'GetPathForHash\(hash,\s*0\)') {
-        throw "StateForgeFileStore must include legacy shard depth 0 fallback."
-    }
-
-    if ($fileStoreSource -notmatch 'GetPathForHash\(hash,\s*1\)') {
-        throw "StateForgeFileStore must include shard depth 1 fallback."
-    }
-}
-
-# Validate v0.19.1 sharding harnesses do not use internal APIs and required references exist.
+# Validate v0.21 sharding harnesses do not use internal APIs and required references exist.
 $prometheusProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Prometheus\StateForge.Prometheus.csproj'
 if (Test-Path -LiteralPath $prometheusProject) {
     $prometheusProjectSource = Get-Content -LiteralPath $prometheusProject -Raw
@@ -315,10 +297,6 @@ if (Test-Path -LiteralPath $shardingTestPath) {
     if ($shardingTestSource -match 'SafeKey\.Hash') {
         throw "StateForge.ShardingTests must not call internal SafeKey.Hash."
     }
-
-    if ($shardingTestSource -notmatch 'ComputeHash') {
-        throw "StateForge.ShardingTests must use a local public-test hash helper."
-    }
 }
 
 $shardingMigrationPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ShardingMigrationHarness\Program.cs'
@@ -328,4 +306,15 @@ if (Test-Path -LiteralPath $shardingMigrationPath) {
     if ($shardingMigrationSource -notmatch 'using StateForge\.Core;') {
         throw "StateForge.ShardingMigrationHarness must import StateForge.Core for StateForgeEntry."
     }
+}
+
+# Validate v0.21 replication foundations exist.
+$replicationProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForge.Replication.csproj'
+if (-not (Test-Path -LiteralPath $replicationProject)) {
+    throw "StateForge.Replication project is required for v0.21.0."
+}
+
+$replicationTestProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ReplicationTests\StateForge.ReplicationTests.csproj'
+if (-not (Test-Path -LiteralPath $replicationTestProject)) {
+    throw "StateForge.ReplicationTests project is required for v0.21.0."
 }

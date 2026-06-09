@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>StateForge.Prometheus</RootNamespace>
-    <AssemblyName>StateForge.Prometheus</AssemblyName>
+    <RootNamespace>StateForge.Replication</RootNamespace>
+    <AssemblyName>StateForge.Replication</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.21.0</Version>
-    <PackageId>StateForge.Prometheus</PackageId>
-    <Description>Prometheus text exposition helpers for StateForge.</Description>
+    <PackageId>StateForge.Replication</PackageId>
+    <Description>Distributed replication foundations for StateForge stores.</Description>
     <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
-    <PackageTags>stateforge;prometheus;metrics;observability;aspnetcore</PackageTags>
+    <PackageTags>stateforge;replication;distributed;session-state;farm-mode</PackageTags>
     <PackageProjectUrl>https://github.com/stateforge/stateforge</PackageProjectUrl>
     <RepositoryUrl>https://github.com/stateforge/stateforge</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -19,10 +19,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
-    <ProjectReference Include="..\StateForge.Telemetry\StateForge.Telemetry.csproj" />
     <None Include="..\..\README-NUGET.md" Pack="true" PackagePath="\" />
-      <ProjectReference Include="..\StateForge.Performance\StateForge.Performance.csproj" />
   </ItemGroup>
 </Project>

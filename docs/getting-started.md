@@ -139,9 +139,14 @@ See `docs/key-rotation.md`.
 .\scripts\Test-StateForgeSharding.ps1
 ```
 
-## Sharding Validation
+## Snapshot-Backed Metrics Validation
 
 ```powershell
-.\scripts\Test-StateForgeShardingImplementation.ps1
-.\scripts\Invoke-StateForgeShardingMigration.ps1
+.\scripts\Test-StateForgeSnapshotMetrics.ps1
+```
+
+## Replication Foundation Validation
+
+```powershell
+.\scripts\Test-StateForgeReplication.ps1
 ```

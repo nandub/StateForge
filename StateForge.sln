@@ -44,6 +44,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Prometheus", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.PrometheusTests", "src\StateForge.PrometheusTests\StateForge.PrometheusTests.csproj", "{3D1610B7-299D-5927-90BF-D48CBDC00E9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Replication", "src\StateForge.Replication\StateForge.Replication.csproj", "{635C9C05-22B1-50E9-B860-890B2B2B83F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ReplicationTests", "src\StateForge.ReplicationTests\StateForge.ReplicationTests.csproj", "{833DDBEE-DBF1-544D-B26A-290C79121939}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ResilienceTests", "src\StateForge.ResilienceTests\StateForge.ResilienceTests.csproj", "{EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ScaleTests", "src\StateForge.ScaleTests\StateForge.ScaleTests.csproj", "{65C28AAF-88B8-5DE6-9905-F73B83B0F2E9}"
@@ -55,6 +59,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ShardingTests", "src\StateForge.ShardingTests\StateForge.ShardingTests.csproj", "{0ABDA695-7179-5C50-8D28-01300EFF13F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SmokeTests", "src\StateForge.SmokeTests\StateForge.SmokeTests.csproj", "{7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SnapshotTests", "src\StateForge.SnapshotTests\StateForge.SnapshotTests.csproj", "{5325230E-0399-5E8E-9F9D-A32BABBD279E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.StoreMigrationHarness", "src\StateForge.StoreMigrationHarness\StateForge.StoreMigrationHarness.csproj", "{FE124F67-9C47-5A5D-BBEB-5FA1629F9173}"
 EndProject
@@ -156,6 +162,14 @@ Global
         {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+        {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Release|Any CPU.Build.0 = Release|Any CPU
+        {833DDBEE-DBF1-544D-B26A-290C79121939}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {833DDBEE-DBF1-544D-B26A-290C79121939}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {833DDBEE-DBF1-544D-B26A-290C79121939}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {833DDBEE-DBF1-544D-B26A-290C79121939}.Release|Any CPU.Build.0 = Release|Any CPU
         {EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -180,6 +194,10 @@ Global
         {7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+        {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Release|Any CPU.Build.0 = Release|Any CPU
         {FE124F67-9C47-5A5D-BBEB-5FA1629F9173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {FE124F67-9C47-5A5D-BBEB-5FA1629F9173}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {FE124F67-9C47-5A5D-BBEB-5FA1629F9173}.Release|Any CPU.ActiveCfg = Release|Any CPU

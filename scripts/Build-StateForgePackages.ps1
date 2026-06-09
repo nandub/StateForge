@@ -36,7 +36,7 @@ param(
     [string]$Configuration = 'Release',
 
     [Parameter()]
-    [string]$Version = '0.19.1'
+    [string]$Version = '0.21.0'
 )
 
 Set-StrictMode -Version 2.0
@@ -61,7 +61,8 @@ try {
         'src\StateForge.CloudNative\StateForge.CloudNative.csproj',
         'src\StateForge.Format\StateForge.Format.csproj',
         'src\StateForge.Prometheus\StateForge.Prometheus.csproj',
-        'src\StateForge.Performance\StateForge.Performance.csproj'
+        'src\StateForge.Performance\StateForge.Performance.csproj',
+        'src\StateForge.Replication\StateForge.Replication.csproj'
     )
 
     foreach ($project in $projects) {
