@@ -36,7 +36,7 @@ param(
     [string]$Configuration = 'Release',
 
     [Parameter()]
-    [string]$Version = '0.15.0'
+    [string]$Version = '0.15.1'
 )
 
 Set-StrictMode -Version 2.0
@@ -70,7 +70,9 @@ try {
             --output $resolvedOutput `
             /p:PackageVersion=$Version `
             /p:IncludeSymbols=false `
-            /p:ContinuousIntegrationBuild=true
+            /p:ContinuousIntegrationBuild=true `
+            /p:IncludeSymbols=true `
+            /p:SymbolPackageFormat=snupkg
 
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet pack failed for $project with exit code $LASTEXITCODE."
@@ -78,10 +80,12 @@ try {
     }
 
     $packages = Get-ChildItem -LiteralPath $resolvedOutput -Filter '*.nupkg' -File
+    $symbolPackages = Get-ChildItem -LiteralPath $resolvedOutput -Filter '*.snupkg' -File
 
     [PSCustomObject]@{
         OutputPath   = $resolvedOutput
         PackageCount = $packages.Count
+        SymbolPackageCount = $symbolPackages.Count
         Success      = $true
     }
 }

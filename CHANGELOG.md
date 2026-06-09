@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.15.1
+
+- Added `README-NUGET.md`.
+- Added NuGet package README metadata.
+- Added license, repository, project URL, and package tags to package-oriented projects.
+- Added symbol package settings.
+- Updated package build script for v0.15.1.
+- Added `Test-StateForgePackageMetadata.ps1`.
+- Added `docs/nuget-packaging.md`.
+
+
 ## 0.15.0
 
 - Fixed Maintenance Host JSON output so `healthy` is `null` when health did not run.

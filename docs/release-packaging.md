@@ -64,3 +64,7 @@ Stats-only:
 ```
 
 This avoids monitoring systems misreading skipped health checks as failures.
+
+## v0.15.1
+
+Adds NuGet README metadata, license metadata, repository metadata, package tags, symbol package settings, and package metadata validation.

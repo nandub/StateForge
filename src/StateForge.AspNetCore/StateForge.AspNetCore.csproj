@@ -5,7 +5,7 @@
     <AssemblyName>StateForge.AspNetCore</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.15.0</Version>
+    <Version>0.15.1</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
@@ -16,11 +16,20 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
+      <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
+      <PackageTags>stateforge;session-state;aspnet;aspnetcore;distributed-cache;filestore;stfg2</PackageTags>
+      <PackageProjectUrl>https://github.com/stateforge/stateforge</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/stateforge/stateforge</RepositoryUrl>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
     <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README-NUGET.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>
