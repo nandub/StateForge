@@ -2,8 +2,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.Maintenance.Host</RootNamespace>
-    <AssemblyName>StateForge.Maintenance.Host</AssemblyName>
+    <RootNamespace>StateForge.ApiValidationTests</RootNamespace>
+    <AssemblyName>StateForge.ApiValidationTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.17.2</Version>
@@ -11,5 +11,8 @@
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+    <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
+    <ProjectReference Include="..\StateForge.Security\StateForge.Security.csproj" />
+    <ProjectReference Include="..\StateForge.Telemetry\StateForge.Telemetry.csproj" />
   </ItemGroup>
 </Project>

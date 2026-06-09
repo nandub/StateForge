@@ -6,7 +6,7 @@ It is designed for environments where session state should survive process crash
 
 ## Status
 
-Current version: **0.16.2**
+Current version: **0.17.2**
 
 StateForge is currently in pre-release validation. The core storage engine, ASP.NET Core cache adapter, classic ASP.NET SessionState provider, diagnostics, smoke tests, farm tests, resilience tests, Kestrel harness, and ASP.NET provider harness have all been added and are under active validation.
 
@@ -448,3 +448,15 @@ StateForge v0.15.1 adds NuGet README, license, repository metadata, symbol packa
 ## Observability Release
 
 StateForge v0.16.2 adds dashboard CLI output and Prometheus text exposition support. See `docs/observability.md`.
+
+## Performance and Scale Release
+
+StateForge v0.17.0 adds scale validation tooling for large stores, concurrent create/read tests, stats scans, Prometheus collection, and cleanup timing. See `docs/performance-scale.md`.
+
+## v0.17.1
+
+Fixes the scale harness FileStore API usage and adds API validation tests. See `docs/api-validation.md`.
+
+## v0.17.2
+
+Fixes API validation and scale tests so they no longer assume `StateForgeEntry.Payload`.

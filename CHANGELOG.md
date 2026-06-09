@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.17.2
+
+- Fixed `StateForge.ScaleTests` to avoid assuming `StateForgeEntry.Payload`.
+- Fixed `StateForge.ApiValidationTests` to avoid assuming `StateForgeEntry.Payload`.
+- Added reflection-safe byte-array extraction for `StateForgeEntry` validation.
+- Updated API validation and performance documentation.
+- Detected entry byte-array property during packaging: `Value`.
+
+
+## 0.17.1
+
+- Fixed `StateForge.ScaleTests` to call `store.Set(..., TimeSpan)`.
+- Fixed `StateForge.ScaleTests` to treat `store.Get(...)` as returning `StateForgeEntry`.
+- Added `StateForge.ApiValidationTests`.
+- Added `Test-StateForgeApiValidation.ps1`.
+- Added source validation for ScaleTests FileStore API usage.
+- Added `docs/api-validation.md`.
+
+
+## 0.17.0
+
+- Added `StateForge.ScaleTests`.
+- Added `Invoke-StateForgeScaleTest.ps1`.
+- Added `Test-StateForgeScale.ps1`.
+- Added `Test-StateForgeLargeScale.ps1`.
+- Added fast and manual large-scale validation paths.
+- Added performance and scale documentation.
+- Updated release validation to include the fast scale test.
+
+
 ## 0.16.2
 
 - Added `StateForge.Prometheus`.

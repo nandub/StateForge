@@ -245,3 +245,36 @@ if (Test-Path -LiteralPath $migrationHarnessPath) {
         throw "StateForge.MigrationHarness must use File.WriteAllBytes with Encoding.UTF8.GetBytes to avoid BOM-sensitive payload tests."
     }
 }
+
+# Validate StateForge.ScaleTests uses the actual FileStore API shape.
+$scaleTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ScaleTests\Program.cs'
+
+if (Test-Path -LiteralPath $scaleTestPath) {
+    $scaleTestSource = Get-Content -LiteralPath $scaleTestPath -Raw
+
+    if ($scaleTestSource -match 'DateTimeOffset\.UtcNow\.AddHours') {
+        throw "StateForge.ScaleTests must call store.Set with TimeSpan, not DateTimeOffset."
+    }
+
+    if ($scaleTestSource -match 'byte\[\]\s+value\s*=\s*store\.Get') {
+        throw "StateForge.ScaleTests must treat store.Get as returning StateForgeEntry, not byte[]."
+    }
+
+    if ($scaleTestSource -notmatch 'StateForgeEntry\s+entry\s*=\s*store\.Get') {
+        throw "StateForge.ScaleTests must validate StateForgeEntry returned by store.Get."
+    }
+}
+
+# Validate StateForgeEntry byte payload access is not hard-coded to Payload.
+$scaleTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ScaleTests\Program.cs'
+$apiValidationPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ApiValidationTests\Program.cs'
+
+foreach ($path in @($scaleTestPath, $apiValidationPath)) {
+    if (Test-Path -LiteralPath $path) {
+        $content = Get-Content -LiteralPath $path -Raw
+
+        if ($content -match '\.Payload') {
+            throw "StateForgeEntry does not expose Payload; use the actual byte[] property or reflection-safe payload access."
+        }
+    }
+}

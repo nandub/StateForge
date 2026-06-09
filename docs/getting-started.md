@@ -119,3 +119,15 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Test-StateForgeRelease.ps1 -PackageOutputPath .\artifacts\nuget
 ```
+
+## Scale Validation
+
+```powershell
+.\scripts\Test-StateForgeScale.ps1
+```
+
+## API Validation
+
+```powershell
+.\scripts\Test-StateForgeApiValidation.ps1
+```
