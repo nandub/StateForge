@@ -40,7 +40,8 @@ try {
     .\scripts\Test-StateForgeObservability.ps1
     .\scripts\Test-StateForgeApiValidation.ps1
     .\scripts\Test-StateForgeScale.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.18.0'
+    .\scripts\Test-StateForgePerformance.ps1
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.18.2'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

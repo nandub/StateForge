@@ -97,3 +97,24 @@ The output includes:
     -BaselineCsv .\artifacts\benchmarks\baseline.csv `
     -CandidateCsv .\artifacts\benchmarks\candidate.csv
 ```
+
+
+## v0.18.1 Snapshot Cache
+
+Snapshot-cache helpers were added in `StateForge.Performance`.
+
+Validate:
+
+```powershell
+.\scripts\Test-StateForgePerformance.ps1
+```
+
+## v0.18.2 Sharding Analysis
+
+Sharding analysis helpers were added in `StateForge.Performance`.
+
+Validate:
+
+```powershell
+.\scripts\Test-StateForgeSharding.ps1
+```

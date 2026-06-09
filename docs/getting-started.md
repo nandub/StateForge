@@ -131,3 +131,10 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Test-StateForgeApiValidation.ps1
 ```
+
+## Performance Helper Validation
+
+```powershell
+.\scripts\Test-StateForgePerformance.ps1
+.\scripts\Test-StateForgeSharding.ps1
+```

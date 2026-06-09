@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.18.2
+
+- Added sharding analysis helpers.
+- Added `StateForgeShardAnalyzer`.
+- Added `StateForgeShardAnalysisResult`.
+- Added `Test-StateForgeSharding.ps1`.
+- Added `docs/sharding-analysis.md`.
+
+## 0.18.1
+
+- Added `StateForge.Performance`.
+- Added store snapshot-cache helpers.
+- Added `StateForgeStoreSnapshot`.
+- Added `StateForgeStoreSnapshotCache`.
+- Added `StateForge.PerformanceTests`.
+- Added `Test-StateForgePerformance.ps1`.
+- Added `docs/snapshot-cache.md`.
+
+
 ## 0.18.0
 
 - Added JSON benchmark export support to `StateForge.ScaleTests`.
