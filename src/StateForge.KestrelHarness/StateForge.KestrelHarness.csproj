@@ -5,7 +5,7 @@
     <RootNamespace>StateForge.KestrelHarness</RootNamespace>
     <AssemblyName>StateForge.KestrelHarness</AssemblyName>
     <Nullable>disable</Nullable>
-    <Version>0.18.2</Version>
+    <Version>0.20.0</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
@@ -18,5 +18,6 @@
       <ProjectReference Include="..\StateForge.CloudNative\StateForge.CloudNative.csproj" />
       <ProjectReference Include="..\StateForge.Telemetry.AspNetCore\StateForge.Telemetry.AspNetCore.csproj" />
       <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
+      <ProjectReference Include="..\StateForge.Performance\StateForge.Performance.csproj" />
   </ItemGroup>
 </Project>

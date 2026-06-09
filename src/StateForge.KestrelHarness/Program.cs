@@ -9,6 +9,7 @@ using StateForge.AspNetCore;
 using StateForge.CloudNative;
 using StateForge.Telemetry;
 using StateForge.Prometheus;
+using StateForge.Performance;
 using StateForge.Telemetry.AspNetCore;
 
 string root = ReadOption(args, "--root");
@@ -126,6 +127,31 @@ app.MapGet("/stateforge/prometheus", () =>
 {
     string text = StateForgePrometheusCollector.CollectText(stateForgePrometheusRootPath);
     return Results.Text(text, "text/plain; version=0.0.4; charset=utf-8");
+});
+
+
+string stateForgeSnapshotPath = Environment.GetEnvironmentVariable("STATEFORGE_SNAPSHOT_PATH");
+
+if (string.IsNullOrWhiteSpace(stateForgeSnapshotPath))
+{
+    stateForgeSnapshotPath = Path.Combine(AppContext.BaseDirectory, "stateforge-store-snapshot.json");
+}
+
+app.MapGet("/stateforge/prometheus-snapshot", () =>
+{
+    if (!File.Exists(stateForgeSnapshotPath))
+    {
+        return Results.NotFound(new { error = "Snapshot file was not found.", snapshotPath = stateForgeSnapshotPath });
+    }
+
+    string text = StateForgeSnapshotPrometheusCollector.CollectTextFromSnapshotFile(stateForgeSnapshotPath);
+    return Results.Text(text, "text/plain; version=0.0.4; charset=utf-8");
+});
+
+app.MapPost("/stateforge/snapshot", () =>
+{
+    StateForgeStoreSnapshot snapshot = StateForgeStoreSnapshotCache.CaptureAndWrite(stateForgePrometheusRootPath, stateForgeSnapshotPath);
+    return Results.Ok(snapshot);
 });
 
 app.Run();

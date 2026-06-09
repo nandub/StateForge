@@ -2,18 +2,15 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.FarmTests</RootNamespace>
-    <AssemblyName>StateForge.FarmTests</AssemblyName>
+    <RootNamespace>StateForge.SnapshotTests</RootNamespace>
+    <AssemblyName>StateForge.SnapshotTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.20.0</Version>
-    <Authors>StateForge</Authors>
-    <Company>StateForge</Company>
-    <Product>StateForge</Product>
-    <Description>Web-farm simulation harness for StateForge.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
+    <ProjectReference Include="..\StateForge.Performance\StateForge.Performance.csproj" />
+    <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
   </ItemGroup>
 </Project>

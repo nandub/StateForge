@@ -138,3 +138,9 @@ See `docs/key-rotation.md`.
 .\scripts\Test-StateForgePerformance.ps1
 .\scripts\Test-StateForgeSharding.ps1
 ```
+
+## Snapshot-Backed Metrics Validation
+
+```powershell
+.\scripts\Test-StateForgeSnapshotMetrics.ps1
+```

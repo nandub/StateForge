@@ -5,7 +5,7 @@
     <AssemblyName>StateForge.Prometheus</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.18.2</Version>
+    <Version>0.20.0</Version>
     <PackageId>StateForge.Prometheus</PackageId>
     <Description>Prometheus text exposition helpers for StateForge.</Description>
     <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
@@ -23,5 +23,6 @@
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
     <ProjectReference Include="..\StateForge.Telemetry\StateForge.Telemetry.csproj" />
     <None Include="..\..\README-NUGET.md" Pack="true" PackagePath="\" />
+      <ProjectReference Include="..\StateForge.Performance\StateForge.Performance.csproj" />
   </ItemGroup>
 </Project>

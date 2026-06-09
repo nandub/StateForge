@@ -36,7 +36,7 @@ param(
     [string]$Configuration = 'Release',
 
     [Parameter()]
-    [string]$Version = '0.18.2'
+    [string]$Version = '0.20.0'
 )
 
 Set-StrictMode -Version 2.0

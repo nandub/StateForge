@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.20.0
+
+- Added snapshot-backed Prometheus formatter.
+- Added snapshot-backed Prometheus collector.
+- Added `StateForge.SnapshotTests`.
+- Added `Test-StateForgeSnapshotMetrics.ps1`.
+- Added `New-StateForgeSnapshot.ps1`.
+- Added `StateForge.Tools snapshot` command.
+- Added `StateForge.Tools prometheus-snapshot` command.
+- Added Kestrel `POST /stateforge/snapshot`.
+- Added Kestrel `GET /stateforge/prometheus-snapshot`.
+- Added `docs/snapshot-backed-metrics.md`.
+
+
 ## 0.18.2
 
 - Added sharding analysis helpers.

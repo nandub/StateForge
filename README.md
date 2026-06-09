@@ -6,7 +6,7 @@ It is designed for environments where session state should survive process crash
 
 ## Status
 
-Current version: **0.18.2**
+Current version: **0.20.0**
 
 StateForge is currently in pre-release validation. The core storage engine, ASP.NET Core cache adapter, classic ASP.NET SessionState provider, diagnostics, smoke tests, farm tests, resilience tests, Kestrel harness, and ASP.NET provider harness have all been added and are under active validation.
 
@@ -472,3 +472,7 @@ Adds snapshot-cache performance helpers.
 ## v0.18.2
 
 Adds sharding analysis helpers and validation scripts.
+
+## v0.20.0
+
+Adds snapshot-backed operational metrics, snapshot Prometheus output, and Kestrel snapshot endpoints. See `docs/snapshot-backed-metrics.md`.
