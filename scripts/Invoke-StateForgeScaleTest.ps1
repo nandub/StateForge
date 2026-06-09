@@ -47,7 +47,13 @@ param(
     [int]$Threads = 8,
 
     [Parameter()]
-    [switch]$Keep
+    [switch]$Keep,
+
+    [Parameter()]
+    [string]$ExportJson,
+
+    [Parameter()]
+    [string]$ExportCsv
 )
 
 Set-StrictMode -Version 2.0
@@ -68,6 +74,16 @@ try {
     $arguments += [string]$PayloadBytes
     $arguments += '--threads'
     $arguments += [string]$Threads
+
+    if (-not [string]::IsNullOrWhiteSpace($ExportJson)) {
+        $arguments += '--export-json'
+        $arguments += $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ExportJson)
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($ExportCsv)) {
+        $arguments += '--export-csv'
+        $arguments += $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($ExportCsv)
+    }
 
     if ($Keep.IsPresent) {
         $arguments += '--keep'

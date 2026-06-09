@@ -24,7 +24,7 @@ Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
 try {
-    .\scripts\Invoke-StateForgeScaleTest.ps1 -Sessions 2000 -PayloadBytes 512 -Threads 4
+    .\scripts\Invoke-StateForgeScaleTest.ps1 -Sessions 2000 -PayloadBytes 512 -Threads 4 -ExportJson .\artifacts\benchmarks\scale-fast.json -ExportCsv .\artifacts\benchmarks\scale-fast.csv
 
     [PSCustomObject]@{
         Sessions = 2000

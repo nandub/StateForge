@@ -67,3 +67,33 @@ StateForgeEntry entry = store.Get(key);
 The scale harness no longer assumes `StateForgeEntry.Payload`.
 
 Detected byte-array property during packaging: `Value`.
+
+
+## v0.18.0 Benchmark Exports
+
+The scale test can now export JSON and CSV:
+
+```powershell
+.\scripts\Invoke-StateForgeScaleTest.ps1 `
+    -Sessions 25000 `
+    -PayloadBytes 1024 `
+    -Threads 8 `
+    -ExportJson .\artifacts\benchmarks\scale.json `
+    -ExportCsv .\artifacts\benchmarks\scale.csv
+```
+
+The output includes:
+
+- elapsed milliseconds
+- operations per second
+- P50 latency
+- P95 latency
+- P99 latency
+
+## Compare Benchmark Runs
+
+```powershell
+.\scripts\Compare-StateForgeBenchmark.ps1 `
+    -BaselineCsv .\artifacts\benchmarks\baseline.csv `
+    -CandidateCsv .\artifacts\benchmarks\candidate.csv
+```

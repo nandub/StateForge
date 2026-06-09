@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.18.0
+
+- Added JSON benchmark export support to `StateForge.ScaleTests`.
+- Added CSV benchmark export support to `StateForge.ScaleTests`.
+- Added P50/P95/P99 latency reporting.
+- Added `Compare-StateForgeBenchmark.ps1`.
+- Updated `Test-StateForgeScale.ps1` to emit benchmark artifacts.
+- Added `docs/benchmark-exports.md`.
+
+
 ## 0.17.2
 
 - Fixed `StateForge.ScaleTests` to avoid assuming `StateForgeEntry.Payload`.
