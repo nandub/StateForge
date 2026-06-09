@@ -113,3 +113,9 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Test-StateForgeMaintenanceHost.ps1
 ```
+
+## Release Readiness
+
+```powershell
+.\scripts\Test-StateForgeRelease.ps1 -PackageOutputPath .\artifacts\nuget
+```

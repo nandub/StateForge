@@ -80,3 +80,15 @@ Config fields:
   "maxLogFiles": 10
 }
 ```
+
+
+## v0.15.0 Healthy Output Change
+
+When health is not executed, JSON output now reports:
+
+```json
+"healthRan": false,
+"healthy": null
+```
+
+This avoids false unhealthy alerts during cleanup-only or stats-only runs.

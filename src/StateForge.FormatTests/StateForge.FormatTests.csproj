@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.FormatTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.14.1</Version>
+    <Version>0.15.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Format\StateForge.Format.csproj" />

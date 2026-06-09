@@ -60,6 +60,8 @@ try {
         'tests\StateForge.FileStore.Tests\StateForge.FileStore.Tests.csproj',
 
         'scripts\Build-StateForge.ps1',
+        'scripts\Test-StateForgeRelease.ps1',
+        'scripts\Build-StateForgePackages.ps1',
         'scripts\Repair-StateForgeSolution.ps1',
         'scripts\Test-StateForgeLayout.ps1',
         'scripts\Test-StateForgeSolution.ps1',
@@ -111,6 +113,7 @@ try {
         'docs\stfg2-store-migration.md',
         'docs\maintenance.md',
         'docs\maintenance-host.md',
+        'docs\release-packaging.md',
         'docs\production-deployment.md'
     )
 

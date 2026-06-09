@@ -4,7 +4,12 @@
     <RootNamespace>StateForge.CloudNative</RootNamespace>
     <AssemblyName>StateForge.CloudNative</AssemblyName>
     <Nullable>disable</Nullable>
-    <Version>0.14.1</Version>
+    <Version>0.15.0</Version>
+
+    <PackageId>StateForge.CloudNative</PackageId>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

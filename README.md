@@ -6,7 +6,7 @@ It is designed for environments where session state should survive process crash
 
 ## Status
 
-Current version: **0.14.1**
+Current version: **0.15.0**
 
 StateForge is currently in pre-release validation. The core storage engine, ASP.NET Core cache adapter, classic ASP.NET SessionState provider, diagnostics, smoke tests, farm tests, resilience tests, Kestrel harness, and ASP.NET provider harness have all been added and are under active validation.
 
@@ -436,3 +436,7 @@ StateForge v0.14.0 adds `StateForge.Maintenance.Host`, once/loop mode, JSON outp
 ## v0.14.1 Maintenance Host Hardening
 
 Adds explicit job selection, config validation, log rotation fields, and Scheduled Task helper validation.
+
+## Release Packaging
+
+StateForge v0.15.0 adds NuGet package build scripts and release-readiness validation. See `docs/release-packaging.md`.

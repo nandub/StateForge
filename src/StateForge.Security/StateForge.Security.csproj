@@ -5,10 +5,15 @@
     <AssemblyName>StateForge.Security</AssemblyName>
     <Nullable>disable</Nullable>
     <LangVersion>7.3</LangVersion>
-    <Version>0.14.1</Version>
+    <Version>0.15.0</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
     <Description>AES key ring management primitives for StateForge.</Description>
+
+    <PackageId>StateForge.Security</PackageId>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 </Project>

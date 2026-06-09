@@ -13,6 +13,7 @@ namespace StateForge.Maintenance.Host
         public int CleanupInvalidQuarantined { get; set; }
         public int CleanupFailed { get; set; }
         public bool HealthRan { get; set; }
+        public bool HealthEvaluated { get; set; }
         public bool Healthy { get; set; }
         public bool CanRead { get; set; }
         public bool CanWrite { get; set; }

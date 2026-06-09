@@ -41,6 +41,7 @@ namespace StateForge.Maintenance.Host
                 {
                     StateForgeHealthResult health = store.CheckHealth();
                     result.HealthRan = true;
+                    result.HealthEvaluated = true;
                     result.Healthy = health.Healthy;
                     result.CanRead = health.CanRead;
                     result.CanWrite = health.CanWrite;

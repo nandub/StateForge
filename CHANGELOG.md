@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.15.0
+
+- Fixed Maintenance Host JSON output so `healthy` is `null` when health did not run.
+- Added package metadata to package-oriented projects.
+- Added `Build-StateForgePackages.ps1`.
+- Added `Test-StateForgeRelease.ps1`.
+- Added `docs/release-packaging.md`.
+
+
 ## 0.14.1
 
 - Added Maintenance Host explicit job selection: cleanup-only, health-only, stats-only, migration-only.

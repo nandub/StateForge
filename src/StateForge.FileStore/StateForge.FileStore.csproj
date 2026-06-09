@@ -5,12 +5,17 @@
     <AssemblyName>StateForge.FileStore</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.14.1</Version>
+    <Version>0.15.0</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
     <Description>Persistent session-state storage components for ASP.NET and ASP.NET Core.</Description>
 
+
+    <PackageId>StateForge.FileStore</PackageId>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />

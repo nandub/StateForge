@@ -39,7 +39,7 @@ namespace StateForge.Maintenance.Host
             builder.AppendLine("CleanupInvalidQuarantined=" + result.CleanupInvalidQuarantined);
             builder.AppendLine("CleanupFailed=" + result.CleanupFailed);
             builder.AppendLine("HealthRan=" + result.HealthRan);
-            builder.AppendLine("Healthy=" + result.Healthy);
+            builder.AppendLine("Healthy=" + (result.HealthRan ? result.Healthy.ToString() : "N/A"));
             builder.AppendLine("StatsRan=" + result.StatsRan);
             builder.AppendLine("TotalSessions=" + result.TotalSessions);
             builder.AppendLine("MigrationRan=" + result.MigrationRan);
@@ -68,7 +68,7 @@ namespace StateForge.Maintenance.Host
             Append(builder, "cleanupInvalidQuarantined", result.CleanupInvalidQuarantined, true);
             Append(builder, "cleanupFailed", result.CleanupFailed, true);
             Append(builder, "healthRan", result.HealthRan, true);
-            Append(builder, "healthy", result.Healthy, true);
+            AppendNullableBool(builder, "healthy", result.HealthRan, result.Healthy, true);
             Append(builder, "statsRan", result.StatsRan, true);
             Append(builder, "totalSessions", result.TotalSessions, true);
             Append(builder, "migrationRan", result.MigrationRan, true);
@@ -83,6 +83,23 @@ namespace StateForge.Maintenance.Host
             }
             builder.Append("]}");
             return builder.ToString();
+        }
+
+
+        private static void AppendNullableBool(StringBuilder builder, string name, bool hasValue, bool value, bool comma)
+        {
+            builder.Append("\"").Append(name).Append("\":");
+
+            if (hasValue)
+            {
+                builder.Append(value ? "true" : "false");
+            }
+            else
+            {
+                builder.Append("null");
+            }
+
+            if (comma) builder.Append(",");
         }
 
         private static void Append(StringBuilder builder, string name, string value, bool comma)
