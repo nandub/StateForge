@@ -34,6 +34,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Maintenance.Host
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.MigrationHarness", "src\StateForge.MigrationHarness\StateForge.MigrationHarness.csproj", "{A3317F6F-A142-51EB-8B6B-EA876AC8F2B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Prometheus", "src\StateForge.Prometheus\StateForge.Prometheus.csproj", "{75D4FF5F-EAA9-52D4-8ADE-6ABBE0C7500A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.PrometheusTests", "src\StateForge.PrometheusTests\StateForge.PrometheusTests.csproj", "{3D1610B7-299D-5927-90BF-D48CBDC00E9D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ResilienceTests", "src\StateForge.ResilienceTests\StateForge.ResilienceTests.csproj", "{EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Security", "src\StateForge.Security\StateForge.Security.csproj", "{85EAF317-B766-5EFD-8AEA-F59D05CB1426}"
@@ -120,6 +124,14 @@ Global
         {A3317F6F-A142-51EB-8B6B-EA876AC8F2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {A3317F6F-A142-51EB-8B6B-EA876AC8F2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {A3317F6F-A142-51EB-8B6B-EA876AC8F2B0}.Release|Any CPU.Build.0 = Release|Any CPU
+        {75D4FF5F-EAA9-52D4-8ADE-6ABBE0C7500A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {75D4FF5F-EAA9-52D4-8ADE-6ABBE0C7500A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {75D4FF5F-EAA9-52D4-8ADE-6ABBE0C7500A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {75D4FF5F-EAA9-52D4-8ADE-6ABBE0C7500A}.Release|Any CPU.Build.0 = Release|Any CPU
+        {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Release|Any CPU.Build.0 = Release|Any CPU
         {EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {EAA16D9D-1D5F-5CEB-AE0F-3C182A70E152}.Release|Any CPU.ActiveCfg = Release|Any CPU

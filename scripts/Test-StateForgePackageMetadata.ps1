@@ -35,7 +35,8 @@ try {
         'src\StateForge.Security\StateForge.Security.csproj',
         'src\StateForge.Telemetry\StateForge.Telemetry.csproj',
         'src\StateForge.CloudNative\StateForge.CloudNative.csproj',
-        'src\StateForge.Format\StateForge.Format.csproj'
+        'src\StateForge.Format\StateForge.Format.csproj',
+        'src\StateForge.Prometheus\StateForge.Prometheus.csproj'
     )
 
     $errors = New-Object System.Collections.Generic.List[string]

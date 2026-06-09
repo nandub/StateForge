@@ -37,7 +37,8 @@ try {
     .\scripts\Test-StateForgeStfg2StoreMigration.ps1
     .\scripts\Test-StateForgeMaintenanceHost.ps1
     .\scripts\Test-StateForgeMaintenanceTask.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.15.1'
+    .\scripts\Test-StateForgeObservability.ps1
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.16.2'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

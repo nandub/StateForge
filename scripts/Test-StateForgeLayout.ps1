@@ -38,6 +38,8 @@ try {
 
         'src\StateForge.Core\StateForge.Core.csproj',
         'src\StateForge.Format\StateForge.Format.csproj',
+        'src\StateForge.PrometheusTests\StateForge.PrometheusTests.csproj',
+        'src\StateForge.Prometheus\StateForge.Prometheus.csproj',
         'src\StateForge.FormatTests\StateForge.FormatTests.csproj',
         'src\StateForge.FormatHarness\StateForge.FormatHarness.csproj',
         'src\StateForge.MigrationHarness\StateForge.MigrationHarness.csproj',
@@ -62,6 +64,9 @@ try {
 
         'scripts\Build-StateForge.ps1',
         'scripts\Test-StateForgeRelease.ps1',
+        'scripts\Test-StateForgeObservability.ps1',
+        'scripts\Test-StateForgePrometheus.ps1',
+        'scripts\Test-StateForgeDashboard.ps1',
         'scripts\Build-StateForgePackages.ps1',
         'scripts\Test-StateForgePackageMetadata.ps1',
         'scripts\Repair-StateForgeSolution.ps1',
@@ -117,6 +122,9 @@ try {
         'docs\maintenance-host.md',
         'docs\release-packaging.md',
         'docs\nuget-packaging.md',
+        'docs\observability.md',
+        'docs\grafana-dashboard.md',
+        'docs\prometheus.md',
         'docs\production-deployment.md'
     )
 

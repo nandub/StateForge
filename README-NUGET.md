@@ -12,6 +12,7 @@ StateForge is a file-based session state and distributed cache platform for .NET
 - StateForge.Telemetry
 - StateForge.CloudNative
 - StateForge.Format
+- StateForge.Prometheus
 
 ## ASP.NET Core Example
 
@@ -34,4 +35,4 @@ builder.Services.AddStateForgeDistributedCache(options =>
 </sessionState>
 ```
 
-Version: 0.15.1
+Version: 0.16.2

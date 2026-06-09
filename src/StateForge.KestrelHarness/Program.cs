@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using StateForge.AspNetCore;
 using StateForge.CloudNative;
 using StateForge.Telemetry;
+using StateForge.Prometheus;
 using StateForge.Telemetry.AspNetCore;
 
 string root = ReadOption(args, "--root");
@@ -112,6 +113,20 @@ Console.WriteLine("  GET    /health");
 Console.WriteLine("  POST   /session/{id}/{value}");
 Console.WriteLine("  GET    /session/{id}");
 Console.WriteLine("  DELETE /session/{id}");
+
+
+string stateForgePrometheusRootPath = Environment.GetEnvironmentVariable("STATEFORGE_ROOT");
+
+if (string.IsNullOrWhiteSpace(stateForgePrometheusRootPath))
+{
+    stateForgePrometheusRootPath = Path.Combine(AppContext.BaseDirectory, "stateforge");
+}
+
+app.MapGet("/stateforge/prometheus", () =>
+{
+    string text = StateForgePrometheusCollector.CollectText(stateForgePrometheusRootPath);
+    return Results.Text(text, "text/plain; version=0.0.4; charset=utf-8");
+});
 
 app.Run();
 

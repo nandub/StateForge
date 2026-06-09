@@ -2,13 +2,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.FormatTests</RootNamespace>
-    <AssemblyName>StateForge.FormatTests</AssemblyName>
+    <RootNamespace>StateForge.PrometheusTests</RootNamespace>
+    <AssemblyName>StateForge.PrometheusTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.16.2</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StateForge.Format\StateForge.Format.csproj" />
+    <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
   </ItemGroup>
 </Project>

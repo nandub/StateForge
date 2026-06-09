@@ -7,6 +7,7 @@ using StateForge.FileStore;
 using StateForge.Telemetry;
 using StateForge.Security;
 using StateForge.Format;
+using StateForge.Prometheus;
 
 namespace StateForge.Tools
 {
@@ -22,6 +23,67 @@ namespace StateForge.Tools
 
             string command = args[0];
 
+
+
+            if (EqualsIgnoreCase(command, "dashboard"))
+            {
+                string dashboardRootPath = ReadOption(args, "--root");
+
+                if (string.IsNullOrWhiteSpace(dashboardRootPath))
+                {
+                    Console.Error.WriteLine("Missing required --root option.");
+                    return 2;
+                }
+
+                StateForgeFileStoreOptions sfDashboardOptions = new StateForgeFileStoreOptions();
+                sfDashboardOptions.RootPath = dashboardRootPath;
+                StateForgeFileStore sfDashboardStore = new StateForgeFileStore(sfDashboardOptions);
+
+                var sfDashboardStats = sfDashboardStore.GetStats();
+                StateForgeHealthResult sfDashboardHealth = sfDashboardStore.CheckHealth();
+                StateForgePrometheusSnapshot sfDashboardMetrics = StateForgePrometheusCollector.Collect(dashboardRootPath);
+
+                Console.WriteLine("StateForge Dashboard");
+                Console.WriteLine("--------------------");
+                Console.WriteLine();
+                Console.WriteLine("Sessions");
+                Console.WriteLine("  Active     : {0}", sfDashboardStats.TotalSessions);
+                Console.WriteLine("  Expired    : {0}", sfDashboardStats.ExpiredSessions);
+                Console.WriteLine("  Locked     : {0}", sfDashboardStats.LockedSessions);
+                Console.WriteLine();
+                Console.WriteLine("Storage");
+                Console.WriteLine("  Compressed : {0}", sfDashboardStats.CompressedSessions);
+                Console.WriteLine("  Encrypted  : {0}", sfDashboardStats.EncryptedSessions);
+                Console.WriteLine("  AES        : {0}", sfDashboardStats.AesEncryptedSessions);
+                Console.WriteLine("  Payload    : {0}", sfDashboardStats.TotalPayloadBytes);
+                Console.WriteLine();
+                Console.WriteLine("Operations");
+                Console.WriteLine("  Reads      : {0}", sfDashboardMetrics.Reads);
+                Console.WriteLine("  Writes     : {0}", sfDashboardMetrics.Writes);
+                Console.WriteLine("  Deletes    : {0}", sfDashboardMetrics.Deletes);
+                Console.WriteLine();
+                Console.WriteLine("Maintenance");
+                Console.WriteLine("  Cleanups   : {0}", sfDashboardMetrics.Cleanups);
+                Console.WriteLine("  Quarantine : {0}", sfDashboardMetrics.Quarantines);
+                Console.WriteLine("  Corruptions: {0}", sfDashboardMetrics.Corruptions);
+                Console.WriteLine();
+                Console.WriteLine("Health");
+                Console.WriteLine("  Status     : {0}", sfDashboardHealth.Healthy ? "HEALTHY" : "UNHEALTHY");
+
+                foreach (string error in sfDashboardHealth.Errors)
+                {
+                    Console.WriteLine("  Error      : {0}", error);
+                }
+
+                return sfDashboardHealth.Healthy ? 0 : 1;
+            }
+
+            if (EqualsIgnoreCase(command, "prometheus"))
+            {
+                string prometheusRootPath = ReadOption(args, "--root");
+                Console.Write(StateForgePrometheusCollector.CollectText(prometheusRootPath));
+                return 0;
+            }
 
             if (EqualsIgnoreCase(command, "keyring-create"))
             {
@@ -634,3 +696,5 @@ namespace StateForge.Tools
         }
     }
 }
+
+// Commands: dashboard --root PATH; prometheus [--root PATH]

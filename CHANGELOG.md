@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.16.2
+
+- Added `StateForge.Prometheus`.
+- Added Prometheus formatter and reflection-safe collector.
+- Added Kestrel `/stateforge/prometheus` endpoint.
+- Added `dashboard` command to StateForge.Tools using isolated variable names.
+- Added `prometheus` command to StateForge.Tools.
+- Added `StateForge.PrometheusTests`.
+- Added observability validation scripts.
+- Added Prometheus, Grafana, and observability documentation.
+
+
 ## 0.15.1
 
 - Added `README-NUGET.md`.
