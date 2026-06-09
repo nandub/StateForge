@@ -47,10 +47,12 @@ try {
     .\scripts\Test-StateForgeReplicationManifest.ps1
     .\scripts\Test-StateForgeAutomaticFailover.ps1
     .\scripts\Test-StateForgeSnapshotMarkers.ps1
+    .\scripts\Test-StateForgeHardening.ps1
+    .\scripts\Test-StateForgeRecoveryFlow.ps1
     .\scripts\Test-StateForgeReplicaPromotion.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.26.1'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.26.2'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

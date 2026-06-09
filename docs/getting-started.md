@@ -165,3 +165,10 @@ See `docs/key-rotation.md`.
 .\scripts\Test-StateForgeReplicaPromotion.ps1
 .\scripts\Test-StateForgeAutomaticFailover.ps1
 ```
+
+## Release Hardening Validation
+
+```powershell
+.\scripts\Test-StateForgeHardening.ps1
+.\scripts\Test-StateForgeRecoveryFlow.ps1
+```

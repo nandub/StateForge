@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Prometheus", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.PrometheusTests", "src\StateForge.PrometheusTests\StateForge.PrometheusTests.csproj", "{3D1610B7-299D-5927-90BF-D48CBDC00E9D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.RecoveryFlowTests", "src\StateForge.RecoveryFlowTests\StateForge.RecoveryFlowTests.csproj", "{C02E4EA2-97B1-5D82-93A5-AABA8EDAD6C6}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Replication", "src\StateForge.Replication\StateForge.Replication.csproj", "{635C9C05-22B1-50E9-B860-890B2B2B83F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Replication.Host", "src\StateForge.Replication.Host\StateForge.Replication.Host.csproj", "{79EDEAE4-4236-5A30-BD3F-26AF161E8A29}"
@@ -174,6 +176,10 @@ Global
         {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {3D1610B7-299D-5927-90BF-D48CBDC00E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+        {C02E4EA2-97B1-5D82-93A5-AABA8EDAD6C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {C02E4EA2-97B1-5D82-93A5-AABA8EDAD6C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {C02E4EA2-97B1-5D82-93A5-AABA8EDAD6C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {C02E4EA2-97B1-5D82-93A5-AABA8EDAD6C6}.Release|Any CPU.Build.0 = Release|Any CPU
         {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Release|Any CPU.ActiveCfg = Release|Any CPU

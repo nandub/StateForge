@@ -377,3 +377,47 @@ foreach ($servicePath in @($promotionServicePath, $failoverServicePath)) {
         }
     }
 }
+
+# Validate v0.26.2 release hardening requirements.
+$requiredHardeningFiles = @(
+    'src\StateForge.RecoveryFlowTests\StateForge.RecoveryFlowTests.csproj',
+    'scripts\Test-StateForgeRecoveryFlow.ps1',
+    'scripts\Test-StateForgeHardening.ps1',
+    'docs\release-hardening.md'
+)
+
+foreach ($requiredHardeningFile in $requiredHardeningFiles) {
+    $requiredHardeningPath = Join-Path -Path $repoRoot -ChildPath $requiredHardeningFile
+
+    if (-not (Test-Path -LiteralPath $requiredHardeningPath)) {
+        throw "Missing v0.26.2 hardening file: $requiredHardeningFile"
+    }
+}
+
+$csprojFiles = Get-ChildItem -Path (Join-Path -Path $repoRoot -ChildPath 'src') -Recurse -Filter '*.csproj'
+foreach ($csprojFile in $csprojFiles) {
+    $csprojText = Get-Content -LiteralPath $csprojFile.FullName -Raw
+
+    if ($csprojText -notmatch '<Version>0\.26\.2</Version>') {
+        throw "Project version must be 0.26.2: $($csprojFile.FullName)"
+    }
+}
+
+$manualJsonFiles = @(
+    'src\StateForge.Replication\StateForgeFileReplicator.cs',
+    'src\StateForge.Snapshots\StateForgeSnapshotService.cs',
+    'src\StateForge.Snapshots\StateForgeReplicaPromotionService.cs',
+    'src\StateForge.Snapshots\StateForgeFailoverService.cs'
+)
+
+foreach ($manualJsonFile in $manualJsonFiles) {
+    $manualJsonPath = Join-Path -Path $repoRoot -ChildPath $manualJsonFile
+
+    if (Test-Path -LiteralPath $manualJsonPath) {
+        $manualJsonSource = Get-Content -LiteralPath $manualJsonPath -Raw
+
+        if ($manualJsonSource -match 'string\s+\w+\s*=\s*"\{') {
+            throw "Manual JSON file contains raw multiline C# string constant: $manualJsonFile"
+        }
+    }
+}

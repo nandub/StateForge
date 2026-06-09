@@ -1,6 +1,6 @@
 # Automatic Failover
 
-StateForge v0.26.1 adds automatic failover primitives.
+StateForge v0.26.2 adds automatic failover primitives.
 
 ## Capabilities
 
