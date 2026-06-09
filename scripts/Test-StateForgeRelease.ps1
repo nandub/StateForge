@@ -43,7 +43,9 @@ try {
     .\scripts\Test-StateForgePerformance.ps1
     .\scripts\Test-StateForgeSnapshotMetrics.ps1
     .\scripts\Test-StateForgeReplication.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.21.0'
+    .\scripts\Test-StateForgeReplicationService.ps1
+    .\scripts\Test-StateForgeReplicationManifest.ps1
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.22.1'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

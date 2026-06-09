@@ -10,10 +10,18 @@ namespace StateForge.Replication
 
         public bool OverwriteExisting { get; set; }
 
+        public bool DryRun { get; set; }
+
+        public bool DetectConflicts { get; set; }
+
+        public string ManifestPath { get; set; }
+
         public StateForgeReplicationOptions()
         {
             Replicas = new List<StateForgeReplicaNode>();
             OverwriteExisting = true;
+            DryRun = false;
+            DetectConflicts = true;
         }
     }
 }

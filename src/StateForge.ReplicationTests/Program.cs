@@ -47,6 +47,19 @@ namespace StateForge.ReplicationTests
                 Require(health.Success, "Replication health failed.");
 
                 StateForgeFileReplicator replicator = new StateForgeFileReplicator();
+
+                StateForgeReplicationOptions dryRunReplication = new StateForgeReplicationOptions();
+                dryRunReplication.PrimaryRootPath = primary;
+                dryRunReplication.DryRun = true;
+                dryRunReplication.ManifestPath = Path.Combine(root, "dry-run-manifest.json");
+                dryRunReplication.Replicas.Add(new StateForgeReplicaNode { Name = "a", RootPath = replicaA });
+
+                StateForgeReplicationResult dryRunResult = replicator.Replicate(dryRunReplication);
+                Require(dryRunResult.Success, "Dry-run replication failed.");
+                Require(dryRunResult.FilesCopied == 0, "Dry-run should not copy files.");
+                Require(dryRunResult.FilesSkipped == 12, "Dry-run skipped count mismatch.");
+                Require(File.Exists(dryRunReplication.ManifestPath), "Dry-run manifest missing.");
+
                 StateForgeReplicationResult result = replicator.Replicate(replication);
 
                 Require(result.Success, "Replication failed.");
@@ -62,6 +75,8 @@ namespace StateForge.ReplicationTests
 
                 Console.WriteLine("PASS: replication health");
                 Console.WriteLine("PASS: replication plan");
+                Console.WriteLine("PASS: dry-run replication");
+                Console.WriteLine("PASS: replication manifest");
                 Console.WriteLine("PASS: replication copy");
                 Console.WriteLine("PASS: sharded layout preserved");
                 Console.WriteLine("PASS: multi-replica fanout");

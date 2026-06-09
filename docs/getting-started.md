@@ -150,3 +150,9 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Test-StateForgeReplication.ps1
 ```
+
+## Replication Service Validation
+
+```powershell
+.\scripts\Test-StateForgeReplicationService.ps1
+```

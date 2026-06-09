@@ -318,3 +318,33 @@ $replicationTestProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.R
 if (-not (Test-Path -LiteralPath $replicationTestProject)) {
     throw "StateForge.ReplicationTests project is required for v0.21.0."
 }
+
+# Validate v0.22 replication services exist.
+$replicationHostProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication.Host\StateForge.Replication.Host.csproj'
+if (-not (Test-Path -LiteralPath $replicationHostProject)) {
+    throw "StateForge.Replication.Host project is required for v0.22.0."
+}
+
+$replicationServiceScript = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeReplicationService.ps1'
+if (-not (Test-Path -LiteralPath $replicationServiceScript)) {
+    throw "Test-StateForgeReplicationService.ps1 is required for v0.22.0."
+}
+
+# Validate v0.22.1 manifest writer does not contain corrupted escaped C# strings.
+$replicatorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeFileReplicator.cs'
+
+if (Test-Path -LiteralPath $replicatorPath) {
+    $replicatorSource = Get-Content -LiteralPath $replicatorPath -Raw
+
+    if ($replicatorSource -match '\\\\"version\\\\"') {
+        throw "StateForgeFileReplicator contains corrupted over-escaped JSON strings."
+    }
+
+    if ($replicatorSource -notmatch 'WriteManifest') {
+        throw "StateForgeFileReplicator must include WriteManifest."
+    }
+
+    if ($replicatorSource -notmatch 'Replace\("\\\\", "\\\\\\\\"\)') {
+        throw "StateForgeFileReplicator Escape method must escape backslashes."
+    }
+}

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.22.1
+
+- Added `StateForge.Replication.Host`.
+- Added replication dry-run mode.
+- Added replication manifest output.
+- Added basic conflict detection.
+- Added `StateForge.ReplicationHostTests`.
+- Added `Test-StateForgeReplicationService.ps1`.
+- Added `Start-StateForgeReplicationHost.ps1`.
+- Added `docs/replication-services.md`.
+
+
 ## 0.21.0
 
 - Merged validated v0.19.1 sharding into the v0.20.0 operational baseline.

@@ -5,7 +5,7 @@
     <RootNamespace>StateForge.KestrelHarness</RootNamespace>
     <AssemblyName>StateForge.KestrelHarness</AssemblyName>
     <Nullable>disable</Nullable>
-    <Version>0.21.0</Version>
+    <Version>0.22.1</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>

@@ -12,9 +12,17 @@ namespace StateForge.Replication
 
         public int FilesSkipped { get; set; }
 
+        public int Conflicts { get; set; }
+
+        public bool DryRun { get; set; }
+
+        public string ManifestPath { get; set; }
+
         public int Errors { get; set; }
 
         public List<string> Messages { get; private set; }
+
+        public StateForgeReplicationManifest Manifest { get; set; }
 
         public bool Success
         {
