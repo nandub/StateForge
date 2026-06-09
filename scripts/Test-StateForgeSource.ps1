@@ -348,3 +348,32 @@ if (Test-Path -LiteralPath $replicatorPath) {
         throw "StateForgeFileReplicator Escape method must escape backslashes."
     }
 }
+
+# Validate v0.23-v0.26 snapshot/promotion/failover projects exist.
+$snapshotsProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForge.Snapshots.csproj'
+if (-not (Test-Path -LiteralPath $snapshotsProject)) {
+    throw "StateForge.Snapshots project is required for v0.23.0 through v0.26.0."
+}
+
+$snapshotTests = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.SnapshotServiceTests\StateForge.SnapshotServiceTests.csproj'
+if (-not (Test-Path -LiteralPath $snapshotTests)) {
+    throw "StateForge.SnapshotServiceTests project is required for v0.23.0 through v0.26.0."
+}
+
+# Validate v0.26.1 snapshot marker writers do not contain multiline C# string constants.
+$promotionServicePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeReplicaPromotionService.cs'
+$failoverServicePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeFailoverService.cs'
+
+foreach ($servicePath in @($promotionServicePath, $failoverServicePath)) {
+    if (Test-Path -LiteralPath $servicePath) {
+        $serviceSource = Get-Content -LiteralPath $servicePath -Raw
+
+        if ($serviceSource -match 'string\s+marker\s*=\s*"\{') {
+            throw "Snapshot marker writers must not use raw multiline C# string constants."
+        }
+
+        if ($serviceSource -notmatch 'StringBuilder') {
+            throw "Snapshot marker writers must use StringBuilder for JSON marker output."
+        }
+    }
+}

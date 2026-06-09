@@ -45,7 +45,12 @@ try {
     .\scripts\Test-StateForgeReplication.ps1
     .\scripts\Test-StateForgeReplicationService.ps1
     .\scripts\Test-StateForgeReplicationManifest.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.22.1'
+    .\scripts\Test-StateForgeAutomaticFailover.ps1
+    .\scripts\Test-StateForgeSnapshotMarkers.ps1
+    .\scripts\Test-StateForgeReplicaPromotion.ps1
+    .\scripts\Test-StateForgeSnapshotScheduling.ps1
+    .\scripts\Test-StateForgeSnapshotServices.ps1
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.26.1'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

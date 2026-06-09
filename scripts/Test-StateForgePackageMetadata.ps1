@@ -38,7 +38,8 @@ try {
         'src\StateForge.Format\StateForge.Format.csproj',
         'src\StateForge.Prometheus\StateForge.Prometheus.csproj',
         'src\StateForge.Performance\StateForge.Performance.csproj',
-        'src\StateForge.Replication\StateForge.Replication.csproj'
+        'src\StateForge.Replication\StateForge.Replication.csproj',
+        'src\StateForge.Snapshots\StateForge.Snapshots.csproj'
     )
 
     $errors = New-Object System.Collections.Generic.List[string]

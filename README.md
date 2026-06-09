@@ -6,7 +6,7 @@ It is designed for environments where session state should survive process crash
 
 ## Status
 
-Current version: **0.22.1**
+Current version: **0.26.1**
 
 StateForge is currently in pre-release validation. The core storage engine, ASP.NET Core cache adapter, classic ASP.NET SessionState provider, diagnostics, smoke tests, farm tests, resilience tests, Kestrel harness, and ASP.NET provider harness have all been added and are under active validation.
 
@@ -484,3 +484,19 @@ Adds distributed replication foundations: replication planning, health checks, m
 ## v0.22.1
 
 Adds replication services: host runner, dry-run mode, manifests, conflict detection, and replication service validation. See `docs/replication-services.md`.
+
+## v0.23.0
+
+Adds Snapshot Services. See `docs/snapshot-services.md`.
+
+## v0.24.0
+
+Adds Snapshot Scheduling. See `docs/snapshot-scheduling.md`.
+
+## v0.25.0
+
+Adds Replica Promotion. See `docs/replica-promotion.md`.
+
+## v0.26.1
+
+Adds Automatic Failover. See `docs/automatic-failover.md`.

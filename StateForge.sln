@@ -66,7 +66,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ShardingTests", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SmokeTests", "src\StateForge.SmokeTests\StateForge.SmokeTests.csproj", "{7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SnapshotMarkerTests", "src\StateForge.SnapshotMarkerTests\StateForge.SnapshotMarkerTests.csproj", "{AFFC9E62-DD6C-5EDC-8016-038D97CA63EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SnapshotServiceTests", "src\StateForge.SnapshotServiceTests\StateForge.SnapshotServiceTests.csproj", "{CB0E508B-F266-530F-8F34-A3B35724ECB3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SnapshotTests", "src\StateForge.SnapshotTests\StateForge.SnapshotTests.csproj", "{5325230E-0399-5E8E-9F9D-A32BABBD279E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Snapshots", "src\StateForge.Snapshots\StateForge.Snapshots.csproj", "{ADA698C9-18D8-5C12-9981-B28B34E9656A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.StoreMigrationHarness", "src\StateForge.StoreMigrationHarness\StateForge.StoreMigrationHarness.csproj", "{FE124F67-9C47-5A5D-BBEB-5FA1629F9173}"
 EndProject
@@ -212,10 +218,22 @@ Global
         {7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {7929D5A7-D823-5DB4-986F-AAE9AFC51D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+        {AFFC9E62-DD6C-5EDC-8016-038D97CA63EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {AFFC9E62-DD6C-5EDC-8016-038D97CA63EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {AFFC9E62-DD6C-5EDC-8016-038D97CA63EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {AFFC9E62-DD6C-5EDC-8016-038D97CA63EB}.Release|Any CPU.Build.0 = Release|Any CPU
+        {CB0E508B-F266-530F-8F34-A3B35724ECB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {CB0E508B-F266-530F-8F34-A3B35724ECB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {CB0E508B-F266-530F-8F34-A3B35724ECB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {CB0E508B-F266-530F-8F34-A3B35724ECB3}.Release|Any CPU.Build.0 = Release|Any CPU
         {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {5325230E-0399-5E8E-9F9D-A32BABBD279E}.Release|Any CPU.Build.0 = Release|Any CPU
+        {ADA698C9-18D8-5C12-9981-B28B34E9656A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {ADA698C9-18D8-5C12-9981-B28B34E9656A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {ADA698C9-18D8-5C12-9981-B28B34E9656A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {ADA698C9-18D8-5C12-9981-B28B34E9656A}.Release|Any CPU.Build.0 = Release|Any CPU
         {FE124F67-9C47-5A5D-BBEB-5FA1629F9173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {FE124F67-9C47-5A5D-BBEB-5FA1629F9173}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {FE124F67-9C47-5A5D-BBEB-5FA1629F9173}.Release|Any CPU.ActiveCfg = Release|Any CPU

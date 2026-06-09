@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.26.1
+
+- Added automatic failover primitives.
+- Added primary health evaluation.
+- Added replica selection and failover marker generation.
+- Added `Test-StateForgeAutomaticFailover.ps1`.
+
+## 0.25.0
+
+- Added replica promotion primitives.
+- Added promotion marker generation.
+- Added `Test-StateForgeReplicaPromotion.ps1`.
+
+## 0.24.0
+
+- Added snapshot scheduling primitives.
+- Added snapshot retention support.
+- Added `Test-StateForgeSnapshotScheduling.ps1`.
+
+## 0.23.0
+
+- Added `StateForge.Snapshots`.
+- Added snapshot create/list/restore.
+- Added snapshot manifests.
+- Added `StateForge.SnapshotServiceTests`.
+- Added `Test-StateForgeSnapshotServices.ps1`.
+
+
 ## 0.22.1
 
 - Added `StateForge.Replication.Host`.

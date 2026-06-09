@@ -156,3 +156,12 @@ See `docs/key-rotation.md`.
 ```powershell
 .\scripts\Test-StateForgeReplicationService.ps1
 ```
+
+## Snapshot, Promotion, and Failover Validation
+
+```powershell
+.\scripts\Test-StateForgeSnapshotServices.ps1
+.\scripts\Test-StateForgeSnapshotScheduling.ps1
+.\scripts\Test-StateForgeReplicaPromotion.ps1
+.\scripts\Test-StateForgeAutomaticFailover.ps1
+```

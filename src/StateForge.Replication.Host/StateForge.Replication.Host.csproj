@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.Replication.Host</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.22.1</Version>
+    <Version>0.26.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Replication\StateForge.Replication.csproj" />
