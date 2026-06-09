@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.Tools</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.20.0</Version>
+    <Version>0.19.1</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
@@ -20,6 +20,5 @@
       <ProjectReference Include="..\StateForge.Security\StateForge.Security.csproj" />
       <ProjectReference Include="..\StateForge.Format\StateForge.Format.csproj" />
       <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
-      <ProjectReference Include="..\StateForge.Performance\StateForge.Performance.csproj" />
   </ItemGroup>
 </Project>

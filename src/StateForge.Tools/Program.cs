@@ -8,7 +8,6 @@ using StateForge.Telemetry;
 using StateForge.Security;
 using StateForge.Format;
 using StateForge.Prometheus;
-using StateForge.Performance;
 
 namespace StateForge.Tools
 {
@@ -25,42 +24,6 @@ namespace StateForge.Tools
             string command = args[0];
 
 
-
-
-            if (EqualsIgnoreCase(command, "snapshot"))
-            {
-                string snapshotRootPath = ReadOption(args, "--root");
-                string snapshotPath = ReadOption(args, "--snapshot");
-
-                if (string.IsNullOrWhiteSpace(snapshotRootPath))
-                {
-                    Console.Error.WriteLine("Missing required --root option.");
-                    return 2;
-                }
-
-                if (string.IsNullOrWhiteSpace(snapshotPath))
-                {
-                    snapshotPath = "stateforge-store-snapshot.json";
-                }
-
-                StateForgeStoreSnapshot snapshot = StateForgeStoreSnapshotCache.CaptureAndWrite(snapshotRootPath, snapshotPath);
-                Console.WriteLine(StateForgeStoreSnapshotCache.ToJson(snapshot));
-                return 0;
-            }
-
-            if (EqualsIgnoreCase(command, "prometheus-snapshot"))
-            {
-                string snapshotPath = ReadOption(args, "--snapshot");
-
-                if (string.IsNullOrWhiteSpace(snapshotPath))
-                {
-                    Console.Error.WriteLine("Missing required --snapshot option.");
-                    return 2;
-                }
-
-                Console.Write(StateForgeSnapshotPrometheusCollector.CollectTextFromSnapshotFile(snapshotPath));
-                return 0;
-            }
 
             if (EqualsIgnoreCase(command, "dashboard"))
             {

@@ -19,3 +19,7 @@ The sharding analyzer reports:
 ```powershell
 .\scripts\Test-StateForgeSharding.ps1
 ```
+
+## v0.19.0 Implementation
+
+v0.19.0 adds real FileStore compatibility for sharded and legacy paths.

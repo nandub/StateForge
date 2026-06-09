@@ -1,17 +1,14 @@
 # Changelog
 
-## 0.20.0
+## 0.19.1
 
-- Added snapshot-backed Prometheus formatter.
-- Added snapshot-backed Prometheus collector.
-- Added `StateForge.SnapshotTests`.
-- Added `Test-StateForgeSnapshotMetrics.ps1`.
-- Added `New-StateForgeSnapshot.ps1`.
-- Added `StateForge.Tools snapshot` command.
-- Added `StateForge.Tools prometheus-snapshot` command.
-- Added Kestrel `POST /stateforge/snapshot`.
-- Added Kestrel `GET /stateforge/prometheus-snapshot`.
-- Added `docs/snapshot-backed-metrics.md`.
+- Added transparent candidate-path reads for sharded and legacy stores.
+- Added multi-depth remove for legacy/sharded cleanup.
+- Added `StateForge.ShardingTests`.
+- Added `StateForge.ShardingMigrationHarness`.
+- Added `Test-StateForgeShardingImplementation.ps1`.
+- Added `Invoke-StateForgeShardingMigration.ps1`.
+- Added `docs/sharding.md`.
 
 
 ## 0.18.2

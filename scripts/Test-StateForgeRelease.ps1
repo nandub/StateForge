@@ -41,8 +41,7 @@ try {
     .\scripts\Test-StateForgeApiValidation.ps1
     .\scripts\Test-StateForgeScale.ps1
     .\scripts\Test-StateForgePerformance.ps1
-    .\scripts\Test-StateForgeSnapshotMetrics.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.20.0'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.19.1'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

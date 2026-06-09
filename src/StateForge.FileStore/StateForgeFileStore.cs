@@ -406,7 +406,19 @@ namespace StateForge.FileStore
         private StateForgeEntry ReadEntryByHash(string hash)
         {
             bool invalid;
-            return ReadEntryFromPath(GetPathForHash(hash), out invalid);
+            string[] paths = GetCandidatePathsForHash(hash);
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                StateForgeEntry entry = ReadEntryFromPath(paths[i], out invalid);
+
+                if (entry != null)
+                {
+                    return entry;
+                }
+            }
+
+            return null;
         }
 
         private StateForgeEntry ReadEntryFromPath(string path, out bool invalid)
@@ -629,13 +641,52 @@ namespace StateForge.FileStore
 
         private bool RemoveByHash(string hash)
         {
-            return TryDelete(GetPathForHash(hash));
+            bool removed = false;
+            string[] paths = GetCandidatePathsForHash(hash);
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                if (TryDelete(paths[i]))
+                {
+                    removed = true;
+                }
+            }
+
+            return removed;
         }
 
-        private string GetPathForHash(string hash)
+
+        private string[] GetCandidatePathsForHash(string hash)
+        {
+            List<string> paths = new List<string>();
+            AddUniquePath(paths, GetPathForHash(hash));
+
+            // Rolling upgrade compatibility. Reads and deletes can see the
+            // configured path plus legacy/uncommon shard depths.
+            AddUniquePath(paths, GetPathForHash(hash, 0));
+            AddUniquePath(paths, GetPathForHash(hash, 1));
+            AddUniquePath(paths, GetPathForHash(hash, 2));
+
+            return paths.ToArray();
+        }
+
+        private static void AddUniquePath(List<string> paths, string path)
+        {
+            for (int i = 0; i < paths.Count; i++)
+            {
+                if (string.Equals(paths[i], path, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+            }
+
+            paths.Add(path);
+        }
+
+        private string GetPathForHash(string hash, int depth)
         {
             string path = _sessionsPath;
-            int depth = _options.ShardDepth;
+
             if (depth < 0) { depth = 0; }
             if (depth > 2) { depth = 2; }
 
@@ -645,6 +696,11 @@ namespace StateForge.FileStore
             }
 
             return Path.Combine(path, hash + ".stfg");
+        }
+
+        private string GetPathForHash(string hash)
+        {
+            return GetPathForHash(hash, _options.ShardDepth);
         }
 
         private bool Quarantine(string path)
