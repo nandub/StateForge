@@ -1,5 +1,11 @@
 # Disaster Recovery
 
+## Quorum Before Promotion
+
+`StateForgeQuorumEvaluator` can be used by operators or future recovery orchestration to confirm that the
+configured voting members have quorum and that a named replica satisfies promotion policy. Version 0.32.0
+does not automatically connect this result to failover or leader election.
+
 StateForge disaster recovery is built from snapshots, incremental deltas, promotion, and failover.
 
 ## Full Snapshots

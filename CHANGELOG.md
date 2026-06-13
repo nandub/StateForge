@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.32.0
+
+- Added cluster member and role models for quorum evaluation.
+- Added majority and explicit minimum-vote quorum policies.
+- Added deterministic promotion-candidate eligibility checks.
+- Added diagnostics for lost quorum and rejected candidates.
+- Added the `Quorum` validation suite to Production and Release validation.
+- Kept leader election and automatic promotion integration out of this foundation release.
+
 ## 0.31.1
 
 - Serialized replica sync state updates with a path-scoped cross-process mutex.

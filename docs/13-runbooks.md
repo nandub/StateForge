@@ -88,3 +88,21 @@ Validation:
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 ```
+
+## Quorum Eligibility Check
+
+Before operator-driven promotion:
+
+1. Build the configured `StateForgeClusterMember` set.
+2. Mark unavailable or disabled members accurately.
+3. Evaluate the intended replica by name with `StateForgeQuorumEvaluator`.
+4. Require both `HasQuorum` and `CandidateEligible`.
+5. Review `Reasons` before overriding policy.
+
+The evaluator does not perform promotion or leader election.
+
+Validation:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Quorum
+```

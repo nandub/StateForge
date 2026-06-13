@@ -31,6 +31,7 @@
 | `StateForge.Replication` | Replication library |
 | `StateForge.Replication.Host` | Replication host executable |
 | `StateForge.ReplicaMonitoringTests` | Replica lag, stale-state, and Prometheus validation |
+| `StateForge.QuorumTests` | Cluster membership, quorum, and promotion eligibility validation |
 
 ## Harnesses and Tests
 
@@ -44,6 +45,7 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.ReplicationTests`
 - `StateForge.ReplicationHostTests`
 - `StateForge.ReplicaMonitoringTests`
+- `StateForge.QuorumTests`
 - `StateForge.SnapshotServiceTests`
 - `StateForge.IncrementalSnapshotTests`
 - `StateForge.RecoveryFlowTests`

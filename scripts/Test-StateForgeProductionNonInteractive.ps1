@@ -25,7 +25,7 @@ Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
 try {
-    $runnerPath = '.\scripts\Test-StateForge.ps1'
+    $runnerPath = Join-Path -Path $PSScriptRoot -ChildPath 'Test-StateForge.ps1'
 
     if (-not (Test-Path -LiteralPath $runnerPath)) {
         throw "Missing test runner: $runnerPath"
@@ -42,7 +42,7 @@ try {
     }
 
     [PSCustomObject]@{
-        RunnerPath     = (Resolve-Path -LiteralPath $runnerPath).Path
+        RunnerPath     = $runnerPath
         NonInteractive = $true
         Success        = $true
     }

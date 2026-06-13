@@ -41,6 +41,7 @@
 .\scripts\Test-StateForgeReplication.ps1
 .\scripts\Test-StateForgeReplicationService.ps1
 .\scripts\Test-StateForgeReplicaMonitoring.ps1
+.\scripts\Test-StateForgeQuorum.ps1
 .\scripts\Test-StateForgeSnapshotServices.ps1
 .\scripts\Test-StateForgeAutomaticFailover.ps1
 .\scripts\Test-StateForgeIncrementalSnapshots.ps1
@@ -69,6 +70,7 @@ StateForge uses a single suite-based validation runner:
 .\scripts\Test-StateForge.ps1 -Suite Replication
 .\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+.\scripts\Test-StateForge.ps1 -Suite Quorum
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite Recovery
 .\scripts\Test-StateForge.ps1 -Suite Release

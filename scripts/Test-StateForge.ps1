@@ -42,6 +42,7 @@ param(
         'Replication',
         'ReplicaCatchUp',
         'ReplicaMonitoring',
+        'Quorum',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -58,6 +59,7 @@ param(
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
+$script:StateForgeRepositoryRoot = Split-Path -Path $PSScriptRoot -Parent
 
 function Invoke-StateForgeScript {
     [CmdletBinding()]
@@ -69,22 +71,32 @@ function Invoke-StateForgeScript {
         [hashtable]$Arguments
     )
 
-    if (-not (Test-Path -LiteralPath $Path)) {
-        Write-Verbose "Skipping missing script: $Path"
-        return
+    $resolvedPath = $Path
+    if (-not [System.IO.Path]::IsPathRooted($resolvedPath)) {
+        $resolvedPath = Join-Path -Path $script:StateForgeRepositoryRoot -ChildPath $resolvedPath
     }
 
-    Write-Host "==> $Path"
-
-    if ($null -ne $Arguments -and $Arguments.Count -gt 0) {
-        & $Path @Arguments
-    }
-    else {
-        & $Path
+    if (-not (Test-Path -LiteralPath $resolvedPath)) {
+        throw "Missing required validation script: $resolvedPath"
     }
 
-    if (-not $?) {
-        throw "$Path failed."
+    Write-Host "==> $resolvedPath"
+
+    Push-Location -LiteralPath $script:StateForgeRepositoryRoot
+    try {
+        if ($null -ne $Arguments -and $Arguments.Count -gt 0) {
+            & $resolvedPath @Arguments
+        }
+        else {
+            & $resolvedPath
+        }
+
+        if (-not $?) {
+            throw "$resolvedPath failed."
+        }
+    }
+    finally {
+        Pop-Location
     }
 }
 
@@ -146,6 +158,10 @@ function Invoke-ReplicaMonitoringSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplicaMonitoring.ps1'
 }
 
+function Invoke-QuorumSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeQuorum.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -180,6 +196,7 @@ function Invoke-ProductionSuite {
     Invoke-ReplicationSuite
     Invoke-ReplicaCatchUpSuite
     Invoke-ReplicaMonitoringSuite
+    Invoke-QuorumSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
@@ -197,6 +214,7 @@ function Invoke-ReleaseSuite {
     Invoke-ReplicationSuite
     Invoke-ReplicaCatchUpSuite
     Invoke-ReplicaMonitoringSuite
+    Invoke-QuorumSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -214,6 +232,7 @@ try {
         'Replication' { Invoke-ReplicationSuite }
         'ReplicaCatchUp' { Invoke-ReplicaCatchUpSuite }
         'ReplicaMonitoring' { Invoke-ReplicaMonitoringSuite }
+        'Quorum' { Invoke-QuorumSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

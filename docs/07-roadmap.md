@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.31.1 replica monitoring stabilization.
+This roadmap reflects the current StateForge direction after v0.32.0 quorum foundations.
 
 ## Completed
 
@@ -20,10 +20,11 @@ This roadmap reflects the current StateForge direction after v0.31.1 replica mon
 | v0.30.x | Replica catch-up and resynchronization foundations |
 | v0.31.0 | Replica lag monitoring |
 | v0.31.1 | Replica monitoring stabilization and dashboard integration |
+| v0.32.0 | Quorum foundations and promotion eligibility policy |
 
 ## Current Stable Candidate
 
-`v0.31.1` is the current stable production-candidate baseline.
+`v0.32.0` is the current stable production-candidate baseline.
 
 It validates:
 
@@ -39,22 +40,13 @@ It validates:
 - replication services
 - replication manifests
 - replica catch-up
+- quorum policy
 - snapshots
 - incremental snapshots
 - replica promotion
 - automatic failover
 - recovery flow
 - package metadata
-
-## v0.32.0 — Quorum Foundations
-
-Planned capabilities:
-
-- cluster member model
-- quorum policy model
-- promotion eligibility checks
-- quorum validation harness
-- no automatic leader election yet
 
 ## v0.33.0 — Witness Nodes
 

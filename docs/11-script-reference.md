@@ -21,6 +21,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Layout
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+.\scripts\Test-StateForge.ps1 -Suite Quorum
 .\scripts\Test-StateForge.ps1 -Suite Release
 ```
 
@@ -85,6 +86,13 @@ See `docs\14-replica-catch-up.md`.
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForgeReplicaMonitoring.ps1
+```
+
+## Quorum
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Quorum
+.\scripts\Test-StateForgeQuorum.ps1
 ```
 
 Dashboard replica health uses semicolon-separated `name=path` entries:

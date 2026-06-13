@@ -15,6 +15,7 @@ Applications
      -> Replication
         -> Replica sync state
         -> Lag / stale evaluation
+        -> Quorum policy evaluation
      -> Snapshots
      -> Promotion / Failover
 ```
@@ -40,6 +41,10 @@ Replication performs primary-to-replica file fanout and can produce manifests. C
 
 Each non-dry-run replication or catch-up attempt updates atomic operational metadata in the replica root.
 `StateForgeReplicaMonitor` projects that state into lag, stale, and health results using a configurable threshold.
+
+Quorum foundations model enabled voting members, available votes, majority or explicit thresholds, and
+replica promotion eligibility. The evaluator is deterministic policy logic only; it does not elect a leader
+or invoke failover.
 
 ## Snapshots
 

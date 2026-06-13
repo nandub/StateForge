@@ -37,6 +37,18 @@ for deterministic evaluation. Missing or stale state is reported as unhealthy.
 `StateForgeReplicaConfiguration.Parse` accepts semicolon-separated `name=path` or positional path entries.
 `StateForgeReplicaStateStore.Read` throws `InvalidDataException` for incomplete or invalid persisted state.
 
+## Quorum
+
+- `StateForgeClusterMember`
+- `StateForgeClusterMemberRole`
+- `StateForgeQuorumPolicy`
+- `StateForgeQuorumEvaluator`
+- `StateForgeQuorumResult`
+
+`StateForgeQuorumEvaluator.Evaluate` calculates available and required votes and evaluates one explicitly
+named promotion candidate. A zero `MinimumVotes` uses a strict majority of enabled voting members.
+The evaluator does not select candidates, elect leaders, or invoke promotion.
+
 ## Snapshots
 
 - `StateForgeSnapshotService`

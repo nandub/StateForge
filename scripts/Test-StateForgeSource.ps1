@@ -711,6 +711,49 @@ if ($monitoringRunnerText -notmatch "'ReplicaMonitoring'") {
     throw 'Test-StateForge.ps1 must expose the ReplicaMonitoring suite.'
 }
 
+# Validate v0.32.0 quorum foundations.
+$quorumEvaluatorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeQuorumEvaluator.cs'
+$quorumPolicyPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeQuorumPolicy.cs'
+$quorumMemberPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeClusterMember.cs'
+$quorumTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.QuorumTests\Program.cs'
+$quorumScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeQuorum.ps1'
+
+foreach ($quorumPath in @(
+    $quorumEvaluatorPath,
+    $quorumPolicyPath,
+    $quorumMemberPath,
+    $quorumTestPath,
+    $quorumScriptPath
+)) {
+    if (-not (Test-Path -LiteralPath $quorumPath)) {
+        throw "Missing quorum foundation file: $quorumPath"
+    }
+}
+
+$quorumEvaluatorText = Get-Content -LiteralPath $quorumEvaluatorPath -Raw
+$quorumTestText = Get-Content -LiteralPath $quorumTestPath -Raw
+
+if ($quorumEvaluatorText -notmatch 'RequiredVotes' -or
+    $quorumEvaluatorText -notmatch 'CandidateEligible' -or
+    $quorumEvaluatorText -match 'Promote\(') {
+    throw 'Quorum foundations must calculate votes and eligibility without automatic promotion.'
+}
+
+if ($quorumTestText -notmatch 'majority quorum calculation' -or
+    $quorumTestText -notmatch 'no automatic leader election') {
+    throw 'Quorum tests must cover majority calculation and the no-election boundary.'
+}
+
+if ($monitoringRunnerText -notmatch "'Quorum'") {
+    throw 'Test-StateForge.ps1 must expose the Quorum suite.'
+}
+
+if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
+    $monitoringRunnerText -notmatch 'Missing required validation script' -or
+    $monitoringRunnerText -notmatch 'Push-Location') {
+    throw 'Test-StateForge.ps1 must resolve scripts from the repository root and fail on missing suites.'
+}
+
 
 # Validate v0.30.3 agent guidance.
 $agentsPath = Join-Path -Path $repoRoot -ChildPath 'AGENTS.md'
@@ -729,6 +772,6 @@ if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
     throw 'AGENTS.md must document Production suite validation.'
 }
 
-if ($agentsText -notmatch 'Quorum Foundations') {
+if ($agentsText -notmatch 'Witness Nodes') {
     throw 'AGENTS.md must document the next roadmap milestone.'
 }

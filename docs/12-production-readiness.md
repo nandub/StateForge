@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.31.1 includes hardened replica monitoring in the production-readiness validation layer.
+StateForge v0.32.0 includes quorum policy validation in the production-readiness layer.
 
 ## Production Suite
 
@@ -15,6 +15,7 @@ This suite validates:
 - documentation shape
 - version consistency
 - replica lag monitoring
+- quorum and promotion eligibility policy
 - repository layout
 - source guards
 - health checks
@@ -79,3 +80,12 @@ See `docs\14-replica-catch-up.md`.
 
 The suite validates atomic and concurrent state updates, strict corrupt-state handling, stale-threshold
 boundaries, named multi-replica configuration, dashboard reporting, and Prometheus output.
+
+## Quorum Foundations
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Quorum
+```
+
+The suite validates majority and explicit thresholds, unavailable voters, candidate voting requirements,
+replica-role checks, invalid configurations, and the no-election boundary.

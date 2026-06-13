@@ -4,7 +4,7 @@
     <RootNamespace>StateForge.Telemetry.AspNetCore</RootNamespace>
     <AssemblyName>StateForge.Telemetry.AspNetCore</AssemblyName>
     <Nullable>disable</Nullable>
-    <Version>0.31.1</Version>
+    <Version>0.32.0</Version>
     <Authors>StateForge</Authors>
     <Company>StateForge</Company>
     <Product>StateForge</Product>
