@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.32.0 quorum foundations.
+This roadmap reflects the current StateForge direction after v0.33.0 witness nodes.
 
 ## Completed
 
@@ -21,10 +21,11 @@ This roadmap reflects the current StateForge direction after v0.32.0 quorum foun
 | v0.31.0 | Replica lag monitoring |
 | v0.31.1 | Replica monitoring stabilization and dashboard integration |
 | v0.32.0 | Quorum foundations and promotion eligibility policy |
+| v0.33.0 | Witness state, health, and quorum vote validation |
 
 ## Current Stable Candidate
 
-`v0.32.0` is the current stable production-candidate baseline.
+`v0.33.0` is the current stable production-candidate baseline.
 
 It validates:
 
@@ -41,21 +42,13 @@ It validates:
 - replication manifests
 - replica catch-up
 - quorum policy
+- witness health and votes
 - snapshots
 - incremental snapshots
 - replica promotion
 - automatic failover
 - recovery flow
 - package metadata
-
-## v0.33.0 — Witness Nodes
-
-Planned capabilities:
-
-- witness state file/model
-- witness health checks
-- witness vote validation
-- failover integration points
 
 ## v0.34.0 — Split-Brain Prevention
 

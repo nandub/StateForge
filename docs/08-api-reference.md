@@ -49,6 +49,19 @@ for deterministic evaluation. Missing or stale state is reported as unhealthy.
 named promotion candidate. A zero `MinimumVotes` uses a strict majority of enabled voting members.
 The evaluator does not select candidates, elect leaders, or invoke promotion.
 
+## Witness Nodes
+
+- `StateForgeWitnessNode`
+- `StateForgeWitnessState`
+- `StateForgeWitnessStateStore`
+- `StateForgeWitnessHealthEntry`
+- `StateForgeWitnessEvaluator`
+
+`StateForgeWitnessStateStore` persists atomic `stateforge-witness-state.json` files.
+`StateForgeWitnessEvaluator.Evaluate` validates heartbeat freshness, witness identity, errors, and a
+candidate-specific granted vote. `ToClusterMember` creates a non-promotable witness quorum member whose
+availability reflects the validated vote.
+
 ## Snapshots
 
 - `StateForgeSnapshotService`

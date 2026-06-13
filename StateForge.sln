@@ -94,6 +94,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.FileStore.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.QuorumTests", "src\StateForge.QuorumTests\StateForge.QuorumTests.csproj", "{53885046-F5E8-4443-A2DB-2F63E4F239D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.WitnessTests", "src\StateForge.WitnessTests\StateForge.WitnessTests.csproj", "{C7A46D34-DB96-49B6-989B-0F289EEC21CD}"
+EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
         Debug|Any CPU = Debug|Any CPU
@@ -284,5 +286,9 @@ Global
         {53885046-F5E8-4443-A2DB-2F63E4F239D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {53885046-F5E8-4443-A2DB-2F63E4F239D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {53885046-F5E8-4443-A2DB-2F63E4F239D1}.Release|Any CPU.Build.0 = Release|Any CPU
+        {C7A46D34-DB96-49B6-989B-0F289EEC21CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {C7A46D34-DB96-49B6-989B-0F289EEC21CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {C7A46D34-DB96-49B6-989B-0F289EEC21CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {C7A46D34-DB96-49B6-989B-0F289EEC21CD}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal

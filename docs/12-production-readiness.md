@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.32.0 includes quorum policy validation in the production-readiness layer.
+StateForge v0.33.0 includes witness health and vote validation in the production-readiness layer.
 
 ## Production Suite
 
@@ -16,6 +16,7 @@ This suite validates:
 - version consistency
 - replica lag monitoring
 - quorum and promotion eligibility policy
+- witness heartbeat and candidate vote validation
 - repository layout
 - source guards
 - health checks
@@ -89,3 +90,12 @@ boundaries, named multi-replica configuration, dashboard reporting, and Promethe
 
 The suite validates majority and explicit thresholds, unavailable voters, candidate voting requirements,
 replica-role checks, invalid configurations, and the no-election boundary.
+
+## Witness Nodes
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Witness
+```
+
+The suite validates atomic state, strict corrupt-state handling, heartbeat freshness, identity matching,
+candidate-specific votes, quorum restoration, and witness promotion rejection.

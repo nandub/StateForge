@@ -748,6 +748,49 @@ if ($monitoringRunnerText -notmatch "'Quorum'") {
     throw 'Test-StateForge.ps1 must expose the Quorum suite.'
 }
 
+# Validate v0.33.0 witness nodes.
+$witnessStateStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeWitnessStateStore.cs'
+$witnessEvaluatorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeWitnessEvaluator.cs'
+$witnessNodePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeWitnessNode.cs'
+$witnessTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.WitnessTests\Program.cs'
+$witnessScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeWitness.ps1'
+
+foreach ($witnessPath in @(
+    $witnessStateStorePath,
+    $witnessEvaluatorPath,
+    $witnessNodePath,
+    $witnessTestPath,
+    $witnessScriptPath
+)) {
+    if (-not (Test-Path -LiteralPath $witnessPath)) {
+        throw "Missing witness node file: $witnessPath"
+    }
+}
+
+$witnessStateStoreText = Get-Content -LiteralPath $witnessStateStorePath -Raw
+$witnessEvaluatorText = Get-Content -LiteralPath $witnessEvaluatorPath -Raw
+$witnessTestText = Get-Content -LiteralPath $witnessTestPath -Raw
+
+if ($witnessStateStoreText -notmatch 'File\.Replace' -or
+    $witnessStateStoreText -notmatch 'InvalidDataException') {
+    throw 'Witness state must be written atomically and parsed strictly.'
+}
+
+if ($witnessEvaluatorText -notmatch 'VoteCounted' -or
+    $witnessEvaluatorText -notmatch 'StateForgeClusterMemberRole\.Witness' -or
+    $witnessEvaluatorText -match 'Failover') {
+    throw 'Witness evaluation must validate votes without automatic failover.'
+}
+
+if ($witnessTestText -notmatch 'witness vote restores quorum' -or
+    $witnessTestText -notmatch 'no automatic failover integration') {
+    throw 'Witness tests must cover quorum integration and the failover boundary.'
+}
+
+if ($monitoringRunnerText -notmatch "'Witness'") {
+    throw 'Test-StateForge.ps1 must expose the Witness suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {
@@ -772,6 +815,6 @@ if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
     throw 'AGENTS.md must document Production suite validation.'
 }
 
-if ($agentsText -notmatch 'Witness Nodes') {
+if ($agentsText -notmatch 'Split-Brain Prevention') {
     throw 'AGENTS.md must document the next roadmap milestone.'
 }

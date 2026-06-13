@@ -3,6 +3,7 @@ namespace StateForge.Replication
     public enum StateForgeClusterMemberRole
     {
         Primary = 0,
-        Replica = 1
+        Replica = 1,
+        Witness = 2
     }
 }

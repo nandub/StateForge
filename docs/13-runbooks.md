@@ -106,3 +106,20 @@ Validation:
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Quorum
 ```
+
+## Witness Health and Vote Check
+
+Before counting a witness vote:
+
+1. Confirm `stateforge-witness-state.json` exists in the configured witness root.
+2. Confirm the heartbeat is within the operating threshold.
+3. Confirm the persisted witness name matches the configured witness.
+4. Confirm the vote is granted for the exact intended replica candidate.
+5. Convert the result with `StateForgeWitnessEvaluator.ToClusterMember`.
+6. Re-evaluate quorum and review all reasons before operator-driven promotion.
+
+Witness validation does not initiate failover.
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Witness
+```

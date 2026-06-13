@@ -2,6 +2,7 @@
 
 | Version | Summary |
 |---|---|
+| v0.33.0 | Witness persistence, health, and candidate-specific quorum votes |
 | v0.32.0 | Quorum membership, vote policy, and promotion eligibility foundations |
 | v0.31.1 | Replica monitoring stabilization, named configuration, and dashboard health |
 | v0.31.0 | Replica lag monitoring and Prometheus health metrics |

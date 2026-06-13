@@ -27,7 +27,7 @@ Implemented areas include:
 
 ## Current Version
 
-Current repository version target: **0.32.0**
+Current repository version target: **0.33.0**
 
 When making release changes, keep project versions and validation defaults aligned.
 
@@ -166,21 +166,20 @@ The deterministic test fixture in `StateForge.ReplicaCatchUpTests` must remain i
 Next recommended milestone:
 
 ```text
-v0.33.0 — Witness Nodes
+v0.34.0 — Split-Brain Prevention
 ```
 
 Expected areas:
 
-- witness state file/model
-- witness health checks
-- witness vote validation
-- failover integration points
+- primary lease markers
+- promotion fencing checks
+- stale-primary detection
+- failover safety validation
 - Production suite validation
 
 Later milestones:
 
 ```text
-v0.34.0 — Split-Brain Prevention
 v0.35.0 — Multi-Site Disaster Recovery
 v1.0.0  — Production Release
 ```

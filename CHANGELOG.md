@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.33.0
+
+- Added atomic, strictly validated witness state persistence.
+- Added witness heartbeat freshness and error health evaluation.
+- Added candidate-specific witness vote validation.
+- Added witness quorum-member integration while preventing witness promotion.
+- Added the `Witness` validation suite to Production and Release validation.
+- Kept automatic failover and leader election integration out of this release.
+
 ## 0.32.0
 
 - Added cluster member and role models for quorum evaluation.

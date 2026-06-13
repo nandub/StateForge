@@ -43,6 +43,7 @@ param(
         'ReplicaCatchUp',
         'ReplicaMonitoring',
         'Quorum',
+        'Witness',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -162,6 +163,10 @@ function Invoke-QuorumSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeQuorum.ps1'
 }
 
+function Invoke-WitnessSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeWitness.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -197,6 +202,7 @@ function Invoke-ProductionSuite {
     Invoke-ReplicaCatchUpSuite
     Invoke-ReplicaMonitoringSuite
     Invoke-QuorumSuite
+    Invoke-WitnessSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
@@ -215,6 +221,7 @@ function Invoke-ReleaseSuite {
     Invoke-ReplicaCatchUpSuite
     Invoke-ReplicaMonitoringSuite
     Invoke-QuorumSuite
+    Invoke-WitnessSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -233,6 +240,7 @@ try {
         'ReplicaCatchUp' { Invoke-ReplicaCatchUpSuite }
         'ReplicaMonitoring' { Invoke-ReplicaMonitoringSuite }
         'Quorum' { Invoke-QuorumSuite }
+        'Witness' { Invoke-WitnessSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

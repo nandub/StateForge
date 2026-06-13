@@ -2,8 +2,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.Replication.Host</RootNamespace>
-    <AssemblyName>StateForge.Replication.Host</AssemblyName>
+    <RootNamespace>StateForge.WitnessTests</RootNamespace>
+    <AssemblyName>StateForge.WitnessTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.33.0</Version>

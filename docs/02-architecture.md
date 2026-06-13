@@ -16,6 +16,7 @@ Applications
         -> Replica sync state
         -> Lag / stale evaluation
         -> Quorum policy evaluation
+        -> Witness health and votes
      -> Snapshots
      -> Promotion / Failover
 ```
@@ -45,6 +46,10 @@ Each non-dry-run replication or catch-up attempt updates atomic operational meta
 Quorum foundations model enabled voting members, available votes, majority or explicit thresholds, and
 replica promotion eligibility. The evaluator is deterministic policy logic only; it does not elect a leader
 or invoke failover.
+
+Witness nodes persist heartbeat and candidate-specific vote state outside session storage. A witness vote
+counts only when the state is fresh, error-free, identity-matched, and granted for the evaluated candidate.
+Witnesses participate in quorum but are never promotion candidates.
 
 ## Snapshots
 
