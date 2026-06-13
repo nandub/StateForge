@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.30.2 introduces a production-readiness validation layer.
+StateForge v0.30.3 introduces a production-readiness validation layer.
 
 ## Production Suite
 

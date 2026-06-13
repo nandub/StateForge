@@ -6,7 +6,7 @@ Validates StateForge project version consistency.
 Ensures every src project file uses the expected StateForge package version.
 
 .PARAMETER ExpectedVersion
-Expected project version. Defaults to 0.30.2.
+Expected project version. Defaults to 0.30.3.
 
 .EXAMPLE
 .\scripts\Test-StateForgeVersionConsistency.ps1
@@ -23,7 +23,7 @@ Compatible with Windows PowerShell 5.1.
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$ExpectedVersion = '0.30.2'
+    [string]$ExpectedVersion = '0.30.3'
 )
 
 Set-StrictMode -Version 2.0

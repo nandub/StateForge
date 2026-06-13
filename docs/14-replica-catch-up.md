@@ -1,6 +1,6 @@
 # Replica Catch-Up and Resynchronization
 
-StateForge v0.30.2 introduces replica catch-up foundations.
+StateForge v0.30.3 introduces replica catch-up foundations.
 
 ## Purpose
 
@@ -38,12 +38,12 @@ Dry run is the default.
 
 ## Change Detection
 
-v0.30.2 uses SHA256 content hashing for changed-file detection. File length alone is not sufficient, and timestamp comparison can be unreliable because timestamp resolution differs across filesystems and copy paths.
+v0.30.3 uses SHA256 content hashing for changed-file detection. File length alone is not sufficient, and timestamp comparison can be unreliable because timestamp resolution differs across filesystems and copy paths.
 
 
 ## Deterministic Test Fixtures
 
-v0.30.2 changed replica catch-up tests to write deterministic `.stfg` files directly. This keeps the tests focused on catch-up planning and content-drift detection instead of relying on FileStore path-generation behavior.
+v0.30.3 changed replica catch-up tests to write deterministic `.stfg` files directly. This keeps the tests focused on catch-up planning and content-drift detection instead of relying on FileStore path-generation behavior.
 
 The test suite now validates:
 

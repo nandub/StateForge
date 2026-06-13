@@ -56,7 +56,7 @@
 
 ## Consolidated Runner
 
-StateForge v0.30.2 adds a single validation runner:
+StateForge v0.30.3 adds a single validation runner:
 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs

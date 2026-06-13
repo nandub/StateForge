@@ -2,7 +2,7 @@
 
 StateForge is a resilient, file-backed session and state platform for .NET applications.
 
-Current version: **0.30.2**
+Current version: **0.30.3**
 
 ## Features
 
@@ -101,3 +101,8 @@ See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 ```
 
 See `docs\14-replica-catch-up.md`.
+
+
+## Coding Agents
+
+See [AGENTS.md](AGENTS.md) for repository instructions for Codex, Claude, and other coding agents.

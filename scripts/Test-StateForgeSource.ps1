@@ -451,7 +451,7 @@ foreach ($consolidatedDoc in $consolidatedDocs) {
 }
 
 
-# Validate v0.30.2 docs cleanup: build script must not require legacy documentation files.
+# Validate v0.30.3 docs cleanup: build script must not require legacy documentation files.
 $buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
 if (Test-Path -LiteralPath $buildScriptPath) {
     $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
@@ -475,11 +475,11 @@ if (Test-Path -LiteralPath $buildScriptPath) {
 }
 
 
-# v0.30.2: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# v0.30.3: Documentation shape is validated by Test-StateForgeDocs.ps1.
 # Test-StateForgeSource.ps1 validates source structure only.
 
 
-# Validate v0.30.2 operational dispatcher scope.
+# Validate v0.30.3 operational dispatcher scope.
 $invokeStateForgePath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForge.ps1'
 if (Test-Path -LiteralPath $invokeStateForgePath) {
     $invokeStateForgeText = Get-Content -LiteralPath $invokeStateForgePath -Raw
@@ -501,7 +501,7 @@ if (Test-Path -LiteralPath $invokeStateForgePath) {
 }
 
 
-# Validate v0.30.2 production-readiness files.
+# Validate v0.30.3 production-readiness files.
 $productionReadinessFiles = @(
     'docs\12-production-readiness.md',
     'docs\13-runbooks.md',
@@ -524,7 +524,7 @@ if ($testRunnerText -notmatch "'Production'") {
 }
 
 
-# Validate v0.30.2 non-interactive production validation.
+# Validate v0.30.3 non-interactive production validation.
 $productionRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
 $productionRunnerText = Get-Content -LiteralPath $productionRunnerPath -Raw
 
@@ -537,7 +537,7 @@ if ($productionRunnerText -notmatch "Test-StateForgeHealth\.ps1'\s+-Arguments\s+
 }
 
 
-# Validate v0.30.2 replica catch-up files.
+# Validate v0.30.3 replica catch-up files.
 $replicaCatchUpFiles = @(
     'src\StateForge.Replication\StateForgeReplicaCatchUpService.cs',
     'src\StateForge.Replication\StateForgeReplicaCatchUpOptions.cs',
@@ -562,7 +562,7 @@ if ($testRunnerText -notmatch "'ReplicaCatchUp'") {
 }
 
 
-# Validate v0.30.2 replica catch-up hash detection.
+# Validate v0.30.3 replica catch-up hash detection.
 $replicaCatchUpServicePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaCatchUpService.cs'
 $replicaCatchUpServiceText = Get-Content -LiteralPath $replicaCatchUpServicePath -Raw
 
@@ -575,7 +575,7 @@ if ($replicaCatchUpServiceText -match 'LastWriteUtc') {
 }
 
 
-# Validate v0.30.2 deterministic replica catch-up test fixture.
+# Validate v0.30.3 deterministic replica catch-up test fixture.
 $replicaCatchUpTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ReplicaCatchUpTests\Program.cs'
 $replicaCatchUpTestText = Get-Content -LiteralPath $replicaCatchUpTestPath -Raw
 
@@ -585,4 +585,26 @@ if ($replicaCatchUpTestText -match 'StateForgeFileStore') {
 
 if ($replicaCatchUpTestText -notmatch 'equal-length changed file detection') {
     throw 'Replica catch-up tests must validate equal-length changed file detection.'
+}
+
+
+# Validate v0.30.3 agent guidance.
+$agentsPath = Join-Path -Path $repoRoot -ChildPath 'AGENTS.md'
+
+if (-not (Test-Path -LiteralPath $agentsPath)) {
+    throw 'Missing AGENTS.md.'
+}
+
+$agentsText = Get-Content -LiteralPath $agentsPath -Raw
+
+if ($agentsText -notmatch 'Windows PowerShell 5.1') {
+    throw 'AGENTS.md must document Windows PowerShell 5.1 compatibility requirements.'
+}
+
+if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
+    throw 'AGENTS.md must document Production suite validation.'
+}
+
+if ($agentsText -notmatch 'Replica Lag Monitoring') {
+    throw 'AGENTS.md must document the next roadmap milestone.'
 }

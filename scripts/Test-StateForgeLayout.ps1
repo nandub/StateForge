@@ -134,6 +134,7 @@ try {
     'src\StateForge.ReplicaCatchUpTests\StateForge.ReplicaCatchUpTests.csproj',
     'scripts\Test-StateForgeReplicaCatchUp.ps1',
     'docs\14-replica-catch-up.md'
+    'AGENTS.md'
 
 
 
