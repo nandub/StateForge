@@ -57,3 +57,23 @@ Top-level script entry points:
 | `Test-StateForge.ps1` | Consolidated validation suite runner |
 | `Invoke-StateForge.ps1` | Consolidated operational command runner |
 | `Build-StateForgePackages.ps1` | Package creation |
+
+
+## Operational Script Dispatcher
+
+```powershell
+.\scripts\Invoke-StateForge.ps1 -Command BuildPackages
+```
+
+
+## Operational Script Guidance
+
+`Invoke-StateForge.ps1` is a convenience runner for low-parameter commands only.
+
+Use direct scripts for parameter-rich operations:
+
+```powershell
+.\scripts\Invoke-StateForgeMaintenanceHost.ps1
+.\scripts\Start-StateForgeReplicationHost.ps1
+.\scripts\New-StateForgeIncrementalSnapshot.ps1
+```

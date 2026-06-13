@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.MigrationHarness</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.28.5</Version>
+    <Version>0.28.7</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />

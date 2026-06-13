@@ -1,18 +1,28 @@
 <#
 .SYNOPSIS
-Runs StateForge operational helper commands.
+Runs StateForge convenience commands.
 
 .DESCRIPTION
-Provides a consolidated entry point for operational StateForge script actions while preserving existing scripts.
+Provides a small convenience command runner for operations that do not require
+rich parameter binding. Parameter-heavy operational scripts remain dedicated
+PowerShell entry points so their parameters, prompts, help, and validation stay visible.
+
+Use Test-StateForge.ps1 for validation suites.
 
 .PARAMETER Command
-Operational command to run.
+Convenience command to run.
+
+.PARAMETER Arguments
+Optional hashtable forwarded to the underlying focused script when appropriate.
 
 .EXAMPLE
 .\scripts\Invoke-StateForge.ps1 -Command BuildPackages
 
 .EXAMPLE
-.\scripts\Invoke-StateForge.ps1 -Command NewIncrementalSnapshot -Arguments @{ SourceRootPath='D:\StateForge'; SnapshotRepositoryPath='D:\Snapshots'; ParentSnapshotName='base'; SnapshotName='inc1' }
+.\scripts\Invoke-StateForge.ps1 -Command RunSmokeTest
+
+.EXAMPLE
+.\scripts\Invoke-StateForge.ps1 -Command TestNuGetSources
 
 .INPUTS
 None.
@@ -28,8 +38,16 @@ param(
     [Parameter(Mandatory = $true)]
     [ValidateSet(
         'BuildPackages',
-        'NewIncrementalSnapshot',
-        'StartReplicationHost'
+        'CompareBenchmark',
+        'RunBenchmark',
+        'RunCleanup',
+        'RunFarmTest',
+        'RunResilienceTest',
+        'RunScaleTest',
+        'RunSmokeTest',
+        'RepairSolution',
+        'ShowSmokeDemo',
+        'TestNuGetSources'
     )]
     [string]$Command,
 
@@ -40,7 +58,7 @@ param(
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
-function Invoke-CommandScript {
+function Invoke-StateForgeCommandScript {
     [CmdletBinding()]
     param(
         [Parameter(Mandatory = $true)]
@@ -51,27 +69,33 @@ function Invoke-CommandScript {
         throw "Required script not found: $Path"
     }
 
+    Write-Host "==> $Path"
+
     if ($null -ne $Arguments -and $Arguments.Count -gt 0) {
         & $Path @Arguments
     }
     else {
         & $Path
     }
+
+    if (-not $?) {
+        throw "$Path failed."
+    }
 }
 
 try {
     switch ($Command) {
-        'BuildPackages' {
-            Invoke-CommandScript -Path '.\scripts\Build-StateForgePackages.ps1'
-        }
-
-        'NewIncrementalSnapshot' {
-            Invoke-CommandScript -Path '.\scripts\New-StateForgeIncrementalSnapshot.ps1'
-        }
-
-        'StartReplicationHost' {
-            Invoke-CommandScript -Path '.\scripts\Start-StateForgeReplicationHost.ps1'
-        }
+        'BuildPackages' { Invoke-StateForgeCommandScript -Path '.\scripts\Build-StateForgePackages.ps1' }
+        'CompareBenchmark' { Invoke-StateForgeCommandScript -Path '.\scripts\Compare-StateForgeBenchmark.ps1' }
+        'RunBenchmark' { Invoke-StateForgeCommandScript -Path '.\scripts\Invoke-StateForgeBenchmark.ps1' }
+        'RunCleanup' { Invoke-StateForgeCommandScript -Path '.\scripts\Invoke-StateForgeCleanup.ps1' }
+        'RunFarmTest' { Invoke-StateForgeCommandScript -Path '.\scripts\Invoke-StateForgeFarmTest.ps1' }
+        'RunResilienceTest' { Invoke-StateForgeCommandScript -Path '.\scripts\Invoke-StateForgeResilienceTest.ps1' }
+        'RunScaleTest' { Invoke-StateForgeCommandScript -Path '.\scripts\Invoke-StateForgeScaleTest.ps1' }
+        'RunSmokeTest' { Invoke-StateForgeCommandScript -Path '.\scripts\Invoke-StateForgeSmokeTest.ps1' }
+        'RepairSolution' { Invoke-StateForgeCommandScript -Path '.\scripts\Repair-StateForgeSolution.ps1' }
+        'ShowSmokeDemo' { Invoke-StateForgeCommandScript -Path '.\scripts\Show-StateForgeSmokeDemo.ps1' }
+        'TestNuGetSources' { Invoke-StateForgeCommandScript -Path '.\scripts\Test-NuGetSources.ps1' }
     }
 
     [PSCustomObject]@{

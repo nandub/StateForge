@@ -126,6 +126,7 @@ try {
     'docs\09-release-history.md',
     'docs\10-contributing.md'
     'scripts\Invoke-StateForge.ps1'
+    'docs\11-script-reference.md'
 
 
 

@@ -438,7 +438,8 @@ $consolidatedDocs = @(
     'docs\07-roadmap.md',
     'docs\08-api-reference.md',
     'docs\09-release-history.md',
-    'docs\10-contributing.md'
+    'docs\10-contributing.md',
+    'docs\11-script-reference.md'
 )
 
 foreach ($consolidatedDoc in $consolidatedDocs) {
@@ -450,7 +451,7 @@ foreach ($consolidatedDoc in $consolidatedDocs) {
 }
 
 
-# Validate v0.28.5 docs cleanup: build script must not require legacy documentation files.
+# Validate v0.28.7 docs cleanup: build script must not require legacy documentation files.
 $buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
 if (Test-Path -LiteralPath $buildScriptPath) {
     $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
@@ -474,5 +475,27 @@ if (Test-Path -LiteralPath $buildScriptPath) {
 }
 
 
-# v0.28.5: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# v0.28.7: Documentation shape is validated by Test-StateForgeDocs.ps1.
 # Test-StateForgeSource.ps1 validates source structure only.
+
+
+# Validate v0.28.7 operational dispatcher scope.
+$invokeStateForgePath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForge.ps1'
+if (Test-Path -LiteralPath $invokeStateForgePath) {
+    $invokeStateForgeText = Get-Content -LiteralPath $invokeStateForgePath -Raw
+    $parameterHeavyCommands = @(
+        'RunMaintenanceHost',
+        'StartReplicationHost',
+        'NewIncrementalSnapshot',
+        'NewSnapshot',
+        'RotateKeyRing',
+        'RegisterMaintenanceTask',
+        'UnregisterMaintenanceTask'
+    )
+
+    foreach ($parameterHeavyCommand in $parameterHeavyCommands) {
+        if ($invokeStateForgeText -match "'$parameterHeavyCommand'") {
+            throw "Invoke-StateForge.ps1 must not expose parameter-heavy operational commands: $parameterHeavyCommand"
+        }
+    }
+}

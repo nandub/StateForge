@@ -35,7 +35,8 @@ try {
         'docs\07-roadmap.md',
         'docs\08-api-reference.md',
         'docs\09-release-history.md',
-        'docs\10-contributing.md'
+        'docs\10-contributing.md',
+        'docs\11-script-reference.md'
     )
 
     $forbiddenDocs = @(

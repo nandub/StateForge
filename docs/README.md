@@ -20,3 +20,9 @@ StateForge documentation is intentionally consolidated into a small set of durab
 ## Policy
 
 Do not add one document per feature unless the feature becomes large enough to justify its own guide. Prefer updating one of the consolidated documents.
+
+
+| [11-script-reference.md](11-script-reference.md) | Consolidated validation and operational script usage |
+
+
+`11-script-reference.md` documents the validation runner and convenience command runner.
