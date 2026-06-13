@@ -114,40 +114,51 @@ try {
         'scripts\Rotate-StateForgeKeyRing.ps1',
         'scripts\Test-StateForgeHealth.ps1',
         'scripts\Show-StateForgeSmokeDemo.ps1',
+    'docs\README.md',
+    'docs\01-getting-started.md',
+    'docs\02-architecture.md',
+    'docs\03-disaster-recovery.md',
+    'docs\04-observability.md',
+    'docs\05-testing.md',
+    'docs\06-solution-layout.md',
+    'docs\07-roadmap.md',
+    'docs\08-api-reference.md',
+    'docs\09-release-history.md',
+    'docs\10-contributing.md'
 
-        'docs\getting-started.md',
-        'docs\architecture.md',
-        'docs\configuration.md',
-        'docs\aspnet-provider.md',
-        'docs\aspnetcore-provider.md',
-        'docs\kestrel-harness.md',
-        'docs\encryption.md',
-        'docs\farm-mode.md',
-        'docs\cli-reference.md',
-        'docs\testing.md',
-        'docs\benchmarking.md',
-        'docs\troubleshooting.md',
-        'docs\telemetry.md',
-        'docs\key-rotation.md',
-        'docs\stfg2-format.md',
-        'docs\stfg2-envelope.md',
-        'docs\stfg2-migration.md',
-        'docs\stfg2-store-migration.md',
-        'docs\maintenance.md',
-        'docs\maintenance-host.md',
-        'docs\release-packaging.md',
-        'docs\nuget-packaging.md',
-        'docs\observability.md',
-        'docs\performance-roadmap.md',
-        'docs\performance-scale.md',
-        'docs\sharding-analysis.md',
-        'docs\snapshot-cache.md',
-        'docs\snapshot-backed-metrics.md',
-        'docs\benchmark-exports.md',
-        'docs\api-validation.md',
-        'docs\grafana-dashboard.md',
-        'docs\prometheus.md',
-        'docs\production-deployment.md'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     )
 
     $missing = New-Object System.Collections.Generic.List[string]
@@ -174,3 +185,5 @@ try {
 catch {
     Write-Error -ErrorRecord $_
 }
+
+# v0.28.3: scripts\Test-StateForgeVersionConsistency.ps1

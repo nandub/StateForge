@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.FormatHarness", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.FormatTests", "src\StateForge.FormatTests\StateForge.FormatTests.csproj", "{F91A1052-7D44-5D00-90C3-79513D18D73C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.IncrementalSnapshotTests", "src\StateForge.IncrementalSnapshotTests\StateForge.IncrementalSnapshotTests.csproj", "{02EF9863-FA4A-5F90-8F90-5E56B3240449}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.KestrelClientTest", "src\StateForge.KestrelClientTest\StateForge.KestrelClientTest.csproj", "{63C99681-49FC-50C9-BA30-9F14DBA5C109}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.KestrelHarness", "src\StateForge.KestrelHarness\StateForge.KestrelHarness.csproj", "{B24053E2-C1E9-5C1E-BB4D-6EE3FE1B1E74}"
@@ -140,6 +142,10 @@ Global
         {F91A1052-7D44-5D00-90C3-79513D18D73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {F91A1052-7D44-5D00-90C3-79513D18D73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {F91A1052-7D44-5D00-90C3-79513D18D73C}.Release|Any CPU.Build.0 = Release|Any CPU
+        {02EF9863-FA4A-5F90-8F90-5E56B3240449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {02EF9863-FA4A-5F90-8F90-5E56B3240449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {02EF9863-FA4A-5F90-8F90-5E56B3240449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {02EF9863-FA4A-5F90-8F90-5E56B3240449}.Release|Any CPU.Build.0 = Release|Any CPU
         {63C99681-49FC-50C9-BA30-9F14DBA5C109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {63C99681-49FC-50C9-BA30-9F14DBA5C109}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {63C99681-49FC-50C9-BA30-9F14DBA5C109}.Release|Any CPU.ActiveCfg = Release|Any CPU

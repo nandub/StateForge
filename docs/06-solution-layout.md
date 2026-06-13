@@ -1,0 +1,47 @@
+# Solution Layout
+
+## Core Platform
+
+| Project | Purpose |
+|---|---|
+| `StateForge.Core` | Shared abstractions and core models |
+| `StateForge.Format` | STFG/STFG2 file format |
+| `StateForge.Security` | Security and encryption helpers |
+| `StateForge.FileStore` | File-backed state/session store |
+| `StateForge.Telemetry` | Runtime metrics |
+| `StateForge.Prometheus` | Prometheus text output |
+| `StateForge.Snapshots` | Snapshot, promotion, and failover services |
+| `StateForge.CloudNative` | Cloud-native helpers |
+
+## Providers
+
+| Project | Purpose |
+|---|---|
+| `StateForge.AspNet` | ASP.NET Framework integration |
+| `StateForge.AspNetCore` | ASP.NET Core integration |
+| `StateForge.Telemetry.AspNetCore` | ASP.NET Core telemetry endpoints |
+
+## Operations
+
+| Project | Purpose |
+|---|---|
+| `StateForge.Maintenance` | Cleanup, stats, and health operations |
+| `StateForge.Maintenance.Host` | Maintenance host executable |
+| `StateForge.Tools` | CLI-style tooling |
+| `StateForge.Replication` | Replication library |
+| `StateForge.Replication.Host` | Replication host executable |
+
+## Harnesses and Tests
+
+The repository uses executable harness projects for validation. Examples include:
+
+- `StateForge.FormatHarness`
+- `StateForge.MigrationHarness`
+- `StateForge.StoreMigrationHarness`
+- `StateForge.KestrelHarness`
+- `StateForge.AspNetHarness`
+- `StateForge.ReplicationTests`
+- `StateForge.ReplicationHostTests`
+- `StateForge.SnapshotServiceTests`
+- `StateForge.IncrementalSnapshotTests`
+- `StateForge.RecoveryFlowTests`

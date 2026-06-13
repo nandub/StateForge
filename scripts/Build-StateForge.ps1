@@ -73,3 +73,7 @@ try {
 catch {
     Write-Error -ErrorRecord $_
 }
+
+# v0.28.3 docs consolidated model: Build validation should use Test-StateForgeDocs.ps1
+
+# Consolidated docs required by Test-StateForgeDocs.ps1

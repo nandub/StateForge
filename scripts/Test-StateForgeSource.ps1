@@ -378,31 +378,6 @@ foreach ($servicePath in @($promotionServicePath, $failoverServicePath)) {
     }
 }
 
-# Validate v0.26.2 release hardening requirements.
-$requiredHardeningFiles = @(
-    'src\StateForge.RecoveryFlowTests\StateForge.RecoveryFlowTests.csproj',
-    'scripts\Test-StateForgeRecoveryFlow.ps1',
-    'scripts\Test-StateForgeHardening.ps1',
-    'docs\release-hardening.md'
-)
-
-foreach ($requiredHardeningFile in $requiredHardeningFiles) {
-    $requiredHardeningPath = Join-Path -Path $repoRoot -ChildPath $requiredHardeningFile
-
-    if (-not (Test-Path -LiteralPath $requiredHardeningPath)) {
-        throw "Missing v0.26.2 hardening file: $requiredHardeningFile"
-    }
-}
-
-$csprojFiles = Get-ChildItem -Path (Join-Path -Path $repoRoot -ChildPath 'src') -Recurse -Filter '*.csproj'
-foreach ($csprojFile in $csprojFiles) {
-    $csprojText = Get-Content -LiteralPath $csprojFile.FullName -Raw
-
-    if ($csprojText -notmatch '<Version>0\.26\.2</Version>') {
-        throw "Project version must be 0.26.2: $($csprojFile.FullName)"
-    }
-}
-
 $manualJsonFiles = @(
     'src\StateForge.Replication\StateForgeFileReplicator.cs',
     'src\StateForge.Snapshots\StateForgeSnapshotService.cs',
@@ -421,3 +396,83 @@ foreach ($manualJsonFile in $manualJsonFiles) {
         }
     }
 }
+
+# Validate v0.27 incremental snapshot components exist.
+$incrementalProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.IncrementalSnapshotTests\StateForge.IncrementalSnapshotTests.csproj'
+if (-not (Test-Path -LiteralPath $incrementalProject)) {
+    throw "StateForge.IncrementalSnapshotTests project is required for v0.27.0."
+}
+
+$incrementalService = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeIncrementalSnapshotService.cs'
+if (-not (Test-Path -LiteralPath $incrementalService)) {
+    throw "StateForgeIncrementalSnapshotService is required for v0.27.0."
+}
+
+# Validate v0.27.1 documentation consolidation files exist.
+$documentationFiles = @(
+    'docs\README.md',
+
+
+
+
+    'scripts\Test-StateForgeDocs.ps1'
+)
+
+foreach ($documentationFile in $documentationFiles) {
+    $documentationPath = Join-Path -Path $repoRoot -ChildPath $documentationFile
+
+    if (-not (Test-Path -LiteralPath $documentationPath)) {
+        throw "Missing v0.27.1 documentation consolidation file: $documentationFile"
+    }
+}
+
+# Validate v0.28.x consolidated documentation model.
+$consolidatedDocs = @(
+    'docs\README.md',
+    'docs\01-getting-started.md',
+    'docs\02-architecture.md',
+    'docs\03-disaster-recovery.md',
+    'docs\04-observability.md',
+    'docs\05-testing.md',
+    'docs\06-solution-layout.md',
+    'docs\07-roadmap.md',
+    'docs\08-api-reference.md',
+    'docs\09-release-history.md',
+    'docs\10-contributing.md'
+)
+
+foreach ($consolidatedDoc in $consolidatedDocs) {
+    $consolidatedPath = Join-Path -Path $repoRoot -ChildPath $consolidatedDoc
+
+    if (-not (Test-Path -LiteralPath $consolidatedPath)) {
+        throw "Missing consolidated documentation file: $consolidatedDoc"
+    }
+}
+
+
+# Validate v0.28.2 docs cleanup: build script must not require legacy documentation files.
+$buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
+if (Test-Path -LiteralPath $buildScriptPath) {
+    $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
+    $legacyDocs = @(
+        'docs\getting-started.md',
+        'docs\architecture.md',
+        'docs\configuration.md',
+        'docs\aspnet-provider.md',
+        'docs\aspnetcore-provider.md',
+        'docs\testing.md',
+        'docs\telemetry.md',
+        'docs\prometheus.md',
+        'docs\production-deployment.md'
+    )
+
+    foreach ($legacyDoc in $legacyDocs) {
+        if ($buildScriptText -like "*$legacyDoc*") {
+            throw "Build-StateForge.ps1 must not require legacy documentation files: $legacyDoc"
+        }
+    }
+}
+
+
+# v0.28.3: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# Test-StateForgeSource.ps1 validates source structure only.

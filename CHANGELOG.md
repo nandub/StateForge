@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.26.2
+## 0.28.3
 
 - Added automatic failover primitives.
 - Added primary health evaluation.

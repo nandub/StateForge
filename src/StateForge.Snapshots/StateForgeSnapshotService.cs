@@ -165,12 +165,12 @@ namespace StateForge.Snapshots
             }
         }
 
-        internal static string ResolveSessionsPath(string rootPath)
+        public static string ResolveSessionsPath(string rootPath)
         {
             return Path.Combine(Path.GetFullPath(rootPath), "sessions");
         }
 
-        internal static string MakeRelative(string rootPath, string filePath)
+        public static string MakeRelative(string rootPath, string filePath)
         {
             string root = Path.GetFullPath(rootPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
             string full = Path.GetFullPath(filePath);
@@ -225,7 +225,7 @@ namespace StateForge.Snapshots
             File.WriteAllText(manifestPath, builder.ToString(), Encoding.UTF8);
         }
 
-        internal static string Escape(string value)
+        public static string Escape(string value)
         {
             if (value == null)
             {

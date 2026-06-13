@@ -48,11 +48,14 @@ try {
     .\scripts\Test-StateForgeAutomaticFailover.ps1
     .\scripts\Test-StateForgeSnapshotMarkers.ps1
     .\scripts\Test-StateForgeHardening.ps1
+    .\scripts\Test-StateForgeIncrementalSnapshots.ps1
+    .\scripts\Test-StateForgeDocs.ps1
+    .\scripts\Test-StateForgeVersionConsistency.ps1
     .\scripts\Test-StateForgeRecoveryFlow.ps1
     .\scripts\Test-StateForgeReplicaPromotion.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.26.2'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.28.3'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath
