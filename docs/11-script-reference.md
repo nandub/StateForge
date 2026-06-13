@@ -86,3 +86,11 @@ See `docs\14-replica-catch-up.md`.
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForgeReplicaMonitoring.ps1
 ```
+
+Dashboard replica health uses semicolon-separated `name=path` entries:
+
+```powershell
+dotnet run --project .\src\StateForge.Tools -- dashboard --root C:\stateforge `
+  --replicas "west=C:\replicas\west;east=C:\replicas\east" `
+  --replica-stale-seconds 300
+```

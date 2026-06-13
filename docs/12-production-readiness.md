@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.31.0 includes replica monitoring in the production-readiness validation layer.
+StateForge v0.31.1 includes hardened replica monitoring in the production-readiness validation layer.
 
 ## Production Suite
 
@@ -76,3 +76,6 @@ See `docs\14-replica-catch-up.md`.
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 ```
+
+The suite validates atomic and concurrent state updates, strict corrupt-state handling, stale-threshold
+boundaries, named multi-replica configuration, dashboard reporting, and Prometheus output.

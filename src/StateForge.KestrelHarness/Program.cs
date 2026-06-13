@@ -141,17 +141,7 @@ app.MapGet("/stateforge/prometheus", () =>
             staleSeconds = parsedStaleSeconds;
         }
 
-        List<StateForgeReplicaNode> replicas = new List<StateForgeReplicaNode>();
-        string[] paths = replicaRoots.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
-
-        for (int i = 0; i < paths.Length; i++)
-        {
-            replicas.Add(new StateForgeReplicaNode
-            {
-                Name = "replica-" + (i + 1).ToString(),
-                RootPath = paths[i]
-            });
-        }
+        List<StateForgeReplicaNode> replicas = StateForgeReplicaConfiguration.Parse(replicaRoots);
 
         text += StateForgeReplicaPrometheusCollector.CollectText(
             replicas,

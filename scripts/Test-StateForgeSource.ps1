@@ -635,8 +635,10 @@ if ($promotionText -notmatch 'if \(result\.Success\)' -or
     throw 'Recovery markers must only be written after successful operations.'
 }
 
-# Validate v0.31.0 replica monitoring.
+# Validate v0.31.1 replica monitoring stabilization.
 $replicaStateStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaStateStore.cs'
+$replicaStateMutexPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaStateMutex.cs'
+$replicaConfigurationPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaConfiguration.cs'
 $replicaMonitorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaMonitor.cs'
 $replicaMetricsPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Prometheus\StateForgeReplicaPrometheusFormatter.cs'
 $replicaMonitoringTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ReplicaMonitoringTests\Program.cs'
@@ -644,6 +646,8 @@ $replicaMonitoringScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Tes
 
 foreach ($monitoringPath in @(
     $replicaStateStorePath,
+    $replicaStateMutexPath,
+    $replicaConfigurationPath,
     $replicaMonitorPath,
     $replicaMetricsPath,
     $replicaMonitoringTestPath,
@@ -655,13 +659,26 @@ foreach ($monitoringPath in @(
 }
 
 $replicaStateStoreText = Get-Content -LiteralPath $replicaStateStorePath -Raw
+$replicaStateMutexText = Get-Content -LiteralPath $replicaStateMutexPath -Raw
+$replicaConfigurationText = Get-Content -LiteralPath $replicaConfigurationPath -Raw
 $replicaMonitorText = Get-Content -LiteralPath $replicaMonitorPath -Raw
 $replicaMetricsText = Get-Content -LiteralPath $replicaMetricsPath -Raw
 $replicaMonitoringTestText = Get-Content -LiteralPath $replicaMonitoringTestPath -Raw
 
 if ($replicaStateStoreText -notmatch 'File\.Replace' -or
-    $replicaStateStoreText -notmatch 'LastSuccessfulSyncUtc') {
-    throw 'Replica monitoring state must be written atomically and track successful sync time.'
+    $replicaStateStoreText -notmatch 'InvalidDataException' -or
+    $replicaStateStoreText -notmatch 'StateForgeReplicaStateMutex\.Acquire') {
+    throw 'Replica monitoring state must be atomic, synchronized, and strictly validated.'
+}
+
+if ($replicaStateMutexText -notmatch 'SHA256' -or
+    $replicaStateMutexText -notmatch 'WaitOne') {
+    throw 'Replica monitoring updates must use a path-scoped named mutex.'
+}
+
+if ($replicaConfigurationText -notmatch "IndexOf\('='\)" -or
+    $replicaConfigurationText -notmatch 'replica-') {
+    throw 'Replica configuration must support named and positional entries.'
 }
 
 if ($replicaMonitorText -notmatch 'staleThreshold' -or
@@ -682,8 +699,9 @@ foreach ($metricName in @(
 }
 
 if ($replicaMonitoringTestText -notmatch 'deterministic replica lag calculation' -or
-    $replicaMonitoringTestText -notmatch 'multi-replica Prometheus metrics') {
-    throw 'Replica monitoring tests must cover deterministic lag and multi-replica metrics.'
+    $replicaMonitoringTestText -notmatch 'concurrent replica state updates' -or
+    $replicaMonitoringTestText -notmatch 'corrupt replica state detection') {
+    throw 'Replica monitoring tests must cover deterministic lag, concurrency, and corrupt state.'
 }
 
 $monitoringRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
@@ -711,6 +729,6 @@ if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
     throw 'AGENTS.md must document Production suite validation.'
 }
 
-if ($agentsText -notmatch 'Replica Lag Monitoring') {
+if ($agentsText -notmatch 'Quorum Foundations') {
     throw 'AGENTS.md must document the next roadmap milestone.'
 }

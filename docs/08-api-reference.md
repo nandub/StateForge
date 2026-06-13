@@ -27,12 +27,15 @@ sliding window without extending an absolute expiration deadline.
 - `StateForgeReplicationManifest`
 - `StateForgeReplicaSyncState`
 - `StateForgeReplicaStateStore`
+- `StateForgeReplicaConfiguration`
 - `StateForgeReplicaMonitor`
 - `StateForgeReplicaMonitorSnapshot`
 - `StateForgeReplicaMonitorEntry`
 
 `StateForgeReplicaMonitor.Capture` accepts a stale threshold and can accept an explicit capture timestamp
 for deterministic evaluation. Missing or stale state is reported as unhealthy.
+`StateForgeReplicaConfiguration.Parse` accepts semicolon-separated `name=path` or positional path entries.
+`StateForgeReplicaStateStore.Read` throws `InvalidDataException` for incomplete or invalid persisted state.
 
 ## Snapshots
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.31.1
+
+- Serialized replica sync state updates with a path-scoped cross-process mutex.
+- Added strict validation for incomplete, malformed, and unsupported replica state files.
+- Added named replica configuration using `name=path` entries while preserving positional path compatibility.
+- Added replica health, lag, counters, and errors to the dashboard command.
+- Added stale-threshold boundary, concurrent update, corrupt state, configuration, and metric label tests.
+
 ## 0.31.0
 
 - Added durable per-replica sync state under `stateforge-replica-state.json`.

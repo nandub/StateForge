@@ -16,15 +16,23 @@ namespace StateForge.Replication
             if (!File.Exists(path)) { return null; }
 
             string json = File.ReadAllText(path);
+            ValidateDocument(json, path);
+
             StateForgeReplicaSyncState state = new StateForgeReplicaSyncState();
-            state.Version = ReadString(json, "version");
-            state.ReplicaName = ReadString(json, "replicaName");
-            state.ReplicaRootPath = ReadString(json, "replicaRootPath");
+            state.Version = ReadRequiredString(json, "version");
+            state.ReplicaName = ReadRequiredString(json, "replicaName");
+            state.ReplicaRootPath = ReadRequiredString(json, "replicaRootPath");
             state.LastAttemptUtc = ReadDate(json, "lastAttemptUtc");
             state.LastSuccessfulSyncUtc = ReadDate(json, "lastSuccessfulSyncUtc");
-            state.CatchUpOperations = ReadLong(json, "catchUpOperations");
-            state.FailedSyncs = ReadLong(json, "failedSyncs");
-            state.LastError = ReadString(json, "lastError");
+            state.CatchUpOperations = ReadRequiredLong(json, "catchUpOperations");
+            state.FailedSyncs = ReadRequiredLong(json, "failedSyncs");
+            state.LastError = ReadOptionalString(json, "lastError");
+
+            if (!string.Equals(state.Version, "1", StringComparison.Ordinal))
+            {
+                throw new InvalidDataException("Unsupported replica sync state version '" + state.Version + "'.");
+            }
+
             return state;
         }
 
@@ -69,28 +77,31 @@ namespace StateForge.Replication
             string fullRoot = Path.GetFullPath(replicaRootPath);
             Directory.CreateDirectory(fullRoot);
 
-            StateForgeReplicaSyncState state = Read(fullRoot) ?? new StateForgeReplicaSyncState();
-            state.ReplicaName = string.IsNullOrWhiteSpace(replicaName) ? "replica" : replicaName;
-            state.ReplicaRootPath = fullRoot;
-            state.LastAttemptUtc = attemptedUtc;
-
-            if (catchUp)
+            using (StateForgeReplicaStateMutex.Acquire(GetPath(fullRoot)))
             {
-                state.CatchUpOperations++;
-            }
+                StateForgeReplicaSyncState state = Read(fullRoot) ?? new StateForgeReplicaSyncState();
+                state.ReplicaName = string.IsNullOrWhiteSpace(replicaName) ? "replica" : replicaName;
+                state.ReplicaRootPath = fullRoot;
+                state.LastAttemptUtc = attemptedUtc;
 
-            if (success)
-            {
-                state.LastSuccessfulSyncUtc = attemptedUtc;
-                state.LastError = string.Empty;
-            }
-            else
-            {
-                state.FailedSyncs++;
-                state.LastError = error ?? string.Empty;
-            }
+                if (catchUp)
+                {
+                    state.CatchUpOperations++;
+                }
 
-            WriteAtomic(fullRoot, state);
+                if (success)
+                {
+                    state.LastSuccessfulSyncUtc = attemptedUtc;
+                    state.LastError = string.Empty;
+                }
+                else
+                {
+                    state.FailedSyncs++;
+                    state.LastError = error ?? string.Empty;
+                }
+
+                WriteAtomic(fullRoot, state);
+            }
         }
 
         private static void WriteAtomic(string replicaRootPath, StateForgeReplicaSyncState state)
@@ -143,14 +154,35 @@ namespace StateForge.Replication
 
         private static DateTimeOffset? ReadDate(string json, string name)
         {
-            string value = ReadString(json, name);
+            string value = ReadOptionalString(json, name);
+            if (value.Length == 0)
+            {
+                return null;
+            }
+
             DateTimeOffset parsed;
-            return DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out parsed)
-                ? parsed
-                : (DateTimeOffset?)null;
+            if (!DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out parsed))
+            {
+                throw new InvalidDataException(
+                    "Replica sync state property '" + name + "' is not a valid timestamp.");
+            }
+
+            return parsed;
         }
 
-        private static string ReadString(string json, string name)
+        private static string ReadRequiredString(string json, string name)
+        {
+            string value = ReadOptionalString(json, name);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new InvalidDataException(
+                    "Replica sync state property '" + name + "' is required.");
+            }
+
+            return value;
+        }
+
+        private static string ReadOptionalString(string json, string name)
         {
             Match match = Regex.Match(
                 json,
@@ -159,17 +191,31 @@ namespace StateForge.Replication
             return match.Success ? Unescape(match.Groups["value"].Value) : string.Empty;
         }
 
-        private static long ReadLong(string json, string name)
+        private static long ReadRequiredLong(string json, string name)
         {
             Match match = Regex.Match(
                 json,
                 "\\\"" + Regex.Escape(name) + "\\\"\\s*:\\s*(?<value>\\d+)",
                 RegexOptions.IgnoreCase);
             long value;
-            return match.Success &&
-                long.TryParse(match.Groups["value"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out value)
-                ? value
-                : 0;
+            if (!match.Success ||
+                !long.TryParse(match.Groups["value"].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out value))
+            {
+                throw new InvalidDataException(
+                    "Replica sync state property '" + name + "' must be a non-negative integer.");
+            }
+
+            return value;
+        }
+
+        private static void ValidateDocument(string json, string path)
+        {
+            string value = (json ?? string.Empty).Trim();
+            if (value.Length == 0 || value[0] != '{' || value[value.Length - 1] != '}')
+            {
+                throw new InvalidDataException(
+                    "Replica sync state file is incomplete or invalid: " + path);
+            }
         }
 
         private static string Escape(string value)

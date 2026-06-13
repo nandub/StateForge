@@ -24,6 +24,7 @@ Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
 try {
+    $repoRoot = Split-Path -Path $PSScriptRoot -Parent
     $root = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath 'StateForgeDashboardTest'
 
     if (Test-Path -LiteralPath $root) {
@@ -32,8 +33,25 @@ try {
 
     New-Item -Path $root -ItemType Directory -Force | Out-Null
 
-    $toolProject = Join-Path -Path (Get-Location) -ChildPath 'src\StateForge.Tools\StateForge.Tools.csproj'
-    $output = & dotnet run --project $toolProject --configuration Release -- dashboard --root $root
+    $replicaRoot = Join-Path -Path $root -ChildPath 'replica-west'
+    New-Item -Path $replicaRoot -ItemType Directory -Force | Out-Null
+    $now = [DateTimeOffset]::UtcNow.ToString('o')
+    $replicaState = [ordered]@{
+        version               = '1'
+        replicaName           = 'west'
+        replicaRootPath       = $replicaRoot
+        lastAttemptUtc        = $now
+        lastSuccessfulSyncUtc = $now
+        catchUpOperations     = 2
+        failedSyncs           = 0
+        lastError             = ''
+    } | ConvertTo-Json
+    $statePath = Join-Path -Path $replicaRoot -ChildPath 'stateforge-replica-state.json'
+    [System.IO.File]::WriteAllText($statePath, $replicaState, (New-Object System.Text.UTF8Encoding($false)))
+
+    $toolProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Tools\StateForge.Tools.csproj'
+    $replicaConfiguration = 'west=' + $replicaRoot
+    $output = & dotnet run --project $toolProject --configuration Release --no-build -- dashboard --root $root --replicas $replicaConfiguration --replica-stale-seconds 300
 
     if ($LASTEXITCODE -ne 0) {
         throw "Dashboard command failed with exit code $LASTEXITCODE."
@@ -47,6 +65,10 @@ try {
 
     if ($text -notmatch 'Health') {
         throw "Dashboard health section was not found."
+    }
+
+    if ($text -notmatch 'Replicas' -or $text -notmatch 'west' -or $text -notmatch 'HEALTHY') {
+        throw "Dashboard replica health output was not found."
     }
 
     [PSCustomObject]@{

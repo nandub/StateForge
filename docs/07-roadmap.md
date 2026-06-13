@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.31.0 replica lag monitoring.
+This roadmap reflects the current StateForge direction after v0.31.1 replica monitoring stabilization.
 
 ## Completed
 
@@ -19,10 +19,11 @@ This roadmap reflects the current StateForge direction after v0.31.0 replica lag
 | v0.29.x | Production-readiness validation |
 | v0.30.x | Replica catch-up and resynchronization foundations |
 | v0.31.0 | Replica lag monitoring |
+| v0.31.1 | Replica monitoring stabilization and dashboard integration |
 
 ## Current Stable Candidate
 
-`v0.31.0` is the current stable production-candidate baseline.
+`v0.31.1` is the current stable production-candidate baseline.
 
 It validates:
 
@@ -44,16 +45,6 @@ It validates:
 - automatic failover
 - recovery flow
 - package metadata
-
-## v0.31.1 — Replica Monitoring Stabilization
-
-Planned capabilities:
-
-- deterministic metric fixtures
-- stale replica threshold tests
-- multi-replica lag reporting
-- Prometheus output validation
-- docs and runbook updates
 
 ## v0.32.0 — Quorum Foundations
 

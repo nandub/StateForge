@@ -27,7 +27,7 @@ Implemented areas include:
 
 ## Current Version
 
-Current repository version target: **0.31.0**
+Current repository version target: **0.31.1**
 
 When making release changes, keep project versions and validation defaults aligned.
 
@@ -166,21 +166,20 @@ The deterministic test fixture in `StateForge.ReplicaCatchUpTests` must remain i
 Next recommended milestone:
 
 ```text
-v0.31.1 — Replica Monitoring Stabilization
+v0.32.0 — Quorum Foundations
 ```
 
 Expected areas:
 
-- deterministic metric fixtures
-- stale threshold edge cases
-- multi-replica reporting stabilization
-- dashboard integration
+- cluster member model
+- quorum policy model
+- promotion eligibility checks
+- quorum validation harness
 - Production suite validation
 
 Later milestones:
 
 ```text
-v0.32.0 — Quorum Foundations
 v0.33.0 — Witness Nodes
 v0.34.0 — Split-Brain Prevention
 v0.35.0 — Multi-Site Disaster Recovery

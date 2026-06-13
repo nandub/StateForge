@@ -6,7 +6,7 @@
     <AssemblyName>StateForge.Maintenance.Host</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.31.0</Version>
+    <Version>0.31.1</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Core\StateForge.Core.csproj" />

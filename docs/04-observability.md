@@ -33,6 +33,8 @@ Snapshot-backed metrics allow the system to expose operational state without con
 
 Successful replication and catch-up operations update `stateforge-replica-state.json` in each replica root.
 The file is operational metadata and is not stored under `sessions`.
+Updates are atomic and serialized per replica root. Incomplete, malformed, or unsupported state files are
+reported as unhealthy rather than interpreted as empty state.
 
 Replica monitoring reports:
 
@@ -57,8 +59,17 @@ stateforge_replica_failed_syncs_total
 ```
 
 Kestrel appends these metrics to `/stateforge/prometheus` when
-`STATEFORGE_REPLICA_ROOTS` contains semicolon-separated replica roots.
+`STATEFORGE_REPLICA_ROOTS` contains semicolon-separated replica entries. Use `name=path` to provide stable
+metric labels. Plain path entries remain supported and receive generated names such as `replica-1`.
 `STATEFORGE_REPLICA_STALE_SECONDS` sets the stale threshold and defaults to `300`.
+
+The dashboard uses the same configuration format:
+
+```powershell
+dotnet run --project .\src\StateForge.Tools -- dashboard --root C:\stateforge `
+  --replicas "west=C:\stateforge-replica-west;east=C:\stateforge-replica-east" `
+  --replica-stale-seconds 300
+```
 
 Validation:
 

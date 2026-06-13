@@ -9,6 +9,7 @@ using StateForge.Security;
 using StateForge.Format;
 using StateForge.Prometheus;
 using StateForge.Performance;
+using StateForge.Replication;
 
 namespace StateForge.Tools
 {
@@ -65,10 +66,21 @@ namespace StateForge.Tools
             if (EqualsIgnoreCase(command, "dashboard"))
             {
                 string dashboardRootPath = ReadOption(args, "--root");
+                string dashboardReplicaConfiguration = ReadOption(args, "--replicas");
+                string dashboardStaleSecondsValue = ReadOption(args, "--replica-stale-seconds");
 
                 if (string.IsNullOrWhiteSpace(dashboardRootPath))
                 {
                     Console.Error.WriteLine("Missing required --root option.");
+                    return 2;
+                }
+
+                int dashboardStaleSeconds = 300;
+                if (!string.IsNullOrWhiteSpace(dashboardStaleSecondsValue) &&
+                    (!int.TryParse(dashboardStaleSecondsValue, out dashboardStaleSeconds) ||
+                    dashboardStaleSeconds < 0))
+                {
+                    Console.Error.WriteLine("--replica-stale-seconds must be a non-negative integer.");
                     return 2;
                 }
 
@@ -79,6 +91,21 @@ namespace StateForge.Tools
                 var sfDashboardStats = sfDashboardStore.GetStats();
                 StateForgeHealthResult sfDashboardHealth = sfDashboardStore.CheckHealth();
                 StateForgePrometheusSnapshot sfDashboardMetrics = StateForgePrometheusCollector.Collect(dashboardRootPath);
+                List<StateForgeReplicaNode> sfDashboardReplicas =
+                    StateForgeReplicaConfiguration.Parse(dashboardReplicaConfiguration);
+                StateForgeReplicaMonitorSnapshot sfDashboardReplicaSnapshot =
+                    StateForgeReplicaMonitor.Capture(
+                        sfDashboardReplicas,
+                        TimeSpan.FromSeconds(dashboardStaleSeconds));
+                bool sfDashboardReplicasHealthy = true;
+
+                for (int i = 0; i < sfDashboardReplicaSnapshot.Replicas.Count; i++)
+                {
+                    if (!sfDashboardReplicaSnapshot.Replicas[i].Healthy)
+                    {
+                        sfDashboardReplicasHealthy = false;
+                    }
+                }
 
                 Console.WriteLine("StateForge Dashboard");
                 Console.WriteLine("--------------------");
@@ -112,7 +139,34 @@ namespace StateForge.Tools
                     Console.WriteLine("  Error      : {0}", error);
                 }
 
-                return sfDashboardHealth.Healthy ? 0 : 1;
+                if (sfDashboardReplicaSnapshot.Replicas.Count > 0)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Replicas");
+
+                    foreach (StateForgeReplicaMonitorEntry replica in sfDashboardReplicaSnapshot.Replicas)
+                    {
+                        string status = replica.Healthy ? "HEALTHY" : (replica.Stale ? "STALE" : "UNHEALTHY");
+                        Console.WriteLine("  {0}", replica.ReplicaName);
+                        Console.WriteLine("    Status       : {0}", status);
+                        Console.WriteLine("    Root         : {0}", replica.ReplicaRootPath);
+                        Console.WriteLine("    Lag Seconds  : {0:0.###}", replica.LagSeconds);
+                        Console.WriteLine(
+                            "    Last Sync UTC: {0}",
+                            replica.LastSuccessfulSyncUtc.HasValue
+                                ? replica.LastSuccessfulSyncUtc.Value.ToString("o")
+                                : "never");
+                        Console.WriteLine("    Catch-ups    : {0}", replica.CatchUpOperations);
+                        Console.WriteLine("    Failed Syncs : {0}", replica.FailedSyncs);
+
+                        if (!string.IsNullOrWhiteSpace(replica.LastError))
+                        {
+                            Console.WriteLine("    Last Error   : {0}", replica.LastError);
+                        }
+                    }
+                }
+
+                return sfDashboardHealth.Healthy && sfDashboardReplicasHealthy ? 0 : 1;
             }
 
             if (EqualsIgnoreCase(command, "prometheus"))
@@ -734,4 +788,4 @@ namespace StateForge.Tools
     }
 }
 
-// Commands: dashboard --root PATH; prometheus [--root PATH]
+// Commands: dashboard --root PATH [--replicas "name=PATH;PATH"] [--replica-stale-seconds N]; prometheus [--root PATH]
