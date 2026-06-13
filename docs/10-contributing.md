@@ -37,3 +37,12 @@ Use direct scripts for parameter-rich operations:
 .\scripts\Start-StateForgeReplicationHost.ps1
 .\scripts\New-StateForgeIncrementalSnapshot.ps1
 ```
+
+
+## Production Readiness
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.

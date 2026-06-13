@@ -19,8 +19,18 @@
 
 | Version | Milestone |
 |---|---|
-| v0.29.x | Replica catch-up / resynchronization |
-| v0.30.x | Cluster membership |
+| v0.29.x | Production readiness |
+| v0.30.x | Replica catch-up / resynchronization |
+| v0.31.x | Cluster membership |
 | v0.31.x | Leader election |
 | v0.32.x | Read-only replicas |
 | v0.33.x | Cluster metadata service |
+
+
+## Production Readiness
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.

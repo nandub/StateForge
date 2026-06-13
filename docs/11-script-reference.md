@@ -59,3 +59,12 @@ This keeps PowerShell parameter binding, prompts, validation, and help text visi
 - Use `Invoke-StateForge.ps1` only for convenience commands.
 - Keep parameter-heavy operational scripts dedicated.
 - Do not hide required operational parameters behind a generic dispatcher.
+
+
+## Production Readiness
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.

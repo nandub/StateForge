@@ -2,7 +2,7 @@
 
 StateForge is a resilient, file-backed session and state platform for .NET applications.
 
-Current version: **0.28.7**
+Current version: **0.29.0**
 
 ## Features
 
@@ -82,3 +82,12 @@ Use direct scripts for parameter-rich operations:
 .\scripts\Start-StateForgeReplicationHost.ps1
 .\scripts\New-StateForgeIncrementalSnapshot.ps1
 ```
+
+
+## Production Readiness
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.

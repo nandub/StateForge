@@ -74,6 +74,6 @@ catch {
     Write-Error -ErrorRecord $_
 }
 
-# v0.28.7 docs consolidated model: Build validation should use Test-StateForgeDocs.ps1
+# v0.29.0 docs consolidated model: Build validation should use Test-StateForgeDocs.ps1
 
 # Consolidated docs required by Test-StateForgeDocs.ps1

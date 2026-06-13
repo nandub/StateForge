@@ -56,7 +56,7 @@
 
 ## Consolidated Runner
 
-StateForge v0.28.7 adds a single validation runner:
+StateForge v0.29.0 adds a single validation runner:
 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs
@@ -93,3 +93,12 @@ Use direct scripts for parameter-rich operations:
 .\scripts\Start-StateForgeReplicationHost.ps1
 .\scripts\New-StateForgeIncrementalSnapshot.ps1
 ```
+
+
+## Production Readiness
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.

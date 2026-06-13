@@ -1,4 +1,5 @@
 artifacts
+backups
 bin
 obj
 stateforge-keyring.json

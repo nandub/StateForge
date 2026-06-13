@@ -44,6 +44,7 @@ param(
         'Recovery',
         'Hardening',
         'Release',
+        'Production',
         'All'
     )]
     [string]$Suite = 'All',
@@ -146,6 +147,21 @@ function Invoke-HardeningSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHardening.ps1'
 }
 
+
+function Invoke-ProductionSuite {
+    Invoke-DocsSuite
+    Invoke-VersionSuite
+    Invoke-LayoutSuite
+    Invoke-SourceSuite
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHealth.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Invoke-StateForgeSmokeTest.ps1'
+    Invoke-ObservabilitySuite
+    Invoke-ReplicationSuite
+    Invoke-SnapshotsSuite
+    Invoke-RecoverySuite
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
+}
+
 function Invoke-ReleaseSuite {
     Invoke-DocsSuite
     Invoke-VersionSuite
@@ -175,6 +191,7 @@ try {
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }
         'Release' { Invoke-ReleaseSuite }
+        'Production' { Invoke-ProductionSuite }
         'All' { Invoke-ReleaseSuite }
     }
 

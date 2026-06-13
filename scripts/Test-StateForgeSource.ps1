@@ -451,7 +451,7 @@ foreach ($consolidatedDoc in $consolidatedDocs) {
 }
 
 
-# Validate v0.28.7 docs cleanup: build script must not require legacy documentation files.
+# Validate v0.29.0 docs cleanup: build script must not require legacy documentation files.
 $buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
 if (Test-Path -LiteralPath $buildScriptPath) {
     $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
@@ -475,11 +475,11 @@ if (Test-Path -LiteralPath $buildScriptPath) {
 }
 
 
-# v0.28.7: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# v0.29.0: Documentation shape is validated by Test-StateForgeDocs.ps1.
 # Test-StateForgeSource.ps1 validates source structure only.
 
 
-# Validate v0.28.7 operational dispatcher scope.
+# Validate v0.29.0 operational dispatcher scope.
 $invokeStateForgePath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForge.ps1'
 if (Test-Path -LiteralPath $invokeStateForgePath) {
     $invokeStateForgeText = Get-Content -LiteralPath $invokeStateForgePath -Raw
@@ -498,4 +498,27 @@ if (Test-Path -LiteralPath $invokeStateForgePath) {
             throw "Invoke-StateForge.ps1 must not expose parameter-heavy operational commands: $parameterHeavyCommand"
         }
     }
+}
+
+
+# Validate v0.29.0 production-readiness files.
+$productionReadinessFiles = @(
+    'docs\12-production-readiness.md',
+    'docs\13-runbooks.md',
+    'scripts\Test-StateForgeProduction.ps1'
+)
+
+foreach ($productionReadinessFile in $productionReadinessFiles) {
+    $productionReadinessPath = Join-Path -Path $repoRoot -ChildPath $productionReadinessFile
+
+    if (-not (Test-Path -LiteralPath $productionReadinessPath)) {
+        throw "Missing production-readiness file: $productionReadinessFile"
+    }
+}
+
+$testRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
+$testRunnerText = Get-Content -LiteralPath $testRunnerPath -Raw
+
+if ($testRunnerText -notmatch "'Production'") {
+    throw "Test-StateForge.ps1 must expose the Production suite."
 }

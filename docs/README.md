@@ -26,3 +26,7 @@ Do not add one document per feature unless the feature becomes large enough to j
 
 
 `11-script-reference.md` documents the validation runner and convenience command runner.
+
+
+| [12-production-readiness.md](12-production-readiness.md) | Production-readiness validation |
+| [13-runbooks.md](13-runbooks.md) | Operational runbooks for failover, restore, rolling upgrades, and package verification |

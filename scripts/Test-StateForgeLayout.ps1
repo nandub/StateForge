@@ -127,6 +127,9 @@ try {
     'docs\10-contributing.md'
     'scripts\Invoke-StateForge.ps1'
     'docs\11-script-reference.md'
+    'docs\12-production-readiness.md',
+    'docs\13-runbooks.md',
+    'scripts\Test-StateForgeProduction.ps1'
 
 
 
@@ -188,4 +191,4 @@ catch {
     Write-Error -ErrorRecord $_
 }
 
-# v0.28.4: scripts\Test-StateForgeVersionConsistency.ps1
+# v0.29.0: scripts\Test-StateForgeVersionConsistency.ps1
