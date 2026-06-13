@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.30.3 introduces a production-readiness validation layer.
+StateForge v0.31.0 includes replica monitoring in the production-readiness validation layer.
 
 ## Production Suite
 
@@ -14,6 +14,7 @@ This suite validates:
 
 - documentation shape
 - version consistency
+- replica lag monitoring
 - repository layout
 - source guards
 - health checks
@@ -69,3 +70,9 @@ This allows the suite to run in CI/CD, scheduled jobs, and release gates.
 ```
 
 See `docs\14-replica-catch-up.md`.
+
+## Replica Monitoring
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+```

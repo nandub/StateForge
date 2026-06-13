@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.30.4 hardening.
+This roadmap reflects the current StateForge direction after v0.31.0 replica lag monitoring.
 
 ## Completed
 
@@ -18,10 +18,11 @@ This roadmap reflects the current StateForge direction after v0.30.4 hardening.
 | v0.28.x | Documentation and script stabilization |
 | v0.29.x | Production-readiness validation |
 | v0.30.x | Replica catch-up and resynchronization foundations |
+| v0.31.0 | Replica lag monitoring |
 
 ## Current Stable Candidate
 
-`v0.30.4` is the current stable production-candidate baseline.
+`v0.31.0` is the current stable production-candidate baseline.
 
 It validates:
 
@@ -43,36 +44,6 @@ It validates:
 - automatic failover
 - recovery flow
 - package metadata
-
-## v0.31.0 — Replica Lag Monitoring
-
-Goal: give operators visibility into replica freshness.
-
-Planned capabilities:
-
-- track last successful replication timestamp
-- calculate replica lag duration
-- detect stale replicas
-- expose replica health state
-- expose Prometheus metrics
-- add validation tests
-- include monitoring in Production suite
-
-Suggested metrics:
-
-```text
-stateforge_replica_lag_seconds
-stateforge_replica_healthy
-stateforge_replica_last_sync_timestamp
-stateforge_replica_catchup_operations_total
-stateforge_replica_failed_syncs_total
-```
-
-Suggested validation:
-
-```powershell
-.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
-```
 
 ## v0.31.1 — Replica Monitoring Stabilization
 

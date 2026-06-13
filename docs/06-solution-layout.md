@@ -30,6 +30,7 @@
 | `StateForge.Tools` | CLI-style tooling |
 | `StateForge.Replication` | Replication library |
 | `StateForge.Replication.Host` | Replication host executable |
+| `StateForge.ReplicaMonitoringTests` | Replica lag, stale-state, and Prometheus validation |
 
 ## Harnesses and Tests
 
@@ -42,6 +43,7 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.AspNetHarness`
 - `StateForge.ReplicationTests`
 - `StateForge.ReplicationHostTests`
+- `StateForge.ReplicaMonitoringTests`
 - `StateForge.SnapshotServiceTests`
 - `StateForge.IncrementalSnapshotTests`
 - `StateForge.RecoveryFlowTests`

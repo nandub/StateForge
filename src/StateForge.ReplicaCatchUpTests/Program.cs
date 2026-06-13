@@ -55,10 +55,12 @@ namespace StateForge.ReplicaCatchUpTests
                 Require(plan.ExtraFiles == 1, "Extra count mismatch.");
                 Require(plan.CopiedFiles == 0, "Dry-run should not copy files.");
                 Require(!File.Exists(Path.Combine(replica, "sessions", "bb", "missing.stfg")), "Dry-run copied missing file.");
+                Require(!File.Exists(StateForgeReplicaStateStore.GetPath(replica)), "Dry-run wrote catch-up sync state.");
 
                 StateForgeReplicaCatchUpOptions apply = new StateForgeReplicaCatchUpOptions();
                 apply.PrimaryRootPath = primary;
                 apply.ReplicaRootPath = replica;
+                apply.ReplicaName = "catch-up-replica";
                 apply.DryRun = false;
                 apply.DeleteExtraReplicaFiles = true;
 
@@ -70,6 +72,10 @@ namespace StateForge.ReplicaCatchUpTests
                 Require(File.Exists(Path.Combine(replica, "sessions", "bb", "missing.stfg")), "Missing file was not copied.");
                 Require(ReadFixture(replica, "sessions\\cc\\changed.stfg") == "aaaa", "Changed file was not copied from primary.");
                 Require(!File.Exists(Path.Combine(replica, "sessions", "aa", "extra.stfg")), "Extra file was not deleted.");
+                StateForgeReplicaSyncState syncState = StateForgeReplicaStateStore.Read(replica);
+                Require(syncState != null, "Catch-up sync state missing.");
+                Require(syncState.CatchUpOperations == 1, "Catch-up operation counter mismatch.");
+                Require(syncState.LastSuccessfulSyncUtc.HasValue, "Catch-up successful sync timestamp missing.");
 
                 StateForgeReplicaCatchUpResult finalPlan = service.Plan(apply);
                 Require(finalPlan.MissingFiles == 0, "Replica still missing files.");
@@ -82,6 +88,7 @@ namespace StateForge.ReplicaCatchUpTests
                 Console.WriteLine("PASS: extra file detection");
                 Console.WriteLine("PASS: replica catch-up apply");
                 Console.WriteLine("PASS: replica convergence");
+                Console.WriteLine("PASS: catch-up monitoring state");
 
                 Directory.Delete(root, true);
                 return 0;

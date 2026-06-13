@@ -25,6 +25,14 @@ sliding window without extending an absolute expiration deadline.
 - `StateForgeReplicationOptions`
 - `StateForgeReplicationResult`
 - `StateForgeReplicationManifest`
+- `StateForgeReplicaSyncState`
+- `StateForgeReplicaStateStore`
+- `StateForgeReplicaMonitor`
+- `StateForgeReplicaMonitorSnapshot`
+- `StateForgeReplicaMonitorEntry`
+
+`StateForgeReplicaMonitor.Capture` accepts a stale threshold and can accept an explicit capture timestamp
+for deterministic evaluation. Missing or stale state is reported as unhealthy.
 
 ## Snapshots
 
@@ -41,3 +49,8 @@ sliding window without extending an absolute expiration deadline.
 - `StateForgeReplicaPromotionOptions`
 - `StateForgeFailoverService`
 - `StateForgeFailoverOptions`
+
+## Replica Prometheus
+
+- `StateForgeReplicaPrometheusCollector`
+- `StateForgeReplicaPrometheusFormatter`

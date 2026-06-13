@@ -22,11 +22,12 @@ Implemented areas include:
 - replica promotion
 - automatic failover
 - replica catch-up and resynchronization
+- replica lag monitoring
 - production-readiness validation
 
 ## Current Version
 
-Current repository version target: **0.30.4**
+Current repository version target: **0.31.0**
 
 When making release changes, keep project versions and validation defaults aligned.
 
@@ -165,16 +166,15 @@ The deterministic test fixture in `StateForge.ReplicaCatchUpTests` must remain i
 Next recommended milestone:
 
 ```text
-v0.31.0 — Replica Lag Monitoring
+v0.31.1 — Replica Monitoring Stabilization
 ```
 
 Expected areas:
 
-- replica last sync timestamp
-- replica lag duration
-- stale replica detection
-- Prometheus metrics
-- dashboard/test integration
+- deterministic metric fixtures
+- stale threshold edge cases
+- multi-replica reporting stabilization
+- dashboard integration
 - Production suite validation
 
 Later milestones:

@@ -13,6 +13,8 @@ Applications
      -> Sharded sessions
      -> Telemetry counters
      -> Replication
+        -> Replica sync state
+        -> Lag / stale evaluation
      -> Snapshots
      -> Promotion / Failover
 ```
@@ -35,6 +37,9 @@ Sharding distributes session files into hash-derived folders. This avoids large 
 ## Replication
 
 Replication performs primary-to-replica file fanout and can produce manifests. Current replication is deterministic and file-based, not consensus-based.
+
+Each non-dry-run replication or catch-up attempt updates atomic operational metadata in the replica root.
+`StateForgeReplicaMonitor` projects that state into lag, stale, and health results using a configurable threshold.
 
 ## Snapshots
 

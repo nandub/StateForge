@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.31.0
+
+- Added durable per-replica sync state under `stateforge-replica-state.json`.
+- Added successful sync timestamps, failed sync counters, and catch-up operation counters.
+- Added deterministic replica lag calculation and stale-threshold evaluation.
+- Added multi-replica health snapshots.
+- Added labeled Prometheus metrics for lag, health, last sync, catch-up operations, and failed syncs.
+- Added optional Kestrel metrics integration through `STATEFORGE_REPLICA_ROOTS`.
+- Added the `ReplicaMonitoring` validation suite to Release and Production validation.
+
 ## 0.30.4
 
 - Added snapshot repository path containment before copy or recursive deletion.

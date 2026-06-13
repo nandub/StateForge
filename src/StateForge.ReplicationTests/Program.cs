@@ -59,6 +59,7 @@ namespace StateForge.ReplicationTests
                 Require(dryRunResult.FilesCopied == 0, "Dry-run should not copy files.");
                 Require(dryRunResult.FilesSkipped == 12, "Dry-run skipped count mismatch.");
                 Require(File.Exists(dryRunReplication.ManifestPath), "Dry-run manifest missing.");
+                Require(!File.Exists(StateForgeReplicaStateStore.GetPath(replicaA)), "Dry-run wrote replica sync state.");
 
                 StateForgeReplicationResult result = replicator.Replicate(replication);
 
@@ -72,6 +73,9 @@ namespace StateForge.ReplicationTests
 
                 Require(replicaAFiles == 12, "Replica A file count mismatch.");
                 Require(replicaBFiles == 12, "Replica B file count mismatch.");
+                Require(File.Exists(StateForgeReplicaStateStore.GetPath(replicaA)), "Replica A sync state missing.");
+                Require(File.Exists(StateForgeReplicaStateStore.GetPath(replicaB)), "Replica B sync state missing.");
+                Require(StateForgeReplicaStateStore.Read(replicaA).LastSuccessfulSyncUtc.HasValue, "Replica A successful sync timestamp missing.");
 
                 Console.WriteLine("PASS: replication health");
                 Console.WriteLine("PASS: replication plan");
@@ -80,6 +84,7 @@ namespace StateForge.ReplicationTests
                 Console.WriteLine("PASS: replication copy");
                 Console.WriteLine("PASS: sharded layout preserved");
                 Console.WriteLine("PASS: multi-replica fanout");
+                Console.WriteLine("PASS: replication monitoring state");
 
                 Directory.Delete(root, true);
                 return 0;

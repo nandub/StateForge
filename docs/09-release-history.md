@@ -2,6 +2,8 @@
 
 | Version | Summary |
 |---|---|
+| v0.31.0 | Replica lag monitoring and Prometheus health metrics |
+| v0.30.x | Replica catch-up and production hardening |
 | v0.19.x | Sharding foundation and migration validation |
 | v0.20.x | Operational snapshot metrics |
 | v0.21.x | Replication foundations |

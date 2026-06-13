@@ -23,6 +23,19 @@ namespace StateForge.Replication
             {
                 result.Errors++;
                 result.Messages.Add("Primary sessions path does not exist: " + plan.PrimarySessionsPath);
+
+                if (!options.DryRun)
+                {
+                    for (int i = 0; i < plan.Targets.Count; i++)
+                    {
+                        RecordState(
+                            plan.Targets[i],
+                            false,
+                            "Primary sessions path does not exist.",
+                            result);
+                    }
+                }
+
                 return result;
             }
 
@@ -33,10 +46,22 @@ namespace StateForge.Replication
             {
                 StateForgeReplicationTarget target = plan.Targets[t];
                 result.ReplicasVisited++;
+                int errorsBefore = result.Errors;
+                int conflictsBefore = result.Conflicts;
 
                 for (int i = 0; i < files.Length; i++)
                 {
                     TryReplicateFile(options, plan, target, files[i], result, manifest);
+                }
+
+                if (!options.DryRun)
+                {
+                    bool targetSuccess = result.Errors == errorsBefore &&
+                        result.Conflicts == conflictsBefore;
+                    string error = targetSuccess
+                        ? string.Empty
+                        : "Replication completed with copy errors or conflicts.";
+                    RecordState(target, targetSuccess, error, result);
                 }
             }
 
@@ -47,6 +72,30 @@ namespace StateForge.Replication
             }
 
             return result;
+        }
+
+        private static void RecordState(
+            StateForgeReplicationTarget target,
+            bool success,
+            string error,
+            StateForgeReplicationResult result)
+        {
+            try
+            {
+                StateForgeReplicaStateStore.RecordReplication(
+                    target.RootPath,
+                    target.Name,
+                    success,
+                    error,
+                    DateTimeOffset.UtcNow);
+            }
+            catch (Exception ex)
+            {
+                result.Errors++;
+                result.Messages.Add(
+                    "Replica monitoring state write failed for " + target.Name + ": " +
+                    ex.GetType().Name + ": " + ex.Message);
+            }
         }
 
         private static void TryReplicateFile(

@@ -2,7 +2,7 @@
 
 StateForge is a resilient, file-backed session and state platform for .NET applications.
 
-Current version: **0.30.4**
+Current version: **0.31.0**
 
 ## Features
 

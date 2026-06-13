@@ -2,15 +2,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.RecoveryFlowTests</RootNamespace>
-    <AssemblyName>StateForge.RecoveryFlowTests</AssemblyName>
+    <RootNamespace>StateForge.ReplicaMonitoringTests</RootNamespace>
+    <AssemblyName>StateForge.ReplicaMonitoringTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.31.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
-    <ProjectReference Include="..\StateForge.Snapshots\StateForge.Snapshots.csproj" />
     <ProjectReference Include="..\StateForge.Replication\StateForge.Replication.csproj" />
+    <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
   </ItemGroup>
 </Project>

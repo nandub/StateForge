@@ -53,9 +53,10 @@ try {
     .\scripts\Test-StateForgeVersionConsistency.ps1
     .\scripts\Test-StateForgeRecoveryFlow.ps1
     .\scripts\Test-StateForgeReplicaPromotion.ps1
+    .\scripts\Test-StateForgeReplicaMonitoring.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.30.4'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.31.0'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

@@ -6,6 +6,8 @@ namespace StateForge.Replication
 
         public string ReplicaRootPath { get; set; }
 
+        public string ReplicaName { get; set; }
+
         public bool DryRun { get; set; }
 
         public bool DeleteExtraReplicaFiles { get; set; }

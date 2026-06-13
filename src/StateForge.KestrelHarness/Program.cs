@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
@@ -9,6 +10,7 @@ using StateForge.AspNetCore;
 using StateForge.CloudNative;
 using StateForge.Telemetry;
 using StateForge.Prometheus;
+using StateForge.Replication;
 using StateForge.Performance;
 using StateForge.Telemetry.AspNetCore;
 
@@ -126,6 +128,36 @@ if (string.IsNullOrWhiteSpace(stateForgePrometheusRootPath))
 app.MapGet("/stateforge/prometheus", () =>
 {
     string text = StateForgePrometheusCollector.CollectText(stateForgePrometheusRootPath);
+
+    string replicaRoots = Environment.GetEnvironmentVariable("STATEFORGE_REPLICA_ROOTS");
+    if (!string.IsNullOrWhiteSpace(replicaRoots))
+    {
+        int staleSeconds = 300;
+        int parsedStaleSeconds;
+        string configuredStaleSeconds = Environment.GetEnvironmentVariable("STATEFORGE_REPLICA_STALE_SECONDS");
+
+        if (int.TryParse(configuredStaleSeconds, out parsedStaleSeconds) && parsedStaleSeconds >= 0)
+        {
+            staleSeconds = parsedStaleSeconds;
+        }
+
+        List<StateForgeReplicaNode> replicas = new List<StateForgeReplicaNode>();
+        string[] paths = replicaRoots.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 0; i < paths.Length; i++)
+        {
+            replicas.Add(new StateForgeReplicaNode
+            {
+                Name = "replica-" + (i + 1).ToString(),
+                RootPath = paths[i]
+            });
+        }
+
+        text += StateForgeReplicaPrometheusCollector.CollectText(
+            replicas,
+            TimeSpan.FromSeconds(staleSeconds));
+    }
+
     return Results.Text(text, "text/plain; version=0.0.4; charset=utf-8");
 });
 

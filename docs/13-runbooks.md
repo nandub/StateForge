@@ -72,3 +72,17 @@ Validation:
 ```
 
 See `docs\14-replica-catch-up.md`.
+
+## Replica Lag Check
+
+1. Confirm `stateforge-replica-state.json` exists in each replica root.
+2. Review `lastSuccessfulSyncUtc`, `failedSyncs`, and `lastError`.
+3. Scrape `/stateforge/prometheus` with `STATEFORGE_REPLICA_ROOTS` configured.
+4. Alert when `stateforge_replica_healthy` is `0` or lag exceeds the operating threshold.
+5. Run catch-up before promotion if a replica is stale.
+
+Validation:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+```

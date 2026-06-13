@@ -20,6 +20,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Version
 .\scripts\Test-StateForge.ps1 -Suite Layout
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForge.ps1 -Suite Release
 ```
 
@@ -78,3 +79,10 @@ See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 ```
 
 See `docs\14-replica-catch-up.md`.
+
+## Replica Monitoring
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+.\scripts\Test-StateForgeReplicaMonitoring.ps1
+```

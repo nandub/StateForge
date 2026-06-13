@@ -40,6 +40,7 @@
 .\scripts\Test-StateForgeShardingImplementation.ps1
 .\scripts\Test-StateForgeReplication.ps1
 .\scripts\Test-StateForgeReplicationService.ps1
+.\scripts\Test-StateForgeReplicaMonitoring.ps1
 .\scripts\Test-StateForgeSnapshotServices.ps1
 .\scripts\Test-StateForgeAutomaticFailover.ps1
 .\scripts\Test-StateForgeIncrementalSnapshots.ps1
@@ -56,7 +57,7 @@
 
 ## Consolidated Runner
 
-StateForge v0.30.3 adds a single validation runner:
+StateForge uses a single suite-based validation runner:
 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs
@@ -66,6 +67,8 @@ StateForge v0.30.3 adds a single validation runner:
 .\scripts\Test-StateForge.ps1 -Suite Observability
 .\scripts\Test-StateForge.ps1 -Suite Maintenance
 .\scripts\Test-StateForge.ps1 -Suite Replication
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite Recovery
 .\scripts\Test-StateForge.ps1 -Suite Release

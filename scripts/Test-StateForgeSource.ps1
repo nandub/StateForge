@@ -635,6 +635,64 @@ if ($promotionText -notmatch 'if \(result\.Success\)' -or
     throw 'Recovery markers must only be written after successful operations.'
 }
 
+# Validate v0.31.0 replica monitoring.
+$replicaStateStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaStateStore.cs'
+$replicaMonitorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaMonitor.cs'
+$replicaMetricsPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Prometheus\StateForgeReplicaPrometheusFormatter.cs'
+$replicaMonitoringTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ReplicaMonitoringTests\Program.cs'
+$replicaMonitoringScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeReplicaMonitoring.ps1'
+
+foreach ($monitoringPath in @(
+    $replicaStateStorePath,
+    $replicaMonitorPath,
+    $replicaMetricsPath,
+    $replicaMonitoringTestPath,
+    $replicaMonitoringScriptPath
+)) {
+    if (-not (Test-Path -LiteralPath $monitoringPath)) {
+        throw "Missing replica monitoring file: $monitoringPath"
+    }
+}
+
+$replicaStateStoreText = Get-Content -LiteralPath $replicaStateStorePath -Raw
+$replicaMonitorText = Get-Content -LiteralPath $replicaMonitorPath -Raw
+$replicaMetricsText = Get-Content -LiteralPath $replicaMetricsPath -Raw
+$replicaMonitoringTestText = Get-Content -LiteralPath $replicaMonitoringTestPath -Raw
+
+if ($replicaStateStoreText -notmatch 'File\.Replace' -or
+    $replicaStateStoreText -notmatch 'LastSuccessfulSyncUtc') {
+    throw 'Replica monitoring state must be written atomically and track successful sync time.'
+}
+
+if ($replicaMonitorText -notmatch 'staleThreshold' -or
+    $replicaMonitorText -notmatch 'LagSeconds') {
+    throw 'Replica monitoring must calculate lag against a configurable stale threshold.'
+}
+
+foreach ($metricName in @(
+    'stateforge_replica_lag_seconds',
+    'stateforge_replica_healthy',
+    'stateforge_replica_last_sync_timestamp',
+    'stateforge_replica_catchup_operations_total',
+    'stateforge_replica_failed_syncs_total'
+)) {
+    if ($replicaMetricsText -notmatch [regex]::Escape($metricName)) {
+        throw "Missing replica monitoring metric: $metricName"
+    }
+}
+
+if ($replicaMonitoringTestText -notmatch 'deterministic replica lag calculation' -or
+    $replicaMonitoringTestText -notmatch 'multi-replica Prometheus metrics') {
+    throw 'Replica monitoring tests must cover deterministic lag and multi-replica metrics.'
+}
+
+$monitoringRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
+$monitoringRunnerText = Get-Content -LiteralPath $monitoringRunnerPath -Raw
+
+if ($monitoringRunnerText -notmatch "'ReplicaMonitoring'") {
+    throw 'Test-StateForge.ps1 must expose the ReplicaMonitoring suite.'
+}
+
 
 # Validate v0.30.3 agent guidance.
 $agentsPath = Join-Path -Path $repoRoot -ChildPath 'AGENTS.md'

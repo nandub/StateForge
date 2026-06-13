@@ -50,6 +50,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.RecoveryFlowTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ReplicaCatchUpTests", "src\StateForge.ReplicaCatchUpTests\StateForge.ReplicaCatchUpTests.csproj", "{458884C4-3D9D-5412-944E-BFF28A795D12}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.ReplicaMonitoringTests", "src\StateForge.ReplicaMonitoringTests\StateForge.ReplicaMonitoringTests.csproj", "{D6CB49E2-FF50-4C82-9C96-72AB481D383D}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Replication", "src\StateForge.Replication\StateForge.Replication.csproj", "{635C9C05-22B1-50E9-B860-890B2B2B83F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Replication.Host", "src\StateForge.Replication.Host\StateForge.Replication.Host.csproj", "{79EDEAE4-4236-5A30-BD3F-26AF161E8A29}"
@@ -192,6 +194,10 @@ Global
         {458884C4-3D9D-5412-944E-BFF28A795D12}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {458884C4-3D9D-5412-944E-BFF28A795D12}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {458884C4-3D9D-5412-944E-BFF28A795D12}.Release|Any CPU.Build.0 = Release|Any CPU
+        {D6CB49E2-FF50-4C82-9C96-72AB481D383D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {D6CB49E2-FF50-4C82-9C96-72AB481D383D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {D6CB49E2-FF50-4C82-9C96-72AB481D383D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {D6CB49E2-FF50-4C82-9C96-72AB481D383D}.Release|Any CPU.Build.0 = Release|Any CPU
         {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {635C9C05-22B1-50E9-B860-890B2B2B83F3}.Release|Any CPU.ActiveCfg = Release|Any CPU

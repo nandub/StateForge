@@ -97,6 +97,22 @@ namespace StateForge.Replication
             }
 
             plan.Success = plan.Errors == 0;
+
+            try
+            {
+                StateForgeReplicaStateStore.RecordCatchUp(
+                    options.ReplicaRootPath,
+                    ResolveReplicaName(options),
+                    plan.Success,
+                    plan.Success ? string.Empty : "Replica catch-up completed with errors.",
+                    DateTimeOffset.UtcNow);
+            }
+            catch
+            {
+                plan.Errors++;
+                plan.Success = false;
+            }
+
             return plan;
         }
 
@@ -211,6 +227,19 @@ namespace StateForge.Replication
             {
                 throw new ArgumentException("ReplicaRootPath is required.", "options");
             }
+        }
+
+        private static string ResolveReplicaName(StateForgeReplicaCatchUpOptions options)
+        {
+            if (!string.IsNullOrWhiteSpace(options.ReplicaName))
+            {
+                return options.ReplicaName;
+            }
+
+            string fullPath = Path.GetFullPath(options.ReplicaRootPath)
+                .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+            string name = Path.GetFileName(fullPath);
+            return string.IsNullOrWhiteSpace(name) ? "replica" : name;
         }
 
         private sealed class FileSignature
