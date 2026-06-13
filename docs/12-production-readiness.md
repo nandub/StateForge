@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.29.1 introduces a production-readiness validation layer.
+StateForge v0.30.2 introduces a production-readiness validation layer.
 
 ## Production Suite
 
@@ -59,3 +59,13 @@ Default health-check root:
 ```
 
 This allows the suite to run in CI/CD, scheduled jobs, and release gates.
+
+
+## Replica Catch-Up
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+.\scripts\Test-StateForgeReplicaCatchUp.ps1
+```
+
+See `docs\14-replica-catch-up.md`.

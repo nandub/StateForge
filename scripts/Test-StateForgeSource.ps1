@@ -451,7 +451,7 @@ foreach ($consolidatedDoc in $consolidatedDocs) {
 }
 
 
-# Validate v0.29.1 docs cleanup: build script must not require legacy documentation files.
+# Validate v0.30.2 docs cleanup: build script must not require legacy documentation files.
 $buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
 if (Test-Path -LiteralPath $buildScriptPath) {
     $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
@@ -475,11 +475,11 @@ if (Test-Path -LiteralPath $buildScriptPath) {
 }
 
 
-# v0.29.1: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# v0.30.2: Documentation shape is validated by Test-StateForgeDocs.ps1.
 # Test-StateForgeSource.ps1 validates source structure only.
 
 
-# Validate v0.29.1 operational dispatcher scope.
+# Validate v0.30.2 operational dispatcher scope.
 $invokeStateForgePath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForge.ps1'
 if (Test-Path -LiteralPath $invokeStateForgePath) {
     $invokeStateForgeText = Get-Content -LiteralPath $invokeStateForgePath -Raw
@@ -501,7 +501,7 @@ if (Test-Path -LiteralPath $invokeStateForgePath) {
 }
 
 
-# Validate v0.29.1 production-readiness files.
+# Validate v0.30.2 production-readiness files.
 $productionReadinessFiles = @(
     'docs\12-production-readiness.md',
     'docs\13-runbooks.md',
@@ -524,7 +524,7 @@ if ($testRunnerText -notmatch "'Production'") {
 }
 
 
-# Validate v0.29.1 non-interactive production validation.
+# Validate v0.30.2 non-interactive production validation.
 $productionRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
 $productionRunnerText = Get-Content -LiteralPath $productionRunnerPath -Raw
 
@@ -534,4 +534,55 @@ if ($productionRunnerText -notmatch 'Get-StateForgeProductionHealthRoot') {
 
 if ($productionRunnerText -notmatch "Test-StateForgeHealth\.ps1'\s+-Arguments\s+@\{\s*RootPath") {
     throw 'Production validation must provide RootPath to Test-StateForgeHealth.ps1.'
+}
+
+
+# Validate v0.30.2 replica catch-up files.
+$replicaCatchUpFiles = @(
+    'src\StateForge.Replication\StateForgeReplicaCatchUpService.cs',
+    'src\StateForge.Replication\StateForgeReplicaCatchUpOptions.cs',
+    'src\StateForge.ReplicaCatchUpTests\StateForge.ReplicaCatchUpTests.csproj',
+    'scripts\Test-StateForgeReplicaCatchUp.ps1',
+    'docs\14-replica-catch-up.md'
+)
+
+foreach ($replicaCatchUpFile in $replicaCatchUpFiles) {
+    $replicaCatchUpPath = Join-Path -Path $repoRoot -ChildPath $replicaCatchUpFile
+
+    if (-not (Test-Path -LiteralPath $replicaCatchUpPath)) {
+        throw "Missing replica catch-up file: $replicaCatchUpFile"
+    }
+}
+
+$testRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
+$testRunnerText = Get-Content -LiteralPath $testRunnerPath -Raw
+
+if ($testRunnerText -notmatch "'ReplicaCatchUp'") {
+    throw "Test-StateForge.ps1 must expose the ReplicaCatchUp suite."
+}
+
+
+# Validate v0.30.2 replica catch-up hash detection.
+$replicaCatchUpServicePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicaCatchUpService.cs'
+$replicaCatchUpServiceText = Get-Content -LiteralPath $replicaCatchUpServicePath -Raw
+
+if ($replicaCatchUpServiceText -notmatch 'SHA256') {
+    throw 'Replica catch-up changed-file detection must use SHA256 content hashing.'
+}
+
+if ($replicaCatchUpServiceText -match 'LastWriteUtc') {
+    throw 'Replica catch-up changed-file detection must not rely on LastWriteUtc.'
+}
+
+
+# Validate v0.30.2 deterministic replica catch-up test fixture.
+$replicaCatchUpTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ReplicaCatchUpTests\Program.cs'
+$replicaCatchUpTestText = Get-Content -LiteralPath $replicaCatchUpTestPath -Raw
+
+if ($replicaCatchUpTestText -match 'StateForgeFileStore') {
+    throw 'Replica catch-up tests must use deterministic filesystem fixtures, not FileStore-generated paths.'
+}
+
+if ($replicaCatchUpTestText -notmatch 'equal-length changed file detection') {
+    throw 'Replica catch-up tests must validate equal-length changed file detection.'
 }

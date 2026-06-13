@@ -131,6 +131,9 @@ try {
     'docs\13-runbooks.md',
     'scripts\Test-StateForgeProduction.ps1'
     'scripts\Test-StateForgeProductionNonInteractive.ps1'
+    'src\StateForge.ReplicaCatchUpTests\StateForge.ReplicaCatchUpTests.csproj',
+    'scripts\Test-StateForgeReplicaCatchUp.ps1',
+    'docs\14-replica-catch-up.md'
 
 
 
@@ -192,4 +195,4 @@ catch {
     Write-Error -ErrorRecord $_
 }
 
-# v0.29.1: scripts\Test-StateForgeVersionConsistency.ps1
+# v0.30.0: scripts\Test-StateForgeVersionConsistency.ps1

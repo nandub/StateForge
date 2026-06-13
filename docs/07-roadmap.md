@@ -34,3 +34,13 @@
 ```
 
 See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
+
+
+## Replica Catch-Up
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+.\scripts\Test-StateForgeReplicaCatchUp.ps1
+```
+
+See `docs\14-replica-catch-up.md`.

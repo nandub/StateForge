@@ -30,3 +30,5 @@ Do not add one document per feature unless the feature becomes large enough to j
 
 | [12-production-readiness.md](12-production-readiness.md) | Production-readiness validation |
 | [13-runbooks.md](13-runbooks.md) | Operational runbooks for failover, restore, rolling upgrades, and package verification |
+
+| [14-replica-catch-up.md](14-replica-catch-up.md) | Replica catch-up and resynchronization foundations |

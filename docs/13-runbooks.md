@@ -62,3 +62,13 @@ Validation:
 .\scripts\Invoke-StateForge.ps1 -Command BuildPackages
 .\scripts\Test-StateForgePackageMetadata.ps1
 ```
+
+
+## Replica Catch-Up
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+.\scripts\Test-StateForgeReplicaCatchUp.ps1
+```
+
+See `docs\14-replica-catch-up.md`.

@@ -5,7 +5,7 @@
     <AssemblyName>StateForge.Performance</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.29.1</Version>
+    <Version>0.30.2</Version>
     <PackageId>StateForge.Performance</PackageId>
     <Description>Performance snapshot and sharding analysis helpers for StateForge.</Description>
     <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>

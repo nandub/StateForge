@@ -56,7 +56,7 @@
 
 ## Consolidated Runner
 
-StateForge v0.29.1 adds a single validation runner:
+StateForge v0.30.2 adds a single validation runner:
 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs
@@ -111,3 +111,13 @@ See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 ```
 
 This verifies that production validation provides a default `RootPath` to health validation.
+
+
+## Replica Catch-Up
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+.\scripts\Test-StateForgeReplicaCatchUp.ps1
+```
+
+See `docs\14-replica-catch-up.md`.

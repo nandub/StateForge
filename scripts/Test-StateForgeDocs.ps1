@@ -38,6 +38,7 @@ try {
         'docs\10-contributing.md',
         'docs\11-script-reference.md',
         'docs\13-runbooks.md',
+        'docs\14-replica-catch-up.md',
         'docs\12-production-readiness.md'
     )
 

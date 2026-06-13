@@ -40,6 +40,7 @@ param(
         'Observability',
         'Maintenance',
         'Replication',
+        'ReplicaCatchUp',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -135,6 +136,11 @@ function Invoke-ReplicationSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplicationManifest.ps1'
 }
 
+
+function Invoke-ReplicaCatchUpSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplicaCatchUp.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -167,6 +173,7 @@ function Invoke-ProductionSuite {
     Invoke-StateForgeScript -Path '.\scripts\Invoke-StateForgeSmokeTest.ps1'
     Invoke-ObservabilitySuite
     Invoke-ReplicationSuite
+    Invoke-ReplicaCatchUpSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
@@ -182,6 +189,7 @@ function Invoke-ReleaseSuite {
     Invoke-ObservabilitySuite
     Invoke-MaintenanceSuite
     Invoke-ReplicationSuite
+    Invoke-ReplicaCatchUpSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -197,6 +205,7 @@ try {
         'Observability' { Invoke-ObservabilitySuite }
         'Maintenance' { Invoke-MaintenanceSuite }
         'Replication' { Invoke-ReplicationSuite }
+        'ReplicaCatchUp' { Invoke-ReplicaCatchUpSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }
