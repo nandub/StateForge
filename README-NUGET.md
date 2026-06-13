@@ -38,4 +38,4 @@ builder.Services.AddStateForgeDistributedCache(options =>
 </sessionState>
 ```
 
-Version: 0.33.0
+Version: 0.34.0

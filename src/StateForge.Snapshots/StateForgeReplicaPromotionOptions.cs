@@ -1,3 +1,5 @@
+using StateForge.Replication;
+
 namespace StateForge.Snapshots
 {
     public sealed class StateForgeReplicaPromotionOptions
@@ -7,6 +9,10 @@ namespace StateForge.Snapshots
         public string NewPrimaryRootPath { get; set; }
 
         public bool OverwriteExisting { get; set; }
+
+        public bool RequirePromotionFence { get; set; }
+
+        public StateForgePromotionFenceOptions PromotionFence { get; set; }
 
         public StateForgeReplicaPromotionOptions()
         {

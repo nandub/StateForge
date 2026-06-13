@@ -791,6 +791,56 @@ if ($monitoringRunnerText -notmatch "'Witness'") {
     throw 'Test-StateForge.ps1 must expose the Witness suite.'
 }
 
+# Validate v0.34.0 split-brain prevention.
+$primaryLeaseStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgePrimaryLeaseStore.cs'
+$primaryLeaseLockPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgePrimaryLeaseLock.cs'
+$promotionFencePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgePromotionFenceService.cs'
+$splitBrainTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.SplitBrainTests\Program.cs'
+$splitBrainScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeSplitBrain.ps1'
+
+foreach ($splitBrainPath in @(
+    $primaryLeaseStorePath,
+    $primaryLeaseLockPath,
+    $promotionFencePath,
+    $splitBrainTestPath,
+    $splitBrainScriptPath
+)) {
+    if (-not (Test-Path -LiteralPath $splitBrainPath)) {
+        throw "Missing split-brain prevention file: $splitBrainPath"
+    }
+}
+
+$primaryLeaseStoreText = Get-Content -LiteralPath $primaryLeaseStorePath -Raw
+$primaryLeaseLockText = Get-Content -LiteralPath $primaryLeaseLockPath -Raw
+$promotionFenceText = Get-Content -LiteralPath $promotionFencePath -Raw
+$splitBrainTestText = Get-Content -LiteralPath $splitBrainTestPath -Raw
+
+if ($primaryLeaseStoreText -notmatch 'File\.Replace' -or
+    $primaryLeaseStoreText -notmatch 'InvalidDataException' -or
+    $primaryLeaseStoreText -notmatch 'Epoch') {
+    throw 'Primary leases must use atomic writes, strict parsing, and monotonic fencing epochs.'
+}
+
+if ($primaryLeaseLockText -notmatch 'FileShare\.None' -or
+    $primaryLeaseLockText -notmatch 'StateForgeReplicaStateMutex') {
+    throw 'Primary lease acquisition must coordinate through both shared-file and local locking.'
+}
+
+if ($promotionFenceText -notmatch 'CandidateEligible' -or
+    $promotionFenceText -notmatch 'ExistingPrimaryStale' -or
+    $promotionFenceText -notmatch 'LeaseId') {
+    throw 'Promotion fencing must require quorum, stale-primary checks, and ownership tokens.'
+}
+
+if ($splitBrainTestText -notmatch 'concurrent promotion single winner' -or
+    $splitBrainTestText -notmatch 'failover safety marker suppression') {
+    throw 'Split-brain tests must cover concurrent acquisition and blocked failover markers.'
+}
+
+if ($monitoringRunnerText -notmatch "'SplitBrain'") {
+    throw 'Test-StateForge.ps1 must expose the SplitBrain suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {
@@ -815,6 +865,6 @@ if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
     throw 'AGENTS.md must document Production suite validation.'
 }
 
-if ($agentsText -notmatch 'Split-Brain Prevention') {
+if ($agentsText -notmatch 'Multi-Site Disaster Recovery') {
     throw 'AGENTS.md must document the next roadmap milestone.'
 }

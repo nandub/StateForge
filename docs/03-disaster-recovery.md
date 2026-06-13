@@ -12,6 +12,18 @@ does not automatically connect this result to failover or leader election.
 the intended candidate. Convert a validated result with `ToClusterMember` before quorum evaluation.
 Version 0.33.0 does not automatically invoke failover from a witness vote.
 
+## Split-Brain Prevention
+
+Version 0.34.0 adds `stateforge-primary-lease.json` in a shared lease root. A fenced promotion requires:
+
+- a quorum result for the exact candidate with `HasQuorum` and `CandidateEligible`
+- an expired lease, no lease, or the matching lease ownership token
+- exclusive access to the shared lease lock
+- a positive lease duration
+
+New owners receive a new lease ID and a monotonically increasing epoch. Existing owners must present the
+lease ID to reacquire or renew an active lease. Expired leases cannot be renewed.
+
 StateForge disaster recovery is built from snapshots, incremental deltas, promotion, and failover.
 
 ## Full Snapshots
@@ -43,12 +55,14 @@ Validation:
 ## Replica Promotion
 
 Replica promotion restores a replica or snapshot into a new primary root and writes a promotion marker
-only after the restore succeeds.
+only after the restore succeeds. Set `RequirePromotionFence` and provide `PromotionFence` to reject an
+unfenced promotion before restore.
 
 ## Automatic Failover
 
 Automatic failover checks primary health, rejects unreadable or invalid session files, selects a usable
-replica, promotes it, and writes a failover marker only after promotion succeeds.
+replica, promotes it, and writes a failover marker only after promotion succeeds. When fencing is required,
+an active primary or missing quorum rejects failover without writing markers.
 
 ## Recovery Flow
 

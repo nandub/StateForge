@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using StateForge.Replication;
 
 namespace StateForge.Snapshots
 {
@@ -11,6 +12,10 @@ namespace StateForge.Snapshots
         public List<string> ReplicaRootPaths { get; private set; }
 
         public bool Force { get; set; }
+
+        public bool RequirePromotionFence { get; set; }
+
+        public StateForgePromotionFenceOptions PromotionFence { get; set; }
 
         public StateForgeFailoverOptions()
         {

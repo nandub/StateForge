@@ -62,6 +62,18 @@ The evaluator does not select candidates, elect leaders, or invoke promotion.
 candidate-specific granted vote. `ToClusterMember` creates a non-promotable witness quorum member whose
 availability reflects the validated vote.
 
+## Split-Brain Prevention
+
+- `StateForgePrimaryLease`
+- `StateForgePrimaryLeaseStore`
+- `StateForgePromotionFenceOptions`
+- `StateForgePromotionFenceResult`
+- `StateForgePromotionFenceService`
+
+`StateForgePromotionFenceService.Acquire` requires an eligible quorum result for the exact candidate.
+Lease acquisition uses machine-local serialization plus an exclusive shared-file lock. A stale takeover
+increments the epoch; active-owner reacquisition and `Renew` require the exact lease ID.
+
 ## Snapshots
 
 - `StateForgeSnapshotService`
@@ -77,6 +89,9 @@ availability reflects the validated vote.
 - `StateForgeReplicaPromotionOptions`
 - `StateForgeFailoverService`
 - `StateForgeFailoverOptions`
+
+Set `RequirePromotionFence` and provide `PromotionFence` to make lease acquisition mandatory. Rejected
+fencing returns an error without restoring data or writing promotion/failover markers.
 
 ## Replica Prometheus
 

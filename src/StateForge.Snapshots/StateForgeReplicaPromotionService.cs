@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Text;
+using StateForge.Replication;
 
 namespace StateForge.Snapshots
 {
@@ -13,13 +14,32 @@ namespace StateForge.Snapshots
                 throw new ArgumentNullException("options");
             }
 
+            StateForgeReplicaPromotionResult result = new StateForgeReplicaPromotionResult();
+            if (options.RequirePromotionFence && options.PromotionFence == null)
+            {
+                result.Errors = 1;
+                result.Success = false;
+                return result;
+            }
+
+            if (options.PromotionFence != null)
+            {
+                StateForgePromotionFenceService fenceService = new StateForgePromotionFenceService();
+                result.PromotionFence = fenceService.Acquire(options.PromotionFence);
+                if (!result.PromotionFence.Acquired)
+                {
+                    result.Errors = 1;
+                    result.Success = false;
+                    return result;
+                }
+            }
+
             StateForgeSnapshotService snapshotService = new StateForgeSnapshotService();
             StateForgeSnapshotResult restore = snapshotService.Restore(
                 options.ReplicaRootPath,
                 options.NewPrimaryRootPath,
                 options.OverwriteExisting);
 
-            StateForgeReplicaPromotionResult result = new StateForgeReplicaPromotionResult();
             result.FilesCopied = restore.FilesCopied;
             result.FilesSkipped = restore.FilesSkipped;
             result.Errors = restore.Errors;

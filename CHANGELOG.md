@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.34.0
+
+- Added atomic primary lease markers with monotonic fencing epochs.
+- Added shared-file and machine-local coordination for lease acquisition.
+- Added quorum-gated promotion fencing and stale-primary takeover.
+- Added ownership-token validation for lease reacquisition and renewal.
+- Integrated optional required fencing into promotion and failover.
+- Added marker-suppression and concurrent-candidate safety validation.
+- Added the `SplitBrain` suite to Production and Release validation.
+
 ## 0.33.0
 
 - Added atomic, strictly validated witness state persistence.

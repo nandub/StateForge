@@ -36,9 +36,12 @@ namespace StateForge.Snapshots
             promotionOptions.ReplicaRootPath = selectedReplica;
             promotionOptions.NewPrimaryRootPath = options.NewPrimaryRootPath;
             promotionOptions.OverwriteExisting = true;
+            promotionOptions.RequirePromotionFence = options.RequirePromotionFence;
+            promotionOptions.PromotionFence = options.PromotionFence;
 
             StateForgeReplicaPromotionResult promotionResult = promotion.Promote(promotionOptions);
             result.Errors = promotionResult.Errors;
+            result.PromotionFence = promotionResult.PromotionFence;
             result.PromotedReplicaRootPath = selectedReplica;
             result.Success = result.Errors == 0;
 

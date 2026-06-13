@@ -5,7 +5,7 @@
     <AssemblyName>StateForge.Snapshots</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
-    <Version>0.33.0</Version>
+    <Version>0.34.0</Version>
     <PackageId>StateForge.Snapshots</PackageId>
     <Description>Snapshot, restore, scheduling, promotion, and failover helpers for StateForge.</Description>
     <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>

@@ -44,6 +44,7 @@ param(
         'ReplicaMonitoring',
         'Quorum',
         'Witness',
+        'SplitBrain',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -167,6 +168,10 @@ function Invoke-WitnessSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeWitness.ps1'
 }
 
+function Invoke-SplitBrainSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSplitBrain.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -203,6 +208,7 @@ function Invoke-ProductionSuite {
     Invoke-ReplicaMonitoringSuite
     Invoke-QuorumSuite
     Invoke-WitnessSuite
+    Invoke-SplitBrainSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
@@ -222,6 +228,7 @@ function Invoke-ReleaseSuite {
     Invoke-ReplicaMonitoringSuite
     Invoke-QuorumSuite
     Invoke-WitnessSuite
+    Invoke-SplitBrainSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -241,6 +248,7 @@ try {
         'ReplicaMonitoring' { Invoke-ReplicaMonitoringSuite }
         'Quorum' { Invoke-QuorumSuite }
         'Witness' { Invoke-WitnessSuite }
+        'SplitBrain' { Invoke-SplitBrainSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

@@ -56,9 +56,10 @@ try {
     .\scripts\Test-StateForgeReplicaMonitoring.ps1
     .\scripts\Test-StateForgeQuorum.ps1
     .\scripts\Test-StateForgeWitness.ps1
+    .\scripts\Test-StateForgeSplitBrain.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.33.0'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.34.0'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

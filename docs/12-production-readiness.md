@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.33.0 includes witness health and vote validation in the production-readiness layer.
+StateForge v0.34.0 includes primary lease and promotion-fencing validation in the production-readiness layer.
 
 ## Production Suite
 
@@ -17,6 +17,7 @@ This suite validates:
 - replica lag monitoring
 - quorum and promotion eligibility policy
 - witness heartbeat and candidate vote validation
+- primary lease, fencing epoch, and stale-primary validation
 - repository layout
 - source guards
 - health checks
@@ -99,3 +100,13 @@ replica-role checks, invalid configurations, and the no-election boundary.
 
 The suite validates atomic state, strict corrupt-state handling, heartbeat freshness, identity matching,
 candidate-specific votes, quorum restoration, and witness promotion rejection.
+
+## Split-Brain Prevention
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite SplitBrain
+```
+
+The suite validates atomic strict lease state, shared-file coordination, quorum rejection, active-primary
+fencing, stale takeover, epoch advancement, ownership-token renewal, concurrent candidates, and failover
+marker suppression.

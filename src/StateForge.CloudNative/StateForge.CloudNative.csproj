@@ -4,7 +4,7 @@
     <RootNamespace>StateForge.CloudNative</RootNamespace>
     <AssemblyName>StateForge.CloudNative</AssemblyName>
     <Nullable>disable</Nullable>
-    <Version>0.33.0</Version>
+    <Version>0.34.0</Version>
 
     <PackageId>StateForge.CloudNative</PackageId>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

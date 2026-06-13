@@ -33,6 +33,7 @@
 | `StateForge.ReplicaMonitoringTests` | Replica lag, stale-state, and Prometheus validation |
 | `StateForge.QuorumTests` | Cluster membership, quorum, and promotion eligibility validation |
 | `StateForge.WitnessTests` | Witness persistence, health, vote, and quorum validation |
+| `StateForge.SplitBrainTests` | Primary lease, promotion fencing, and failover safety validation |
 
 ## Harnesses and Tests
 
@@ -48,6 +49,7 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.ReplicaMonitoringTests`
 - `StateForge.QuorumTests`
 - `StateForge.WitnessTests`
+- `StateForge.SplitBrainTests`
 - `StateForge.SnapshotServiceTests`
 - `StateForge.IncrementalSnapshotTests`
 - `StateForge.RecoveryFlowTests`

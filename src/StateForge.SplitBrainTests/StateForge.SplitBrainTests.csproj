@@ -2,13 +2,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net481</TargetFramework>
-    <RootNamespace>StateForge.WitnessTests</RootNamespace>
-    <AssemblyName>StateForge.WitnessTests</AssemblyName>
+    <RootNamespace>StateForge.SplitBrainTests</RootNamespace>
+    <AssemblyName>StateForge.SplitBrainTests</AssemblyName>
     <LangVersion>7.3</LangVersion>
     <Nullable>disable</Nullable>
     <Version>0.34.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StateForge.Replication\StateForge.Replication.csproj" />
+    <ProjectReference Include="..\StateForge.Snapshots\StateForge.Snapshots.csproj" />
   </ItemGroup>
 </Project>

@@ -17,6 +17,7 @@ Applications
         -> Lag / stale evaluation
         -> Quorum policy evaluation
         -> Witness health and votes
+        -> Primary lease and fencing epoch
      -> Snapshots
      -> Promotion / Failover
 ```
@@ -51,10 +52,15 @@ Witness nodes persist heartbeat and candidate-specific vote state outside sessio
 counts only when the state is fresh, error-free, identity-matched, and granted for the evaluated candidate.
 Witnesses participate in quorum but are never promotion candidates.
 
+Primary leases are stored in a shared lease root outside session data. Promotion fencing combines an
+eligible quorum result with an exclusive shared-file lock, an expiring owner token, and a monotonically
+increasing epoch. A different candidate cannot acquire ownership until the active lease expires.
+
 ## Snapshots
 
 Snapshots copy session files into a repository. Incremental snapshots add delta manifests containing `add`, `modify`, and `delete` entries.
 
 ## Failover
 
-Failover evaluates primary health, selects a replica, promotes it into a new primary root, and writes marker files.
+Failover evaluates primary health, selects a replica, and can require promotion fencing before restoring
+the new primary. Fenced rejection suppresses promotion and failover markers.

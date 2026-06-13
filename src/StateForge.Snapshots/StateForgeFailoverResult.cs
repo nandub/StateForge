@@ -1,3 +1,5 @@
+using StateForge.Replication;
+
 namespace StateForge.Snapshots
 {
     public sealed class StateForgeFailoverResult
@@ -11,5 +13,7 @@ namespace StateForge.Snapshots
         public string MarkerPath { get; set; }
 
         public int Errors { get; set; }
+
+        public StateForgePromotionFenceResult PromotionFence { get; set; }
     }
 }

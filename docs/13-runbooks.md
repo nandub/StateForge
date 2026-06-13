@@ -123,3 +123,21 @@ Witness validation does not initiate failover.
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Witness
 ```
+
+## Fenced Promotion and Failover
+
+1. Place the lease root on storage visible to every promotion coordinator.
+2. Evaluate quorum for the exact replica candidate.
+3. Set `RequirePromotionFence = true`.
+4. Populate `PromotionFence` with the shared root, cluster name, candidate, quorum result, and lease duration.
+5. Reject the operation when fencing is not acquired; review `PromotionFence.Reasons`.
+6. Persist the returned lease ID and epoch with the active-primary operating state.
+7. Renew before `ExpiresUtc` using the exact cluster, primary, and lease ID.
+8. Never force a rival promotion before the current lease expires.
+
+An expired owner must not renew its old token. A successful takeover receives a new token and a higher
+epoch. A blocked operation must not produce promotion or failover markers.
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite SplitBrain
+```
