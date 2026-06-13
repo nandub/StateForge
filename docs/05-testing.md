@@ -52,3 +52,24 @@
 .\scripts\Test-StateForgeHardening.ps1
 .\scripts\Test-StateForgeRelease.ps1
 ```
+
+
+## Consolidated Runner
+
+StateForge v0.28.5 adds a single validation runner:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Docs
+.\scripts\Test-StateForge.ps1 -Suite Version
+.\scripts\Test-StateForge.ps1 -Suite Format
+.\scripts\Test-StateForge.ps1 -Suite Migration
+.\scripts\Test-StateForge.ps1 -Suite Observability
+.\scripts\Test-StateForge.ps1 -Suite Maintenance
+.\scripts\Test-StateForge.ps1 -Suite Replication
+.\scripts\Test-StateForge.ps1 -Suite Snapshots
+.\scripts\Test-StateForge.ps1 -Suite Recovery
+.\scripts\Test-StateForge.ps1 -Suite Release
+.\scripts\Test-StateForge.ps1 -Suite All
+```
+
+Feature-specific scripts remain available for compatibility.

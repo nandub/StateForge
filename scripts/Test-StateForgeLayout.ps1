@@ -125,6 +125,7 @@ try {
     'docs\08-api-reference.md',
     'docs\09-release-history.md',
     'docs\10-contributing.md'
+    'scripts\Invoke-StateForge.ps1'
 
 
 
@@ -186,4 +187,4 @@ catch {
     Write-Error -ErrorRecord $_
 }
 
-# v0.28.3: scripts\Test-StateForgeVersionConsistency.ps1
+# v0.28.4: scripts\Test-StateForgeVersionConsistency.ps1

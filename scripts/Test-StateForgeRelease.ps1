@@ -55,7 +55,7 @@ try {
     .\scripts\Test-StateForgeReplicaPromotion.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.28.3'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.28.5'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath
@@ -65,3 +65,9 @@ try {
 catch {
     Write-Error -ErrorRecord $_
 }
+
+
+
+# Consolidated validation runner smoke checks.
+.\scripts\Test-StateForge.ps1 -Suite Docs
+.\scripts\Test-StateForge.ps1 -Suite Version

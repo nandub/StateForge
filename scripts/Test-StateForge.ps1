@@ -1,15 +1,22 @@
 <#
 .SYNOPSIS
-Runs StateForge tests.
+Runs StateForge validation suites.
 
 .DESCRIPTION
-Validates repository layout and solution file, restores packages, then runs dotnet test against the StateForge solution.
+Consolidates StateForge validation into one suite-based runner. Existing feature-specific
+Test-StateForge*.ps1 scripts remain available for compatibility.
+
+.PARAMETER Suite
+Validation suite to run.
 
 .PARAMETER Configuration
-Test configuration. Defaults to Release.
+Build configuration used by dotnet-based harnesses.
 
 .EXAMPLE
-.\scripts\Test-StateForge.ps1 -Configuration Release -WhatIf
+.\scripts\Test-StateForge.ps1 -Suite Docs
+
+.EXAMPLE
+.\scripts\Test-StateForge.ps1 -Suite All
 
 .INPUTS
 None.
@@ -18,10 +25,29 @@ None.
 System.Management.Automation.PSCustomObject.
 
 .NOTES
-Requires the .NET SDK. Compatible with Windows PowerShell 5.1.
+Compatible with Windows PowerShell 5.1.
 #>
-[CmdletBinding(SupportsShouldProcess = $true)]
+[CmdletBinding()]
 param(
+    [Parameter()]
+    [ValidateSet(
+        'Docs',
+        'Version',
+        'Layout',
+        'Source',
+        'Format',
+        'Migration',
+        'Observability',
+        'Maintenance',
+        'Replication',
+        'Snapshots',
+        'Recovery',
+        'Hardening',
+        'Release',
+        'All'
+    )]
+    [string]$Suite = 'All',
+
     [Parameter()]
     [ValidateSet('Debug', 'Release')]
     [string]$Configuration = 'Release'
@@ -30,33 +56,130 @@ param(
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
+function Invoke-StateForgeScript {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [Parameter()]
+        [hashtable]$Arguments
+    )
+
+    if (-not (Test-Path -LiteralPath $Path)) {
+        Write-Verbose "Skipping missing script: $Path"
+        return
+    }
+
+    Write-Host "==> $Path"
+
+    if ($null -ne $Arguments -and $Arguments.Count -gt 0) {
+        & $Path @Arguments
+    }
+    else {
+        & $Path
+    }
+
+    if (-not $?) {
+        throw "$Path failed."
+    }
+}
+
+function Invoke-DocsSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeDocs.ps1'
+}
+
+function Invoke-VersionSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeVersionConsistency.ps1'
+}
+
+function Invoke-LayoutSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeLayout.ps1'
+}
+
+function Invoke-SourceSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSource.ps1'
+}
+
+function Invoke-FormatSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeFormat.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeStfg2Envelope.ps1'
+}
+
+function Invoke-MigrationSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeStfg2Migration.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeStfg2StoreMigration.ps1'
+}
+
+function Invoke-ObservabilitySuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeObservability.ps1'
+}
+
+function Invoke-MaintenanceSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeMaintenanceHost.ps1'
+}
+
+function Invoke-ReplicationSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplication.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplicationService.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplicationManifest.ps1'
+}
+
+function Invoke-SnapshotsSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotMarkers.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeIncrementalSnapshots.ps1'
+}
+
+function Invoke-RecoverySuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeReplicaPromotion.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeAutomaticFailover.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeRecoveryFlow.ps1'
+}
+
+function Invoke-HardeningSuite {
+    Invoke-DocsSuite
+    Invoke-VersionSuite
+    Invoke-LayoutSuite
+    Invoke-SourceSuite
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHardening.ps1'
+}
+
+function Invoke-ReleaseSuite {
+    Invoke-DocsSuite
+    Invoke-VersionSuite
+    Invoke-LayoutSuite
+    Invoke-SourceSuite
+    Invoke-FormatSuite
+    Invoke-MigrationSuite
+    Invoke-ObservabilitySuite
+    Invoke-MaintenanceSuite
+    Invoke-ReplicationSuite
+    Invoke-SnapshotsSuite
+    Invoke-RecoverySuite
+}
+
 try {
-    $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-    $repoRoot = Split-Path -Parent $scriptRoot
-    $solutionPath = Join-Path -Path $repoRoot -ChildPath 'StateForge.sln'
-    $nugetConfig = Join-Path -Path $repoRoot -ChildPath 'NuGet.config'
-    $layoutScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeLayout.ps1'
-    $solutionValidationScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeSolution.ps1'
-    $sourceValidationScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeSource.ps1'
-
-    & $layoutScript | Out-Host
-    & $solutionValidationScript | Out-Host
-    & $sourceValidationScript | Out-Host
-
-    if ($PSCmdlet.ShouldProcess($solutionPath, "Run StateForge tests")) {
-        & dotnet restore $solutionPath --configfile $nugetConfig
-        if ($LASTEXITCODE -ne 0) {
-            throw "dotnet restore failed with exit code $LASTEXITCODE."
-        }
-
-        & dotnet test $solutionPath --configuration $Configuration --no-restore
-        if ($LASTEXITCODE -ne 0) {
-            throw "dotnet test failed with exit code $LASTEXITCODE."
-        }
+    switch ($Suite) {
+        'Docs' { Invoke-DocsSuite }
+        'Version' { Invoke-VersionSuite }
+        'Layout' { Invoke-LayoutSuite }
+        'Source' { Invoke-SourceSuite }
+        'Format' { Invoke-FormatSuite }
+        'Migration' { Invoke-MigrationSuite }
+        'Observability' { Invoke-ObservabilitySuite }
+        'Maintenance' { Invoke-MaintenanceSuite }
+        'Replication' { Invoke-ReplicationSuite }
+        'Snapshots' { Invoke-SnapshotsSuite }
+        'Recovery' { Invoke-RecoverySuite }
+        'Hardening' { Invoke-HardeningSuite }
+        'Release' { Invoke-ReleaseSuite }
+        'All' { Invoke-ReleaseSuite }
     }
 
     [PSCustomObject]@{
-        Solution      = $solutionPath
+        Suite         = $Suite
         Configuration = $Configuration
         Success       = $true
     }

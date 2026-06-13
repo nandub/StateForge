@@ -2,7 +2,7 @@
 
 StateForge is a resilient, file-backed session and state platform for .NET applications.
 
-Current version: **0.28.3**
+Current version: **0.28.5**
 
 ## Features
 
@@ -53,4 +53,19 @@ Core docs:
 .\scripts\Build-StateForge.ps1
 .\scripts\Test-StateForgeHardening.ps1
 .\scripts\Test-StateForgeRelease.ps1
+```
+
+
+## Consolidated Script Runner
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Docs
+.\scripts\Test-StateForge.ps1 -Suite Snapshots
+.\scripts\Test-StateForge.ps1 -Suite Release
+```
+
+Operational dispatcher:
+
+```powershell
+.\scripts\Invoke-StateForge.ps1 -Command BuildPackages
 ```

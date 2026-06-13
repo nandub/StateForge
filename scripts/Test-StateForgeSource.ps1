@@ -450,7 +450,7 @@ foreach ($consolidatedDoc in $consolidatedDocs) {
 }
 
 
-# Validate v0.28.2 docs cleanup: build script must not require legacy documentation files.
+# Validate v0.28.5 docs cleanup: build script must not require legacy documentation files.
 $buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
 if (Test-Path -LiteralPath $buildScriptPath) {
     $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
@@ -474,5 +474,5 @@ if (Test-Path -LiteralPath $buildScriptPath) {
 }
 
 
-# v0.28.3: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# v0.28.5: Documentation shape is validated by Test-StateForgeDocs.ps1.
 # Test-StateForgeSource.ps1 validates source structure only.

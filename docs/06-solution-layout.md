@@ -45,3 +45,15 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.SnapshotServiceTests`
 - `StateForge.IncrementalSnapshotTests`
 - `StateForge.RecoveryFlowTests`
+
+
+## Script Consolidation
+
+Top-level script entry points:
+
+| Script | Purpose |
+|---|---|
+| `Build-StateForge.ps1` | Build validation |
+| `Test-StateForge.ps1` | Consolidated validation suite runner |
+| `Invoke-StateForge.ps1` | Consolidated operational command runner |
+| `Build-StateForgePackages.ps1` | Package creation |
