@@ -56,7 +56,7 @@
 
 ## Consolidated Runner
 
-StateForge v0.29.0 adds a single validation runner:
+StateForge v0.29.1 adds a single validation runner:
 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs
@@ -102,3 +102,12 @@ Use direct scripts for parameter-rich operations:
 ```
 
 See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
+
+
+## Production Non-Interactive Guard
+
+```powershell
+.\scripts\Test-StateForgeProductionNonInteractive.ps1
+```
+
+This verifies that production validation provides a default `RootPath` to health validation.

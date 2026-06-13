@@ -4,6 +4,7 @@ Runs StateForge production-readiness validation.
 
 .DESCRIPTION
 Runs the production-readiness validation suite through the consolidated StateForge test runner.
+The suite is non-interactive and safe for CI/CD usage.
 
 .EXAMPLE
 .\scripts\Test-StateForgeProduction.ps1

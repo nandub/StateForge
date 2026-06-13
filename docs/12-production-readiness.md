@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.29.0 introduces a production-readiness validation layer.
+StateForge v0.29.1 introduces a production-readiness validation layer.
 
 ## Production Suite
 
@@ -46,3 +46,16 @@ Continue to use direct scripts for parameter-heavy operations:
 .\scripts\New-StateForgeSnapshot.ps1
 .\scripts\New-StateForgeIncrementalSnapshot.ps1
 ```
+
+
+## Non-Interactive Execution
+
+Production validation is designed to run unattended. The suite provides a temporary health-check root automatically and does not prompt for `RootPath`.
+
+Default health-check root:
+
+```text
+%TEMP%\StateForgeProductionHealth
+```
+
+This allows the suite to run in CI/CD, scheduled jobs, and release gates.

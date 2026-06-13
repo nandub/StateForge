@@ -451,7 +451,7 @@ foreach ($consolidatedDoc in $consolidatedDocs) {
 }
 
 
-# Validate v0.29.0 docs cleanup: build script must not require legacy documentation files.
+# Validate v0.29.1 docs cleanup: build script must not require legacy documentation files.
 $buildScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForge.ps1'
 if (Test-Path -LiteralPath $buildScriptPath) {
     $buildScriptText = Get-Content -LiteralPath $buildScriptPath -Raw
@@ -475,11 +475,11 @@ if (Test-Path -LiteralPath $buildScriptPath) {
 }
 
 
-# v0.29.0: Documentation shape is validated by Test-StateForgeDocs.ps1.
+# v0.29.1: Documentation shape is validated by Test-StateForgeDocs.ps1.
 # Test-StateForgeSource.ps1 validates source structure only.
 
 
-# Validate v0.29.0 operational dispatcher scope.
+# Validate v0.29.1 operational dispatcher scope.
 $invokeStateForgePath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForge.ps1'
 if (Test-Path -LiteralPath $invokeStateForgePath) {
     $invokeStateForgeText = Get-Content -LiteralPath $invokeStateForgePath -Raw
@@ -501,7 +501,7 @@ if (Test-Path -LiteralPath $invokeStateForgePath) {
 }
 
 
-# Validate v0.29.0 production-readiness files.
+# Validate v0.29.1 production-readiness files.
 $productionReadinessFiles = @(
     'docs\12-production-readiness.md',
     'docs\13-runbooks.md',
@@ -521,4 +521,17 @@ $testRunnerText = Get-Content -LiteralPath $testRunnerPath -Raw
 
 if ($testRunnerText -notmatch "'Production'") {
     throw "Test-StateForge.ps1 must expose the Production suite."
+}
+
+
+# Validate v0.29.1 non-interactive production validation.
+$productionRunnerPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForge.ps1'
+$productionRunnerText = Get-Content -LiteralPath $productionRunnerPath -Raw
+
+if ($productionRunnerText -notmatch 'Get-StateForgeProductionHealthRoot') {
+    throw 'Production validation must define a default health root.'
+}
+
+if ($productionRunnerText -notmatch "Test-StateForgeHealth\.ps1'\s+-Arguments\s+@\{\s*RootPath") {
+    throw 'Production validation must provide RootPath to Test-StateForgeHealth.ps1.'
 }

@@ -86,6 +86,15 @@ function Invoke-StateForgeScript {
     }
 }
 
+
+function Get-StateForgeProductionHealthRoot {
+    [CmdletBinding()]
+    param()
+
+    $basePath = [System.IO.Path]::GetTempPath()
+    return (Join-Path -Path $basePath -ChildPath 'StateForgeProductionHealth')
+}
+
 function Invoke-DocsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeDocs.ps1'
 }
@@ -149,11 +158,12 @@ function Invoke-HardeningSuite {
 
 
 function Invoke-ProductionSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeProductionNonInteractive.ps1'
     Invoke-DocsSuite
     Invoke-VersionSuite
     Invoke-LayoutSuite
     Invoke-SourceSuite
-    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHealth.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHealth.ps1' -Arguments @{ RootPath = (Get-StateForgeProductionHealthRoot) }
     Invoke-StateForgeScript -Path '.\scripts\Invoke-StateForgeSmokeTest.ps1'
     Invoke-ObservabilitySuite
     Invoke-ReplicationSuite

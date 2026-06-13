@@ -130,6 +130,7 @@ try {
     'docs\12-production-readiness.md',
     'docs\13-runbooks.md',
     'scripts\Test-StateForgeProduction.ps1'
+    'scripts\Test-StateForgeProductionNonInteractive.ps1'
 
 
 
@@ -191,4 +192,4 @@ catch {
     Write-Error -ErrorRecord $_
 }
 
-# v0.29.0: scripts\Test-StateForgeVersionConsistency.ps1
+# v0.29.1: scripts\Test-StateForgeVersionConsistency.ps1
