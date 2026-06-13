@@ -266,6 +266,34 @@ namespace StateForge.SmokeTests
 
             byte[] read = cache.Get("cache-key");
             Require(BytesEqual(payload, read), "IDistributedCache payload mismatch.");
+
+            DistributedCacheEntryOptions cappedOptions = new DistributedCacheEntryOptions();
+            cappedOptions.SlidingExpiration = TimeSpan.FromMinutes(20);
+            cappedOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(2);
+            cache.Set("cache-capped", payload, cappedOptions);
+
+            StateForgeEntry capped = store.Get("cache-capped");
+            Require(capped != null, "Capped cache entry missing.");
+            Require(capped.ExpiresUtc <= DateTimeOffset.UtcNow.AddMinutes(2).AddSeconds(1),
+                "Absolute cache expiration did not cap sliding expiration.");
+
+            DateTimeOffset originalCap = capped.ExpiresUtc;
+            cache.Refresh("cache-capped");
+            StateForgeEntry refreshed = store.Get("cache-capped");
+            Require(refreshed != null && refreshed.ExpiresUtc <= originalCap.AddSeconds(1),
+                "Cache refresh extended the absolute expiration cap.");
+
+            DistributedCacheEntryOptions absoluteOnlyOptions = new DistributedCacheEntryOptions();
+            absoluteOnlyOptions.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
+            cache.Set("cache-absolute-only", payload, absoluteOnlyOptions);
+            StateForgeEntry absoluteOnly = store.Get("cache-absolute-only");
+            Require(absoluteOnly != null && absoluteOnly.ExpiresUtc >= DateTimeOffset.UtcNow.AddMinutes(59),
+                "Absolute-only cache expiration was capped by the default duration.");
+
+            DistributedCacheEntryOptions expiredOptions = new DistributedCacheEntryOptions();
+            expiredOptions.AbsoluteExpiration = DateTimeOffset.UtcNow.AddSeconds(-1);
+            cache.Set("cache-expired", payload, expiredOptions);
+            Require(cache.Get("cache-expired") == null, "Past absolute expiration created a cache entry.");
         }
 
 

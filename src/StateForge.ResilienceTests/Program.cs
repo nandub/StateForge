@@ -93,6 +93,9 @@ namespace StateForge.ResilienceTests
             bool updated = nodeB.SetAndUnlock("lock-crash-session", new byte[] { 2 }, TimeSpan.FromMinutes(30), nodeBSteal.LockId);
             Require(updated, "NodeB could not update stolen lock.");
 
+            bool staleUpdate = nodeA.SetAndUnlock("lock-crash-session", new byte[] { 3 }, TimeSpan.FromMinutes(30), nodeALock.LockId);
+            Require(!staleUpdate, "Stale lock holder overwrote a completed stolen lock.");
+
             StateForgeEntry finalEntry = nodeA.Get("lock-crash-session");
             Require(finalEntry != null, "Final entry missing.");
             Require(finalEntry.Value.Length == 1 && finalEntry.Value[0] == 2, "Final value mismatch after stale-lock recovery.");

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -21,11 +22,18 @@ namespace StateForge.Snapshots
 
             string repositoryPath = Path.GetFullPath(options.SnapshotRepositoryPath);
             string sourceSessionsPath = StateForgeSnapshotService.ResolveSessionsPath(options.SourceRootPath);
-            string parentSessionsPath = Path.Combine(repositoryPath, options.ParentSnapshotName, "sessions");
+            string parentSnapshotPath = StateForgeSnapshotPath.ResolveChildName(
+                repositoryPath,
+                options.ParentSnapshotName,
+                "ParentSnapshotName");
+            string parentSessionsPath = Path.Combine(parentSnapshotPath, "sessions");
             string snapshotName = string.IsNullOrWhiteSpace(options.SnapshotName)
                 ? DateTimeOffset.UtcNow.ToString("yyyyMMddHHmmss")
                 : options.SnapshotName;
-            string snapshotPath = Path.Combine(repositoryPath, snapshotName);
+            string snapshotPath = StateForgeSnapshotPath.ResolveChildName(
+                repositoryPath,
+                snapshotName,
+                "SnapshotName");
             string deltaPath = Path.Combine(snapshotPath, "delta");
 
             StateForgeIncrementalSnapshotResult result = new StateForgeIncrementalSnapshotResult();
@@ -75,7 +83,8 @@ namespace StateForge.Snapshots
                     continue;
                 }
 
-                if (parent.Length != source.Value.Length || parent.LastWriteUtc != source.Value.LastWriteUtc)
+                if (parent.Length != source.Value.Length ||
+                    !string.Equals(parent.Hash, source.Value.Hash, StringComparison.Ordinal))
                 {
                     AddCopyEntry("modify", source.Key, source.Value, sourceSessionsPath, deltaPath, manifest, result);
                     result.FilesModified++;
@@ -108,7 +117,11 @@ namespace StateForge.Snapshots
         public StateForgeSnapshotResult RestoreChain(string snapshotRepositoryPath, string baseSnapshotName, string[] incrementalSnapshotNames, string destinationRootPath)
         {
             StateForgeSnapshotService service = new StateForgeSnapshotService();
-            string baseSnapshotPath = Path.Combine(Path.GetFullPath(snapshotRepositoryPath), baseSnapshotName);
+            string repositoryPath = Path.GetFullPath(snapshotRepositoryPath);
+            string baseSnapshotPath = StateForgeSnapshotPath.ResolveChildName(
+                repositoryPath,
+                baseSnapshotName,
+                "BaseSnapshotName");
             StateForgeSnapshotResult restore = service.Restore(baseSnapshotPath, destinationRootPath, true);
 
             if (!restore.Success)
@@ -122,7 +135,11 @@ namespace StateForge.Snapshots
             {
                 for (int i = 0; i < incrementalSnapshotNames.Length; i++)
                 {
-                    ApplyIncremental(Path.Combine(Path.GetFullPath(snapshotRepositoryPath), incrementalSnapshotNames[i]), destinationSessionsPath, restore);
+                    string incrementalPath = StateForgeSnapshotPath.ResolveChildName(
+                        repositoryPath,
+                        incrementalSnapshotNames[i],
+                        "IncrementalSnapshotName");
+                    ApplyIncremental(incrementalPath, destinationSessionsPath, restore);
                 }
             }
 
@@ -146,7 +163,10 @@ namespace StateForge.Snapshots
             for (int i = 0; i < manifest.Entries.Count; i++)
             {
                 StateForgeIncrementalSnapshotEntry entry = manifest.Entries[i];
-                string destination = Path.Combine(destinationSessionsPath, entry.RelativePath);
+                string destination = StateForgeSnapshotPath.ResolveRelativePath(
+                    destinationSessionsPath,
+                    entry.RelativePath,
+                    "Incremental manifest relativePath");
 
                 if (string.Equals(entry.Action, "delete", StringComparison.OrdinalIgnoreCase))
                 {
@@ -158,7 +178,10 @@ namespace StateForge.Snapshots
                     continue;
                 }
 
-                string source = Path.Combine(deltaPath, entry.RelativePath);
+                string source = StateForgeSnapshotPath.ResolveRelativePath(
+                    deltaPath,
+                    entry.RelativePath,
+                    "Incremental manifest relativePath");
                 string directory = Path.GetDirectoryName(destination);
 
                 if (!Directory.Exists(directory))
@@ -218,6 +241,7 @@ namespace StateForge.Snapshots
                 FileSignature signature = new FileSignature();
                 signature.Length = info.Length;
                 signature.LastWriteUtc = info.LastWriteTimeUtc.ToString("o");
+                signature.Hash = ComputeSha256(info.FullName);
                 map[StateForgeSnapshotService.MakeRelative(sessionsPath, files[i])] = signature;
             }
 
@@ -345,10 +369,28 @@ namespace StateForge.Snapshots
             return value.Replace("\\\\", "\\").Replace("\\\"", "\"");
         }
 
+        private static string ComputeSha256(string path)
+        {
+            using (SHA256 sha = SHA256.Create())
+            using (FileStream stream = File.OpenRead(path))
+            {
+                byte[] hash = sha.ComputeHash(stream);
+                StringBuilder builder = new StringBuilder(hash.Length * 2);
+
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    builder.Append(hash[i].ToString("x2"));
+                }
+
+                return builder.ToString();
+            }
+        }
+
         private sealed class FileSignature
         {
             public long Length { get; set; }
             public string LastWriteUtc { get; set; }
+            public string Hash { get; set; }
         }
     }
 }

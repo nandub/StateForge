@@ -55,7 +55,7 @@ try {
     .\scripts\Test-StateForgeReplicaPromotion.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.30.3'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.30.4'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

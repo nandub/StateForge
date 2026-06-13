@@ -16,7 +16,10 @@ namespace StateForge.Snapshots
                 ? DateTimeOffset.UtcNow.ToString("yyyyMMddHHmmss")
                 : options.SnapshotName;
 
-            string snapshotPath = Path.Combine(Path.GetFullPath(options.SnapshotRepositoryPath), snapshotName);
+            string snapshotPath = StateForgeSnapshotPath.ResolveChildName(
+                options.SnapshotRepositoryPath,
+                snapshotName,
+                "SnapshotName");
             string snapshotSessionsPath = Path.Combine(snapshotPath, "sessions");
 
             StateForgeSnapshotResult result = new StateForgeSnapshotResult();
@@ -53,7 +56,10 @@ namespace StateForge.Snapshots
                 try
                 {
                     string relative = MakeRelative(sourceSessionsPath, files[i]);
-                    string destination = Path.Combine(snapshotSessionsPath, relative);
+                    string destination = StateForgeSnapshotPath.ResolveRelativePath(
+                        snapshotSessionsPath,
+                        relative,
+                        "Snapshot relative path");
                     string directory = Path.GetDirectoryName(destination);
 
                     if (!Directory.Exists(directory))

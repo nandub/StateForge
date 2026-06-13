@@ -40,12 +40,15 @@ namespace StateForge.Snapshots
             StateForgeReplicaPromotionResult promotionResult = promotion.Promote(promotionOptions);
             result.Errors = promotionResult.Errors;
             result.PromotedReplicaRootPath = selectedReplica;
-
-            string markerPath = Path.Combine(Path.GetFullPath(options.NewPrimaryRootPath), "failover-marker.json");
-            WriteFailoverMarker(markerPath, options, selectedReplica);
-
-            result.MarkerPath = markerPath;
             result.Success = result.Errors == 0;
+
+            if (result.Success)
+            {
+                string markerPath = Path.Combine(Path.GetFullPath(options.NewPrimaryRootPath), "failover-marker.json");
+                WriteFailoverMarker(markerPath, options, selectedReplica);
+                result.MarkerPath = markerPath;
+            }
+
             return result;
         }
 
@@ -57,7 +60,42 @@ namespace StateForge.Snapshots
             }
 
             string sessionsPath = Path.Combine(Path.GetFullPath(rootPath), "sessions");
-            return Directory.Exists(sessionsPath);
+
+            if (!Directory.Exists(sessionsPath))
+            {
+                return false;
+            }
+
+            try
+            {
+                string[] files = Directory.GetFiles(sessionsPath, "*.stfg", SearchOption.AllDirectories);
+
+                for (int i = 0; i < files.Length; i++)
+                {
+                    using (FileStream stream = new FileStream(files[i], FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                    {
+                        if (stream.Length < 8)
+                        {
+                            return false;
+                        }
+
+                        using (BinaryReader reader = new BinaryReader(stream))
+                        {
+                            if (reader.ReadInt32() != StateForge.Core.StateForgeConstants.FileMagic ||
+                                reader.ReadInt32() != StateForge.Core.StateForgeConstants.FileVersion)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static string SelectReplica(StateForgeFailoverOptions options)
@@ -73,7 +111,9 @@ namespace StateForge.Snapshots
 
                 string sessions = Path.Combine(Path.GetFullPath(replica), "sessions");
 
-                if (Directory.Exists(sessions))
+                StateForgeFailoverService service = new StateForgeFailoverService();
+
+                if (service.IsHealthy(replica))
                 {
                     return replica;
                 }

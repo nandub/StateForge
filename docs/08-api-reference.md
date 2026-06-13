@@ -8,6 +8,17 @@ This is a human-maintained API index. It should remain concise.
 - `StateForgeFileStoreOptions`
 - `StateForgeStoreStats`
 
+Lock IDs returned by `GetAndLock` are fencing tokens. `SetAndUnlock` succeeds for an existing entry only
+when the entry is actively locked with the supplied lock ID. `Refresh` returns `false` for expired entries.
+
+## ASP.NET Core Cache
+
+- `StateForgeDistributedCache`
+- `StateForgeDistributedCacheOptions`
+
+The cache adapter preserves sliding expiration and absolute expiration independently. Refresh extends the
+sliding window without extending an absolute expiration deadline.
+
 ## Replication
 
 - `StateForgeFileReplicator`

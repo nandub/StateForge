@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.30.4
+
+- Added snapshot repository path containment before copy or recursive deletion.
+- Added incremental manifest path containment during restore.
+- Changed incremental snapshot drift detection to SHA256 content hashing.
+- Enforced lock IDs as fencing tokens after stale-lock recovery.
+- Prevented refresh from reviving expired entries.
+- Preserved sliding and absolute expiration semantics in the ASP.NET Core distributed-cache adapter.
+- Suppressed promotion and failover markers when recovery does not complete successfully.
+- Strengthened failover health checks to reject unreadable or invalid session files.
+- Added regression coverage for the hardening changes.
+
 ## 0.30.3
 
 - Added automatic failover primitives.

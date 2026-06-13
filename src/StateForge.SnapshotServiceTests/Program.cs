@@ -80,12 +80,35 @@ namespace StateForge.SnapshotServiceTests
                 Require(failoverResult.Success, "Failover failed.");
                 Require(File.Exists(failoverResult.MarkerPath), "Failover marker missing.");
 
+                string failedPromotionRoot = Path.Combine(root, "failed-promotion");
+                StateForgeReplicaPromotionOptions failedPromotionOptions = new StateForgeReplicaPromotionOptions();
+                failedPromotionOptions.ReplicaRootPath = Path.Combine(root, "missing-replica");
+                failedPromotionOptions.NewPrimaryRootPath = failedPromotionRoot;
+                failedPromotionOptions.OverwriteExisting = true;
+                StateForgeReplicaPromotionResult failedPromotion = promotion.Promote(failedPromotionOptions);
+                Require(!failedPromotion.Success, "Missing replica promotion unexpectedly succeeded.");
+                Require(string.IsNullOrEmpty(failedPromotion.PromotionMarkerPath), "Failed promotion returned a marker path.");
+                Require(!File.Exists(Path.Combine(failedPromotionRoot, "promotion-marker.json")), "Failed promotion wrote a marker.");
+
+                string corruptReplica = Path.Combine(root, "corrupt-replica");
+                string corruptSessions = Path.Combine(corruptReplica, "sessions");
+                Directory.CreateDirectory(corruptSessions);
+                File.WriteAllText(Path.Combine(corruptSessions, "bad.stfg"), "bad");
+                StateForgeFailoverOptions failedFailoverOptions = new StateForgeFailoverOptions();
+                failedFailoverOptions.PrimaryRootPath = Path.Combine(root, "missing-primary-2");
+                failedFailoverOptions.NewPrimaryRootPath = Path.Combine(root, "failed-failover");
+                failedFailoverOptions.ReplicaRootPaths.Add(corruptReplica);
+                StateForgeFailoverResult failedFailover = failoverService.EvaluateAndFailover(failedFailoverOptions);
+                Require(!failedFailover.Success, "Corrupt replica failover unexpectedly succeeded.");
+                Require(string.IsNullOrEmpty(failedFailover.MarkerPath), "Failed failover returned a marker path.");
+
                 Console.WriteLine("PASS: snapshot create");
                 Console.WriteLine("PASS: snapshot manifest");
                 Console.WriteLine("PASS: snapshot restore");
                 Console.WriteLine("PASS: snapshot scheduling retention");
                 Console.WriteLine("PASS: replica promotion");
                 Console.WriteLine("PASS: automatic failover");
+                Console.WriteLine("PASS: failed recovery markers suppressed");
 
                 Directory.Delete(root, true);
                 return 0;

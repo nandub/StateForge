@@ -57,6 +57,31 @@ namespace StateForge.FileStore.Tests
         }
 
         [TestMethod]
+        public void Stale_Lock_Holder_Cannot_Overwrite_Completed_Stolen_Lock()
+        {
+            StateForgeFileStore store = CreateStore(false);
+            store.Set("abc", new byte[] { 1 }, TimeSpan.FromMinutes(20));
+
+            StateForgeLockResult first = store.GetAndLock("abc", TimeSpan.FromMinutes(5));
+            StateForgeLockResult stolen = store.GetAndLock("abc", TimeSpan.Zero);
+
+            Assert.IsTrue(store.SetAndUnlock("abc", new byte[] { 2 }, TimeSpan.FromMinutes(20), stolen.LockId));
+            Assert.IsFalse(store.SetAndUnlock("abc", new byte[] { 3 }, TimeSpan.FromMinutes(20), first.LockId));
+            CollectionAssert.AreEqual(new byte[] { 2 }, store.Get("abc").Value);
+        }
+
+        [TestMethod]
+        public void Refresh_Does_Not_Revive_Expired_Entry()
+        {
+            StateForgeFileStore store = CreateStore(false);
+            store.Set("expired", new byte[] { 1 }, TimeSpan.FromMilliseconds(1));
+            System.Threading.Thread.Sleep(25);
+
+            Assert.IsFalse(store.Refresh("expired", TimeSpan.FromMinutes(20)));
+            Assert.IsNull(store.Get("expired"));
+        }
+
+        [TestMethod]
         public void CleanupExpired_Removes_Expired()
         {
             StateForgeFileStore store = CreateStore(false);

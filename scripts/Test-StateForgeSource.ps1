@@ -587,6 +587,54 @@ if ($replicaCatchUpTestText -notmatch 'equal-length changed file detection') {
     throw 'Replica catch-up tests must validate equal-length changed file detection.'
 }
 
+# Validate v0.30.4 hardening invariants.
+$snapshotPathGuardPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeSnapshotPath.cs'
+$incrementalSnapshotPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeIncrementalSnapshotService.cs'
+$fileStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.FileStore\StateForgeFileStore.cs'
+$distributedCachePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.AspNetCore\StateForgeDistributedCache.cs'
+$promotionPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeReplicaPromotionService.cs'
+$failoverPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Snapshots\StateForgeFailoverService.cs'
+
+if (-not (Test-Path -LiteralPath $snapshotPathGuardPath)) {
+    throw 'Missing snapshot path containment helper.'
+}
+
+$snapshotPathGuardText = Get-Content -LiteralPath $snapshotPathGuardPath -Raw
+$incrementalSnapshotText = Get-Content -LiteralPath $incrementalSnapshotPath -Raw
+$fileStoreText = Get-Content -LiteralPath $fileStorePath -Raw
+$distributedCacheText = Get-Content -LiteralPath $distributedCachePath -Raw
+$promotionText = Get-Content -LiteralPath $promotionPath -Raw
+$failoverText = Get-Content -LiteralPath $failoverPath -Raw
+
+if ($snapshotPathGuardText -notmatch 'Path\.IsPathRooted' -or
+    $snapshotPathGuardText -notmatch 'StartsWith\(prefix') {
+    throw 'Snapshot paths must reject rooted paths and enforce root containment.'
+}
+
+if ($incrementalSnapshotText -notmatch 'SHA256' -or
+    $incrementalSnapshotText -notmatch 'ResolveRelativePath') {
+    throw 'Incremental snapshots must use SHA256 detection and contained manifest paths.'
+}
+
+if ($fileStoreText -notmatch '!existing\.Locked\s*\|\|\s*existing\.LockId != lockId') {
+    throw 'SetAndUnlock must enforce the current active lock ID as a fencing token.'
+}
+
+if ($fileStoreText -notmatch 'entry\.IsExpired\(now\)') {
+    throw 'Refresh must reject expired entries.'
+}
+
+if ($distributedCacheText -notmatch 'EnvelopeMagic' -or
+    $distributedCacheText -notmatch 'AbsoluteExpirationUtc' -or
+    $distributedCacheText -notmatch 'SlidingExpiration') {
+    throw 'Distributed cache expiration metadata must preserve sliding and absolute deadlines.'
+}
+
+if ($promotionText -notmatch 'if \(result\.Success\)' -or
+    $failoverText -notmatch 'if \(result\.Success\)') {
+    throw 'Recovery markers must only be written after successful operations.'
+}
+
 
 # Validate v0.30.3 agent guidance.
 $agentsPath = Join-Path -Path $repoRoot -ChildPath 'AGENTS.md'

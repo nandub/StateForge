@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.30.2 replica catch-up stabilization.
+This roadmap reflects the current StateForge direction after v0.30.4 hardening.
 
 ## Completed
 
@@ -21,7 +21,7 @@ This roadmap reflects the current StateForge direction after v0.30.2 replica cat
 
 ## Current Stable Candidate
 
-`v0.30.2` is the current stable production-candidate baseline.
+`v0.30.4` is the current stable production-candidate baseline.
 
 It validates:
 

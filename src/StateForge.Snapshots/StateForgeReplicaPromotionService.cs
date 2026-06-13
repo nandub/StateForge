@@ -24,11 +24,15 @@ namespace StateForge.Snapshots
             result.FilesSkipped = restore.FilesSkipped;
             result.Errors = restore.Errors;
 
-            string markerPath = Path.Combine(Path.GetFullPath(options.NewPrimaryRootPath), "promotion-marker.json");
-            WritePromotionMarker(markerPath, options);
-
-            result.PromotionMarkerPath = markerPath;
             result.Success = result.Errors == 0;
+
+            if (result.Success)
+            {
+                string markerPath = Path.Combine(Path.GetFullPath(options.NewPrimaryRootPath), "promotion-marker.json");
+                WritePromotionMarker(markerPath, options);
+                result.PromotionMarkerPath = markerPath;
+            }
+
             return result;
         }
 
