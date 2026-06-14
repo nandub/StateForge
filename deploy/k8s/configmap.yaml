@@ -2,11 +2,15 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: stateforge-config
+  labels:
+    app.kubernetes.io/name: stateforge
 data:
   STATEFORGE_ROOT_PATH: "/data/stateforge"
+  STATEFORGE_SNAPSHOT_PATH: "/data/stateforge/stateforge-store-snapshot.json"
   STATEFORGE_COMPRESSION: "true"
-  STATEFORGE_ENCRYPTION: "true"
-  STATEFORGE_PROTECTION_MODE: "aes"
+  STATEFORGE_ENCRYPTION: "false"
+  STATEFORGE_PROTECTION_MODE: "none"
   STATEFORGE_KEEP_BACKUPS: "false"
   STATEFORGE_SHARD_DEPTH: "1"
-  STATEFORGE_STALE_LOCK_MINUTES: "5"
+  STATEFORGE_MUTEX_TIMEOUT_MS: "30000"
+  STATEFORGE_ENABLE_DEMO_ENDPOINTS: "false"

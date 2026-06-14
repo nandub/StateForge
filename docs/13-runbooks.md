@@ -161,3 +161,21 @@ candidate explicitly, and the cross-site result must match the promoted replica 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
 ```
+
+## Kubernetes Deployment
+
+1. Build and publish `stateforge-kestrel:0.35.0` to the target registry.
+2. Replace the image reference in `deploy\k8s\deployment.yaml`.
+3. Confirm a `ReadWriteMany` storage class and set `storageClassName` on the PVC if required.
+4. Leave encryption disabled initially, or provision the AES secret before enabling it.
+5. Render with `kubectl kustomize .\deploy\k8s`, then apply and wait for the Deployment rollout.
+6. Confirm `/livez`, `/readyz`, and `/stateforge/prometheus`.
+7. Confirm the mounted path is writable by UID/GID `1654`.
+8. Confirm the HPA sees CPU metrics before relying on autoscaling.
+9. Verify `/session/...` returns `404`; demo endpoints must remain disabled.
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Deployment
+kubectl apply -k .\deploy\k8s
+kubectl rollout status deployment/stateforge-kestrel
+```

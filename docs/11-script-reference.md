@@ -25,6 +25,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Witness
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
+.\scripts\Test-StateForge.ps1 -Suite Deployment
 .\scripts\Test-StateForge.ps1 -Suite Release
 ```
 
@@ -117,6 +118,15 @@ See `docs\14-replica-catch-up.md`.
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
 .\scripts\Test-StateForgeMultiSite.ps1
+```
+
+## Docker and Kubernetes
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Deployment
+.\scripts\Test-StateForgeDeployment.ps1
+docker build --tag stateforge-kestrel:0.35.0 .
+kubectl apply -k .\deploy\k8s
 ```
 
 Dashboard replica health uses semicolon-separated `name=path` entries:

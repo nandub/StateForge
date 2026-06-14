@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Updated Docker and Kubernetes assets from the original v0.9.0 baseline to v0.35.0.
+- Aligned cache, Prometheus, and snapshot paths on `STATEFORGE_ROOT_PATH`.
+- Disabled Kestrel harness demo session endpoints by default in containers.
+- Added non-root image execution and Kubernetes security contexts.
+- Added probe timing, resource requests and limits, and safe encryption defaults.
+- Added the `Deployment` suite to Production and Release validation.
+
 ## 0.35.0
 
 - Added atomic site metadata with identity, region, role, health, and recovery-point timestamps.

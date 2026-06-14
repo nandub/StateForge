@@ -91,6 +91,8 @@ try {
         'scripts\Test-StateForgeWitness.ps1',
         'scripts\Test-StateForgeSplitBrain.ps1',
         'scripts\Test-StateForgeMultiSite.ps1',
+        'scripts\Test-StateForgeDeployment.ps1',
+        'deploy\k8s\kustomization.yaml',
         'scripts\Test-StateForgeDashboard.ps1',
         'scripts\Build-StateForgePackages.ps1',
         'scripts\Test-StateForgePackageMetadata.ps1',

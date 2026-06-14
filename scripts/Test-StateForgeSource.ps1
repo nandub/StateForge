@@ -892,6 +892,48 @@ if ($monitoringRunnerText -notmatch "'MultiSite'") {
     throw 'Test-StateForge.ps1 must expose the MultiSite suite.'
 }
 
+# Validate current container and Kubernetes deployment assets.
+$dockerfilePath = Join-Path -Path $repoRoot -ChildPath 'Dockerfile'
+$deploymentPath = Join-Path -Path $repoRoot -ChildPath 'deploy\k8s\deployment.yaml'
+$deploymentTestPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeDeployment.ps1'
+$kestrelHarnessPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.KestrelHarness\Program.cs'
+
+foreach ($deploymentAssetPath in @(
+    $dockerfilePath,
+    $deploymentPath,
+    $deploymentTestPath,
+    $kestrelHarnessPath
+)) {
+    if (-not (Test-Path -LiteralPath $deploymentAssetPath)) {
+        throw "Missing deployment hardening file: $deploymentAssetPath"
+    }
+}
+
+$dockerfileText = Get-Content -LiteralPath $dockerfilePath -Raw
+$deploymentText = Get-Content -LiteralPath $deploymentPath -Raw
+$kestrelHarnessText = Get-Content -LiteralPath $kestrelHarnessPath -Raw
+
+if ($dockerfileText -notmatch 'USER app' -or
+    $dockerfileText -notmatch 'STATEFORGE_ENABLE_DEMO_ENDPOINTS=false') {
+    throw 'Docker image must run non-root and disable harness demo endpoints.'
+}
+
+if ($deploymentText -notmatch 'stateforge-kestrel:0\.35\.0' -or
+    $deploymentText -notmatch 'runAsNonRoot:\s*true' -or
+    $deploymentText -notmatch 'readinessProbe:' -or
+    $deploymentText -notmatch 'resources:') {
+    throw 'Kubernetes deployment must remain versioned, non-root, probed, and resource-bounded.'
+}
+
+if ($kestrelHarnessText -match 'GetEnvironmentVariable\("STATEFORGE_ROOT"\)' -or
+    $kestrelHarnessText -notmatch 'STATEFORGE_ENABLE_DEMO_ENDPOINTS') {
+    throw 'Kestrel container paths and demo endpoint controls have drifted.'
+}
+
+if ($monitoringRunnerText -notmatch "'Deployment'") {
+    throw 'Test-StateForge.ps1 must expose the Deployment suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {

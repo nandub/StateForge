@@ -46,6 +46,7 @@ param(
         'Witness',
         'SplitBrain',
         'MultiSite',
+        'Deployment',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -177,6 +178,10 @@ function Invoke-MultiSiteSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeMultiSite.ps1'
 }
 
+function Invoke-DeploymentSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeDeployment.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -215,6 +220,7 @@ function Invoke-ProductionSuite {
     Invoke-WitnessSuite
     Invoke-SplitBrainSuite
     Invoke-MultiSiteSuite
+    Invoke-DeploymentSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
@@ -236,6 +242,7 @@ function Invoke-ReleaseSuite {
     Invoke-WitnessSuite
     Invoke-SplitBrainSuite
     Invoke-MultiSiteSuite
+    Invoke-DeploymentSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -257,6 +264,7 @@ try {
         'Witness' { Invoke-WitnessSuite }
         'SplitBrain' { Invoke-SplitBrainSuite }
         'MultiSite' { Invoke-MultiSiteSuite }
+        'Deployment' { Invoke-DeploymentSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

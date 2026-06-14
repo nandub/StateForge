@@ -2,6 +2,8 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: stateforge-kestrel
+  labels:
+    app.kubernetes.io/name: stateforge
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

@@ -35,6 +35,16 @@ Current version: **0.35.0**
 .\scripts\Test-StateForgeIncrementalSnapshots.ps1
 ```
 
+## Containers
+
+```powershell
+docker build --tag stateforge-kestrel:0.35.0 .
+.\scripts\Test-StateForge.ps1 -Suite Deployment
+```
+
+The container runs non-root, stores data and snapshots under `/data/stateforge`, and disables demo session
+endpoints. See `docs\12-production-readiness.md` for Kubernetes storage and encryption requirements.
+
 ## Documentation
 
 See [docs/README.md](docs/README.md).

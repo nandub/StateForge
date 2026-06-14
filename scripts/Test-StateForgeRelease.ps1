@@ -58,6 +58,7 @@ try {
     .\scripts\Test-StateForgeWitness.ps1
     .\scripts\Test-StateForgeSplitBrain.ps1
     .\scripts\Test-StateForgeMultiSite.ps1
+    .\scripts\Test-StateForgeDeployment.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
     .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.35.0'

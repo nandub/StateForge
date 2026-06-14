@@ -19,6 +19,7 @@ This suite validates:
 - witness heartbeat and candidate vote validation
 - primary lease, fencing epoch, and stale-primary validation
 - site metadata, cross-site policy, restore drill, and fenced site failover
+- Docker and Kubernetes deployment invariants
 - repository layout
 - source guards
 - health checks
@@ -121,3 +122,21 @@ marker suppression.
 The suite validates atomic strict site state, site-tagged replication manifests, region separation,
 heartbeat and recovery-point freshness, exact quorum candidate binding, snapshot restore drills, fenced
 cross-site failover, and rejection when policy evidence targets a different replica root.
+
+## Docker and Kubernetes
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Deployment
+docker build --tag stateforge-kestrel:0.35.0 .
+```
+
+The image runs as the .NET `app` user, listens on port `8080`, and uses `/data/stateforge` for cache data
+and snapshot metrics. Demo `/session` and `/health` harness endpoints are disabled by default.
+
+The Kubernetes manifests require a `ReadWriteMany` storage class for multiple replicas, Metrics Server
+for the HPA, and pod security support for UID/GID `1654`. Replace the local image name with a
+registry-qualified image in remote clusters.
+
+Encryption is disabled in the generic ConfigMap. To enable AES, populate `stateforge-secret` with
+`STATEFORGE_AES_KEY_BASE64`, then set `STATEFORGE_ENCRYPTION=true` and
+`STATEFORGE_PROTECTION_MODE=aes`. Do not commit the key.
