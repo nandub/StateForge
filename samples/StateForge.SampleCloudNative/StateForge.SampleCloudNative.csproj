@@ -5,6 +5,7 @@
     <Version>0.35.0</Version>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\StateForge.AspNetCore\StateForge.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\StateForge.CloudNative\StateForge.CloudNative.csproj" />
+    <ProjectReference Include="..\..\src\StateForge.Telemetry.AspNetCore\StateForge.Telemetry.AspNetCore.csproj" />
   </ItemGroup>
 </Project>

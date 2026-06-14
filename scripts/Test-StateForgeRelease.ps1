@@ -43,6 +43,7 @@ try {
     .\scripts\Test-StateForgeUpgradeCompatibility.ps1
     .\scripts\Test-StateForgeSecurity.ps1
     .\scripts\Test-StateForgeKeyRing.ps1
+    .\scripts\Test-StateForgeSamples.ps1
     .\scripts\Test-StateForgeScale.ps1
     .\scripts\Test-StateForgePerformance.ps1
     .\scripts\Test-StateForgeSnapshotMetrics.ps1

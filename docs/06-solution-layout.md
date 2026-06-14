@@ -60,6 +60,17 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.IncrementalSnapshotTests`
 - `StateForge.RecoveryFlowTests`
 
+## Samples
+
+Maintained application examples live under `samples`:
+
+- `StateForge.SampleFileStore`
+- `StateForge.SampleAspNetCore`
+- `StateForge.SampleCloudNative`
+- `StateForge.SampleWebFramework`
+
+The first three are SDK-style projects. The ASP.NET Framework Web Forms sample is an IIS configuration
+and markup example with a dedicated setup guide.
 
 ## Script Consolidation
 
@@ -74,6 +85,7 @@ Top-level script entry points:
 | `Test-StateForgeApiCompatibility.ps1` | Reviewed public API baseline validation |
 | `Test-StateForgeUpgradeCompatibility.ps1` | Mixed-version store and recovery compatibility |
 | `Test-StateForgeSecurity.ps1` | AES record integrity and key-ring persistence validation |
+| `Test-StateForgeSamples.ps1` | Sample build, persistence, documentation, and configuration validation |
 | `Test-StateForgePackages.ps1` | Package metadata, SourceLink, artifact, and install validation |
 
 Reviewed package API signatures are stored as one text file per package under `api-baselines`.

@@ -62,6 +62,19 @@ Core docs:
 - [Release History](docs/09-release-history.md)
 - [Contributing](docs/10-contributing.md)
 
+## Samples
+
+Maintained examples are indexed in [samples/README.md](samples/README.md):
+
+- direct `StateForgeFileStore` usage
+- ASP.NET Core distributed cache and session state
+- cloud-native health, environment configuration, and telemetry
+- ASP.NET Framework custom session-state provider
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Samples
+```
+
 ## Validation
 
 ```powershell
@@ -69,6 +82,7 @@ Core docs:
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Security
+.\scripts\Test-StateForge.ps1 -Suite Samples
 .\scripts\Test-StateForge.ps1 -Suite Packages
 .\scripts\Test-StateForgeHardening.ps1
 .\scripts\Test-StateForgeRelease.ps1

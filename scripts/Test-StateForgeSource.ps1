@@ -1108,6 +1108,33 @@ if ($monitoringRunnerText -notmatch "'Security'") {
     throw 'Test-StateForge.ps1 must expose the Security suite.'
 }
 
+# Validate maintained sample coverage.
+$sampleValidationScript = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeSamples.ps1'
+$sampleIndex = Join-Path -Path $repoRoot -ChildPath 'samples\README.md'
+
+if (-not (Test-Path -LiteralPath $sampleValidationScript) -or
+    -not (Test-Path -LiteralPath $sampleIndex)) {
+    throw 'Missing sample validation script or sample index.'
+}
+
+$sampleValidationText = Get-Content -LiteralPath $sampleValidationScript -Raw
+foreach ($requiredSamplePattern in @(
+    'StateForge.SampleFileStore',
+    'StateForge.SampleAspNetCore',
+    'StateForge.SampleCloudNative',
+    'StateForge.SampleWebFramework',
+    'Counter:\s*2',
+    'README.md'
+)) {
+    if ($sampleValidationText -notmatch [regex]::Escape($requiredSamplePattern)) {
+        throw "Sample validation is missing required coverage: $requiredSamplePattern"
+    }
+}
+
+if ($monitoringRunnerText -notmatch "'Samples'") {
+    throw 'Test-StateForge.ps1 must expose the Samples suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {

@@ -38,6 +38,7 @@ param(
         'ApiCompatibility',
         'UpgradeCompatibility',
         'Security',
+        'Samples',
         'Format',
         'Migration',
         'Observability',
@@ -147,6 +148,10 @@ function Invoke-SecuritySuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeKeyRing.ps1'
 }
 
+function Invoke-SamplesSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSamples.ps1'
+}
+
 function Invoke-FormatSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeFormat.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeStfg2Envelope.ps1'
@@ -235,6 +240,7 @@ function Invoke-ProductionSuite {
     Invoke-ApiCompatibilitySuite
     Invoke-UpgradeCompatibilitySuite
     Invoke-SecuritySuite
+    Invoke-SamplesSuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHealth.ps1' -Arguments @{ RootPath = (Get-StateForgeProductionHealthRoot) }
     Invoke-StateForgeScript -Path '.\scripts\Invoke-StateForgeSmokeTest.ps1'
     Invoke-ObservabilitySuite
@@ -259,6 +265,7 @@ function Invoke-ReleaseSuite {
     Invoke-ApiCompatibilitySuite
     Invoke-UpgradeCompatibilitySuite
     Invoke-SecuritySuite
+    Invoke-SamplesSuite
     Invoke-FormatSuite
     Invoke-MigrationSuite
     Invoke-ObservabilitySuite
@@ -285,6 +292,7 @@ try {
         'ApiCompatibility' { Invoke-ApiCompatibilitySuite }
         'UpgradeCompatibility' { Invoke-UpgradeCompatibilitySuite }
         'Security' { Invoke-SecuritySuite }
+        'Samples' { Invoke-SamplesSuite }
         'Format' { Invoke-FormatSuite }
         'Migration' { Invoke-MigrationSuite }
         'Observability' { Invoke-ObservabilitySuite }

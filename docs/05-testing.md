@@ -70,6 +70,7 @@ StateForge uses a single suite-based validation runner:
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Security
+.\scripts\Test-StateForge.ps1 -Suite Samples
 .\scripts\Test-StateForge.ps1 -Suite Format
 .\scripts\Test-StateForge.ps1 -Suite Migration
 .\scripts\Test-StateForge.ps1 -Suite Observability
@@ -126,6 +127,15 @@ post-drain migration; and explicit AES and STFG2 downgrade boundaries.
 The suite verifies authenticated AES records, full-record tamper rejection, authentication flag
 stripping, wrong-key rejection, legacy AES read compatibility, bounded decompression, and validated
 atomic key-ring saves.
+
+## Sample Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Samples
+```
+
+The suite builds all SDK-style samples, verifies direct FileStore persistence across processes, checks
+per-folder README coverage, and validates safe ASP.NET Framework sample defaults.
 
 ## Package Readiness
 

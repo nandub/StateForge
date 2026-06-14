@@ -195,6 +195,7 @@ Do not:
 - update API baselines without reviewing and documenting the public surface change
 - change store-format or sharding compatibility without updating the upgrade suite and migration guide
 - change encryption or record authentication without updating the security suite and security runbook
+- change sample-facing APIs without updating the sample projects, READMEs, and Samples suite
 - change version numbers inconsistently
 
 ## Definition of Done

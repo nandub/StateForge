@@ -24,6 +24,7 @@ This suite validates:
 - reviewed public API compatibility
 - rolling-upgrade and migration compatibility
 - authenticated AES record and key-ring security validation
+- maintained sample build and behavior validation
 - repository layout
 - source guards
 - health checks

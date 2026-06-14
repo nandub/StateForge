@@ -22,6 +22,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Security
+.\scripts\Test-StateForge.ps1 -Suite Samples
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForge.ps1 -Suite Quorum
@@ -178,6 +179,16 @@ legacy replication and snapshot restore, and unsupported downgrade boundaries.
 
 The suite validates authenticated AES records, tamper and wrong-key rejection, legacy AES compatibility,
 bounded decompression, and atomic validated key-ring persistence.
+
+## Sample Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Samples
+.\scripts\Test-StateForgeSamples.ps1
+```
+
+The suite builds the FileStore, ASP.NET Core, and cloud-native samples, executes FileStore persistence
+checks, and validates the Web Forms configuration and all sample READMEs.
 
 Dashboard replica health uses semicolon-separated `name=path` entries:
 

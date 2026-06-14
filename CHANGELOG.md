@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Refreshed the ASP.NET Core and ASP.NET Framework samples for portable roots and safe encryption defaults.
+- Added direct FileStore and cloud-native minimal API samples.
+- Added detailed setup, encryption, deployment, and verification guidance to every sample folder.
+- Added the `Samples` suite to build and exercise maintained examples in Production and Release validation.
 - Added record-level HMAC-SHA256 authentication for new STFG1 AES records.
 - Added fail-closed validation for metadata, ciphertext, tag, flag-stripping, wrong-key, and oversized compressed payload attacks.
 - Preserved read compatibility for legacy AES-CBC records while making authenticated writes the default.
