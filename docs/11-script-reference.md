@@ -10,6 +10,7 @@ StateForge uses two consolidated script entry points and keeps parameter-rich op
 | `Test-StateForge.ps1` | Suite-based validation runner |
 | `Invoke-StateForge.ps1` | Convenience command runner |
 | `Build-StateForgePackages.ps1` | Package creation |
+| `Build-StateForgeApiDocs.ps1` | DocFX conceptual and generated API site |
 
 ## Validation Runner
 
@@ -19,6 +20,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Docs
 .\scripts\Test-StateForge.ps1 -Suite Version
 .\scripts\Test-StateForge.ps1 -Suite Layout
+.\scripts\Test-StateForge.ps1 -Suite ApiDocs
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Security
@@ -159,6 +161,16 @@ change, regenerate the baselines explicitly:
 ```powershell
 .\scripts\Test-StateForgeApiCompatibility.ps1 -UpdateBaseline
 ```
+
+## Generated API Documentation
+
+```powershell
+.\scripts\Build-StateForgeApiDocs.ps1
+.\scripts\Test-StateForge.ps1 -Suite ApiDocs
+```
+
+DocFX extracts public API metadata from all twelve package projects and writes the site to
+`artifacts\docfx\site`. The local tool manifest pins the DocFX version used by development and validation.
 
 ## Rolling Upgrade Compatibility
 

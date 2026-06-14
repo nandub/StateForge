@@ -33,7 +33,18 @@ Do not add one document per feature unless the feature becomes large enough to j
 
 | [14-replica-catch-up.md](14-replica-catch-up.md) | Replica catch-up and resynchronization foundations |
 
+## Generated .NET API
+
+Build the Microsoft-style generated reference for all twelve shipped packages:
+
+```powershell
+.\scripts\Build-StateForgeApiDocs.ps1
+```
+
+The site is written to `artifacts\docfx\site`. The conceptual API guide remains
+`08-api-reference.md`; DocFX derives type and member pages from compiler XML comments.
 
 ## Coding Agents
 
-Repository guidance for Codex, Claude, and other coding agents is available in [`../AGENTS.md`](../AGENTS.md).
+Repository guidance for Codex, Claude, and other coding agents is available in
+[`AGENTS.md`](https://github.com/nandub/StateForge/blob/main/AGENTS.md).

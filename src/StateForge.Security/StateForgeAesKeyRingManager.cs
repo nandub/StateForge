@@ -5,8 +5,16 @@ using System.Security.Cryptography;
 
 namespace StateForge.Security
 {
+    /// <summary>Creates, validates, rotates, and atomically persists StateForge AES key rings.</summary>
+    /// <remarks>
+    /// Generated keys contain 256 random bits. Accepted AES key sizes follow
+    /// <see href="https://csrc.nist.gov/pubs/fips/197/final">NIST FIPS 197</see>.
+    /// </remarks>
     public static class StateForgeAesKeyRingManager
     {
+        /// <summary>Creates a key ring containing one current key.</summary>
+        /// <param name="keyId">The key identifier, or a blank value to generate a timestamp-based identifier.</param>
+        /// <returns>A new key ring.</returns>
         public static StateForgeAesKeyRing CreateNew(string keyId)
         {
             StateForgeAesKeyRing ring = new StateForgeAesKeyRing();
@@ -18,6 +26,9 @@ namespace StateForge.Security
             return ring;
         }
 
+        /// <summary>Creates a 256-bit AES key using a cryptographic random-number generator.</summary>
+        /// <param name="keyId">The key identifier, or a blank value to generate a timestamp-based identifier.</param>
+        /// <returns>The new key metadata and Base64-encoded key material.</returns>
         public static StateForgeAesKeyInfo CreateKey(string keyId)
         {
             if (string.IsNullOrWhiteSpace(keyId))
@@ -42,6 +53,12 @@ namespace StateForge.Security
             return key;
         }
 
+        /// <summary>Adds a new current key to an existing ring.</summary>
+        /// <param name="ring">The key ring to rotate.</param>
+        /// <param name="newKeyId">The new key identifier, or a blank value to generate one.</param>
+        /// <param name="retirePrevious"><see langword="true"/> to timestamp the previous current key as retired.</param>
+        /// <returns>The newly created current key.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="ring"/> is <see langword="null"/>.</exception>
         public static StateForgeAesKeyInfo Rotate(StateForgeAesKeyRing ring, string newKeyId, bool retirePrevious)
         {
             if (ring == null)
@@ -64,6 +81,11 @@ namespace StateForge.Security
         }
 
 
+        /// <summary>Loads, rotates, validates, and atomically saves a key ring.</summary>
+        /// <param name="path">The key-ring JSON path.</param>
+        /// <param name="newKeyId">The new key identifier, or a blank value to generate one.</param>
+        /// <param name="retirePrevious"><see langword="true"/> to timestamp the previous current key as retired.</param>
+        /// <returns>A summary of the rotation.</returns>
         public static StateForgeAesKeyRingRotationResult RotateAndSave(string path, string newKeyId, bool retirePrevious)
         {
             StateForgeAesKeyRing ring = StateForgeAesKeyRingReader.Load(path);
@@ -79,6 +101,9 @@ namespace StateForge.Security
             return result;
         }
 
+        /// <summary>Validates key identifiers, current-key membership, Base64 encoding, and AES key sizes.</summary>
+        /// <param name="ring">The key ring to validate.</param>
+        /// <returns>A list of validation errors; an empty list indicates success.</returns>
         public static List<string> Validate(StateForgeAesKeyRing ring)
         {
             List<string> errors = new List<string>();
@@ -130,6 +155,11 @@ namespace StateForge.Security
             return errors;
         }
 
+        /// <summary>Validates and atomically writes a key ring to disk.</summary>
+        /// <param name="path">The destination JSON path.</param>
+        /// <param name="ring">The key ring to persist.</param>
+        /// <exception cref="ArgumentException"><paramref name="path"/> is blank.</exception>
+        /// <exception cref="InvalidOperationException">Key-ring validation fails.</exception>
         public static void Save(string path, StateForgeAesKeyRing ring)
         {
             if (string.IsNullOrWhiteSpace(path))

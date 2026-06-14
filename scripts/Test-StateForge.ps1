@@ -35,6 +35,7 @@ param(
         'Version',
         'Layout',
         'Source',
+        'ApiDocs',
         'ApiCompatibility',
         'UpgradeCompatibility',
         'Security',
@@ -132,6 +133,10 @@ function Invoke-LayoutSuite {
 
 function Invoke-SourceSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSource.ps1'
+}
+
+function Invoke-ApiDocsSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeApiDocs.ps1'
 }
 
 function Invoke-ApiCompatibilitySuite {
@@ -237,6 +242,7 @@ function Invoke-ProductionSuite {
     Invoke-VersionSuite
     Invoke-LayoutSuite
     Invoke-SourceSuite
+    Invoke-ApiDocsSuite
     Invoke-ApiCompatibilitySuite
     Invoke-UpgradeCompatibilitySuite
     Invoke-SecuritySuite
@@ -262,6 +268,7 @@ function Invoke-ReleaseSuite {
     Invoke-VersionSuite
     Invoke-LayoutSuite
     Invoke-SourceSuite
+    Invoke-ApiDocsSuite
     Invoke-ApiCompatibilitySuite
     Invoke-UpgradeCompatibilitySuite
     Invoke-SecuritySuite
@@ -289,6 +296,7 @@ try {
         'Version' { Invoke-VersionSuite }
         'Layout' { Invoke-LayoutSuite }
         'Source' { Invoke-SourceSuite }
+        'ApiDocs' { Invoke-ApiDocsSuite }
         'ApiCompatibility' { Invoke-ApiCompatibilitySuite }
         'UpgradeCompatibility' { Invoke-UpgradeCompatibilitySuite }
         'Security' { Invoke-SecuritySuite }

@@ -1,6 +1,27 @@
 # API Reference
 
-This is a human-maintained API index. It should remain concise.
+This is the human-maintained API guide. It should remain concise and focus on contracts and operational
+semantics that are not obvious from individual members.
+
+## Generated Reference
+
+StateForge also produces a Microsoft-style DocFX reference for every shipped package:
+
+```powershell
+.\scripts\Build-StateForgeApiDocs.ps1
+```
+
+Open `artifacts\docfx\site\README.html` after the build. Public type and member pages are generated from
+compiler XML comments. Missing comments fail the build for the completed Core, Format, and Security
+documentation slice; the remaining package comments will be hardened incrementally.
+
+Implementation references are cited only where they materially inform behavior:
+
+- STFG2 payload checksums use SHA-256 as specified by [NIST FIPS 180-4](https://csrc.nist.gov/pubs/fips/180-4/upd1/final).
+- AES key sizes follow [NIST FIPS 197](https://csrc.nist.gov/pubs/fips/197/final).
+- Authenticated STFG1 records use HMAC-SHA256 following the HMAC construction in [RFC 2104](https://www.rfc-editor.org/rfc/rfc2104).
+
+These are standards references, not claims that StateForge source code was copied from those publications.
 
 ## Compatibility Policy
 

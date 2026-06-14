@@ -34,6 +34,8 @@ try {
         'CHANGELOG.md',
         'NuGet.config',
         'Directory.Build.targets',
+        '.config\dotnet-tools.json',
+        'docfx.json',
         'config\stateforge-maintenance.sample.json',
         'StateForge.sln',
         'samples\README.md',
@@ -107,6 +109,8 @@ try {
         'scripts\Update-StateForgeStoreSnapshot.ps1',
         'scripts\Test-StateForgeApiValidation.ps1',
         'scripts\Test-StateForgeApiCompatibility.ps1',
+        'scripts\Build-StateForgeApiDocs.ps1',
+        'scripts\Test-StateForgeApiDocs.ps1',
         'scripts\Test-StateForgeUpgradeCompatibility.ps1',
         'scripts\Test-StateForgeSecurity.ps1',
         'scripts\Test-StateForgeSamples.ps1',
@@ -166,6 +170,7 @@ try {
     'docs\08-api-reference.md',
     'docs\09-release-history.md',
     'docs\10-contributing.md'
+    'docs\toc.yml'
     'scripts\Invoke-StateForge.ps1'
     'docs\11-script-reference.md'
     'docs\12-production-readiness.md',

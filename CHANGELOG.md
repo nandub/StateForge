@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added a repository-pinned DocFX site for conceptual documentation and all twelve shipped package APIs.
+- Enabled compiler XML documentation output for every package.
+- Added complete, compiler-enforced public API comments for StateForge.Core, StateForge.Format, and StateForge.Security.
+- Added authoritative SHA-256, AES, and HMAC standards references where they inform implementation behavior.
+- Added the `ApiDocs` suite to Production and Release validation.
 - Refreshed the ASP.NET Core and ASP.NET Framework samples for portable roots and safe encryption defaults.
 - Added direct FileStore and cloud-native minimal API samples.
 - Added detailed setup, encryption, deployment, and verification guidance to every sample folder.

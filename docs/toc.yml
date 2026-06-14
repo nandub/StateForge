@@ -1,0 +1,32 @@
+- name: Documentation home
+  href: README.md
+- name: Getting started
+  href: 01-getting-started.md
+- name: Architecture
+  href: 02-architecture.md
+- name: Disaster recovery
+  href: 03-disaster-recovery.md
+- name: Observability
+  href: 04-observability.md
+- name: Testing
+  href: 05-testing.md
+- name: Solution layout
+  href: 06-solution-layout.md
+- name: Roadmap
+  href: 07-roadmap.md
+- name: API guide
+  href: 08-api-reference.md
+- name: Generated .NET API
+  xref: StateForge.Core
+- name: Release history
+  href: 09-release-history.md
+- name: Contributing
+  href: 10-contributing.md
+- name: Script reference
+  href: 11-script-reference.md
+- name: Production readiness
+  href: 12-production-readiness.md
+- name: Runbooks
+  href: 13-runbooks.md
+- name: Replica catch-up
+  href: 14-replica-catch-up.md

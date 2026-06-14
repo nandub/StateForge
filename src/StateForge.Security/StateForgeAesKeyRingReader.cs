@@ -5,8 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace StateForge.Security
 {
+    /// <summary>Loads StateForge AES key rings from their persisted JSON representation.</summary>
     public static class StateForgeAesKeyRingReader
     {
+        /// <summary>Reads and parses a key ring from disk.</summary>
+        /// <param name="path">The key-ring JSON path.</param>
+        /// <returns>The parsed key ring.</returns>
+        /// <exception cref="ArgumentException"><paramref name="path"/> is blank.</exception>
         public static StateForgeAesKeyRing Load(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -18,6 +23,10 @@ namespace StateForge.Security
             return FromJson(json);
         }
 
+        /// <summary>Parses the StateForge key-ring JSON shape.</summary>
+        /// <param name="json">The JSON content.</param>
+        /// <returns>The parsed key ring.</returns>
+        /// <exception cref="ArgumentException"><paramref name="json"/> is blank.</exception>
         public static StateForgeAesKeyRing FromJson(string json)
         {
             if (string.IsNullOrWhiteSpace(json))

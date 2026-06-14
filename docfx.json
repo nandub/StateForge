@@ -1,0 +1,58 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": ".",
+          "files": [
+            "src/StateForge.Core/StateForge.Core.csproj",
+            "src/StateForge.FileStore/StateForge.FileStore.csproj",
+            "src/StateForge.AspNet/StateForge.AspNet.csproj",
+            "src/StateForge.AspNetCore/StateForge.AspNetCore.csproj",
+            "src/StateForge.Security/StateForge.Security.csproj",
+            "src/StateForge.Telemetry/StateForge.Telemetry.csproj",
+            "src/StateForge.CloudNative/StateForge.CloudNative.csproj",
+            "src/StateForge.Format/StateForge.Format.csproj",
+            "src/StateForge.Prometheus/StateForge.Prometheus.csproj",
+            "src/StateForge.Performance/StateForge.Performance.csproj",
+            "src/StateForge.Replication/StateForge.Replication.csproj",
+            "src/StateForge.Snapshots/StateForge.Snapshots.csproj"
+          ]
+        }
+      ],
+      "dest": "artifacts/docfx/api"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "*.md",
+          "toc.yml"
+        ],
+        "src": "docs"
+      },
+      {
+        "files": [
+          "**/*.yml"
+        ],
+        "src": "artifacts/docfx/api",
+        "dest": "api"
+      }
+    ],
+    "dest": "artifacts/docfx/site",
+    "globalMetadata": {
+      "_appName": "StateForge",
+      "_appTitle": "StateForge Documentation",
+      "_enableSearch": true,
+      "pdf": false
+    },
+    "template": [
+      "default",
+      "modern"
+    ],
+    "xref": [
+      "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"
+    ]
+  }
+}

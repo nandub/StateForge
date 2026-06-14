@@ -1162,3 +1162,46 @@ if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
 if ($agentsText -notmatch 'Production Release') {
     throw 'AGENTS.md must document the next roadmap milestone.'
 }
+
+# Validate generated API documentation infrastructure and coverage policy.
+$docfxPath = Join-Path -Path $repoRoot -ChildPath 'docfx.json'
+$apiDocsBuildPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForgeApiDocs.ps1'
+$apiDocsTestPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeApiDocs.ps1'
+$directoryTargetsPath = Join-Path -Path $repoRoot -ChildPath 'Directory.Build.targets'
+
+foreach ($apiDocsPath in @($docfxPath, $apiDocsBuildPath, $apiDocsTestPath, $directoryTargetsPath)) {
+    if (-not (Test-Path -LiteralPath $apiDocsPath)) {
+        throw "Missing generated API documentation asset: $apiDocsPath"
+    }
+}
+
+$docfxText = Get-Content -LiteralPath $docfxPath -Raw
+$directoryTargetsText = Get-Content -LiteralPath $directoryTargetsPath -Raw
+
+foreach ($packageNamespace in @(
+    'StateForge.Core',
+    'StateForge.FileStore',
+    'StateForge.AspNet',
+    'StateForge.AspNetCore',
+    'StateForge.Security',
+    'StateForge.Telemetry',
+    'StateForge.CloudNative',
+    'StateForge.Format',
+    'StateForge.Prometheus',
+    'StateForge.Performance',
+    'StateForge.Replication',
+    'StateForge.Snapshots'
+)) {
+    if ($docfxText -notmatch [regex]::Escape($packageNamespace)) {
+        throw "DocFX metadata does not include package namespace: $packageNamespace"
+    }
+}
+
+if ($directoryTargetsText -notmatch 'GenerateDocumentationFile' -or
+    $directoryTargetsText -notmatch 'WarningsAsErrors') {
+    throw 'Package XML documentation generation and foundational coverage enforcement are required.'
+}
+
+if ($monitoringRunnerText -notmatch "'ApiDocs'") {
+    throw 'Test-StateForge.ps1 must expose the ApiDocs suite.'
+}

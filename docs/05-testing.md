@@ -10,7 +10,11 @@
 
 ```powershell
 .\scripts\Test-StateForgeDocs.ps1
+.\scripts\Test-StateForge.ps1 -Suite ApiDocs
 ```
+
+`ApiDocs` restores the repository-pinned DocFX tool, builds generated reference metadata for all twelve
+shipped packages, and verifies that Core, Format, and Security retain complete compiler-enforced XML comments.
 
 ## Version Consistency
 
@@ -67,6 +71,7 @@ StateForge uses a single suite-based validation runner:
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs
 .\scripts\Test-StateForge.ps1 -Suite Version
+.\scripts\Test-StateForge.ps1 -Suite ApiDocs
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Security

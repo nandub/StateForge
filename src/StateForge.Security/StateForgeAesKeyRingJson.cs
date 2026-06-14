@@ -4,8 +4,13 @@ using System.Text;
 
 namespace StateForge.Security
 {
+    /// <summary>Serializes StateForge AES key rings to their persisted JSON representation.</summary>
     public static class StateForgeAesKeyRingJson
     {
+        /// <summary>Serializes a key ring as indented JSON.</summary>
+        /// <param name="ring">The key ring to serialize.</param>
+        /// <returns>The persisted JSON representation.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="ring"/> is <see langword="null"/>.</exception>
         public static string ToJson(StateForgeAesKeyRing ring)
         {
             if (ring == null)

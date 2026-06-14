@@ -41,6 +41,7 @@ try {
     $layoutScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeLayout.ps1'
     $solutionValidationScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeSolution.ps1'
     $sourceValidationScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeSource.ps1'
+    $docsValidationScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeDocs.ps1'
     $nugetSourceScript = Join-Path -Path $scriptRoot -ChildPath 'Test-NuGetSources.ps1'
 
     if (-not (Test-Path -LiteralPath $solutionPath)) {
@@ -50,6 +51,7 @@ try {
     & $layoutScript | Out-Host
     & $solutionValidationScript | Out-Host
     & $sourceValidationScript | Out-Host
+    & $docsValidationScript | Out-Host
     & $nugetSourceScript | Out-Host
 
     if ($PSCmdlet.ShouldProcess($solutionPath, "Restore and build StateForge solution")) {
