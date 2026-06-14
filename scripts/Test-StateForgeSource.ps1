@@ -934,6 +934,49 @@ if ($monitoringRunnerText -notmatch "'Deployment'") {
     throw 'Test-StateForge.ps1 must expose the Deployment suite.'
 }
 
+# Validate v1.0 package and SourceLink readiness.
+$packageTargetsPath = Join-Path -Path $repoRoot -ChildPath 'Directory.Build.targets'
+$packageValidationPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.PackageValidationTests\Program.cs'
+$packageSuitePath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgePackages.ps1'
+$packageBuildPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Build-StateForgePackages.ps1'
+
+foreach ($packageReadinessPath in @(
+    $packageTargetsPath,
+    $packageValidationPath,
+    $packageSuitePath,
+    $packageBuildPath
+)) {
+    if (-not (Test-Path -LiteralPath $packageReadinessPath)) {
+        throw "Missing package readiness file: $packageReadinessPath"
+    }
+}
+
+$packageTargetsText = Get-Content -LiteralPath $packageTargetsPath -Raw
+$packageValidationText = Get-Content -LiteralPath $packageValidationPath -Raw
+$packageBuildText = Get-Content -LiteralPath $packageBuildPath -Raw
+
+if ($packageTargetsText -notmatch 'Microsoft\.SourceLink\.GitHub' -or
+    $packageTargetsText -notmatch 'PublishRepositoryUrl' -or
+    $packageTargetsText -notmatch 'EmbedUntrackedSources' -or
+    $packageTargetsText -notmatch '<DebugType>portable</DebugType>') {
+    throw 'Package projects must use centralized portable SourceLink settings.'
+}
+
+if ($packageValidationText -notmatch 'PortablePdbStream' -or
+    $packageValidationText -notmatch 'raw\.githubusercontent\.com/nandub/StateForge' -or
+    $packageValidationText -notmatch 'repository commit') {
+    throw 'Package validation must inspect portable PDB SourceLink and repository commit metadata.'
+}
+
+if ($packageBuildText -match 'IncludeSymbols=false' -or
+    $packageBuildText -notmatch 'RepositoryCommit') {
+    throw 'Package builds must emit symbols once and bind artifacts to the repository commit.'
+}
+
+if ($monitoringRunnerText -notmatch "'Packages'") {
+    throw 'Test-StateForge.ps1 must expose the Packages suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {

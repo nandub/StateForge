@@ -26,6 +26,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
 .\scripts\Test-StateForge.ps1 -Suite Deployment
+.\scripts\Test-StateForge.ps1 -Suite Packages
 .\scripts\Test-StateForge.ps1 -Suite Release
 ```
 
@@ -128,6 +129,18 @@ See `docs\14-replica-catch-up.md`.
 docker build --tag stateforge-kestrel:0.35.0 .
 kubectl apply -k .\deploy\k8s
 ```
+
+## NuGet Packages and SourceLink
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Packages
+.\scripts\Test-StateForgePackages.ps1
+.\scripts\Test-StateForgePackageArtifacts.ps1 -PackagePath .\artifacts\nuget
+.\scripts\Test-StateForgePackageInstall.ps1 -PackagePath .\artifacts\nuget
+```
+
+`Build-StateForgePackages.ps1` emits `.nupkg` and `.snupkg` files with deterministic portable PDBs,
+SourceLink mappings, and the exact repository commit in package metadata.
 
 Dashboard replica health uses semicolon-separated `name=path` entries:
 

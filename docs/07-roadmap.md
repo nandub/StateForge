@@ -53,14 +53,21 @@ It validates:
 - automatic failover
 - recovery flow
 - package metadata
+- package symbols and SourceLink mappings
+- package installation on `net8.0` and `net481`
+
+## Completed v1 Readiness Gates
+
+- package metadata and repository identity review
+- deterministic portable PDB generation
+- SourceLink mapping and repository commit validation
+- isolated local-feed package installation checks
 
 ## v1.0.0 — Production Release
 
 Required before v1.0:
 
 - public API review
-- package metadata review
-- SourceLink/package validation
 - long-duration soak tests
 - rolling upgrade checks
 - DR drill documentation

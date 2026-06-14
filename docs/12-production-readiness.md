@@ -20,6 +20,7 @@ This suite validates:
 - primary lease, fencing epoch, and stale-primary validation
 - site metadata, cross-site policy, restore drill, and fenced site failover
 - Docker and Kubernetes deployment invariants
+- NuGet metadata, symbols, SourceLink, and install compatibility
 - repository layout
 - source guards
 - health checks
@@ -140,3 +141,13 @@ registry-qualified image in remote clusters.
 Encryption is disabled in the generic ConfigMap. To enable AES, populate `stateforge-secret` with
 `STATEFORGE_AES_KEY_BASE64`, then set `STATEFORGE_ENCRYPTION=true` and
 `STATEFORGE_PROTECTION_MODE=aes`. Do not commit the key.
+
+## Package and SourceLink Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Packages
+```
+
+The package suite builds all twelve `.nupkg` and `.snupkg` artifacts, checks repository URL and commit
+metadata, validates portable PDB SourceLink mappings, and restores plus builds isolated `net8.0` and
+`net481` consumer projects from the local package feed.

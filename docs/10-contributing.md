@@ -16,7 +16,11 @@
 .\scripts\Test-StateForgeDocs.ps1
 .\scripts\Test-StateForgeVersionConsistency.ps1
 .\scripts\Test-StateForgeIncrementalSnapshots.ps1
+.\scripts\Test-StateForge.ps1 -Suite Packages
 ```
+
+Package changes must preserve the centralized SourceLink settings in `Directory.Build.targets` and
+pass artifact plus local-feed install validation for both supported consumer target families.
 
 
 ## Operational Script Dispatcher

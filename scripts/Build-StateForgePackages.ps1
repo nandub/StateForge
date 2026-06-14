@@ -46,6 +46,10 @@ try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
     $resolvedOutput = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
+    $repositoryCommit = (& git -C $repoRoot rev-parse HEAD).Trim()
+    if ($LASTEXITCODE -ne 0 -or $repositoryCommit -notmatch '^[0-9a-fA-F]{40}$') {
+        throw 'Unable to resolve the 40-character repository commit for package metadata.'
+    }
 
     if (-not (Test-Path -LiteralPath $resolvedOutput)) {
         New-Item -Path $resolvedOutput -ItemType Directory -Force | Out-Null
@@ -73,10 +77,10 @@ try {
             --configuration $Configuration `
             --output $resolvedOutput `
             /p:PackageVersion=$Version `
-            /p:IncludeSymbols=false `
             /p:ContinuousIntegrationBuild=true `
             /p:IncludeSymbols=true `
-            /p:SymbolPackageFormat=snupkg
+            /p:SymbolPackageFormat=snupkg `
+            /p:RepositoryCommit=$repositoryCommit
 
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet pack failed for $project with exit code $LASTEXITCODE."
@@ -90,6 +94,7 @@ try {
         OutputPath   = $resolvedOutput
         PackageCount = $packages.Count
         SymbolPackageCount = $symbolPackages.Count
+        RepositoryCommit = $repositoryCommit
         Success      = $true
     }
 }

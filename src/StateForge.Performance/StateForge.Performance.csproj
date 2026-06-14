@@ -10,8 +10,8 @@
     <Description>Performance snapshot and sharding analysis helpers for StateForge.</Description>
     <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
     <PackageTags>stateforge;performance;benchmark;sharding;snapshot-cache</PackageTags>
-    <PackageProjectUrl>https://github.com/stateforge/stateforge</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/stateforge/stateforge</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/nandub/StateForge</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nandub/StateForge</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

@@ -47,6 +47,7 @@ param(
         'SplitBrain',
         'MultiSite',
         'Deployment',
+        'Packages',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -182,6 +183,10 @@ function Invoke-DeploymentSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeDeployment.ps1'
 }
 
+function Invoke-PackagesSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackages.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -221,9 +226,9 @@ function Invoke-ProductionSuite {
     Invoke-SplitBrainSuite
     Invoke-MultiSiteSuite
     Invoke-DeploymentSuite
+    Invoke-PackagesSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
-    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackageMetadata.ps1'
 }
 
 function Invoke-ReleaseSuite {
@@ -243,6 +248,7 @@ function Invoke-ReleaseSuite {
     Invoke-SplitBrainSuite
     Invoke-MultiSiteSuite
     Invoke-DeploymentSuite
+    Invoke-PackagesSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -265,6 +271,7 @@ try {
         'SplitBrain' { Invoke-SplitBrainSuite }
         'MultiSite' { Invoke-MultiSiteSuite }
         'Deployment' { Invoke-DeploymentSuite }
+        'Packages' { Invoke-PackagesSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

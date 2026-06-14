@@ -18,8 +18,8 @@
     <RepositoryType>git</RepositoryType>
       <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
       <PackageTags>stateforge;session-state;aspnet;aspnetcore;distributed-cache;filestore;stfg2</PackageTags>
-      <PackageProjectUrl>https://github.com/stateforge/stateforge</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/stateforge/stateforge</RepositoryUrl>
+      <PackageProjectUrl>https://github.com/nandub/StateForge</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/nandub/StateForge</RepositoryUrl>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>

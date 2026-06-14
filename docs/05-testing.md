@@ -79,6 +79,7 @@ StateForge uses a single suite-based validation runner:
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
 .\scripts\Test-StateForge.ps1 -Suite Deployment
+.\scripts\Test-StateForge.ps1 -Suite Packages
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite Recovery
 .\scripts\Test-StateForge.ps1 -Suite Release
@@ -86,6 +87,16 @@ StateForge uses a single suite-based validation runner:
 ```
 
 Feature-specific scripts remain available for compatibility.
+
+## Package Readiness
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Packages
+```
+
+This builds all twelve package and symbol artifacts, validates NuGet repository and commit metadata,
+inspects portable PDB SourceLink mappings, and builds isolated `net8.0` and `net481` consumers from the
+local package feed.
 
 
 ## Operational Script Dispatcher

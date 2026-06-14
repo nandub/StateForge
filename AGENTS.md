@@ -172,9 +172,9 @@ v1.0.0 — Production Release
 Expected areas:
 
 - public API review
-- package and SourceLink validation
 - rolling upgrade checks
 - security and performance review
+- long-duration soak tests
 - Production suite validation
 
 Later milestones:

@@ -10,8 +10,8 @@
     <Description>Prometheus text exposition helpers for StateForge.</Description>
     <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
     <PackageTags>stateforge;prometheus;metrics;observability;aspnetcore</PackageTags>
-    <PackageProjectUrl>https://github.com/stateforge/stateforge</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/stateforge/stateforge</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/nandub/StateForge</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nandub/StateForge</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

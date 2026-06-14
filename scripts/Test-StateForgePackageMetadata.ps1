@@ -3,7 +3,8 @@
 Validates package metadata for StateForge package projects.
 
 .DESCRIPTION
-Checks package-oriented projects for NuGet README, license, project URL, repository URL, tags, and README-NUGET.md inclusion.
+Checks package-oriented projects for NuGet README, license, project URL,
+repository URL, tags, README inclusion, and centralized SourceLink settings.
 
 .EXAMPLE
 .\scripts\Test-StateForgePackageMetadata.ps1
@@ -43,10 +44,12 @@ try {
     )
 
     $errors = New-Object System.Collections.Generic.List[string]
+    $expectedRepositoryUrl = 'https://github.com/nandub/StateForge'
 
     foreach ($project in $projects) {
         $path = Join-Path -Path $repoRoot -ChildPath $project
-        $content = Get-Content -LiteralPath $path -Raw
+        [xml]$document = Get-Content -LiteralPath $path -Raw
+        $content = $document.OuterXml
 
         foreach ($tag in @('PackageReadmeFile', 'PackageLicenseExpression', 'PackageProjectUrl', 'RepositoryUrl', 'PackageTags')) {
             if ($content -notmatch "<$tag>") {
@@ -54,8 +57,38 @@ try {
             }
         }
 
+        $properties = $document.Project.PropertyGroup
+        if (($properties.RepositoryUrl | Where-Object { $_ }) -ne $expectedRepositoryUrl) {
+            $errors.Add("$project has an incorrect RepositoryUrl.")
+        }
+
+        if (($properties.PackageProjectUrl | Where-Object { $_ }) -ne $expectedRepositoryUrl) {
+            $errors.Add("$project has an incorrect PackageProjectUrl.")
+        }
+
         if ($content -notmatch 'README-NUGET\.md') {
             $errors.Add("$project does not include README-NUGET.md for packing.")
+        }
+    }
+
+    $targetsPath = Join-Path -Path $repoRoot -ChildPath 'Directory.Build.targets'
+    if (-not (Test-Path -LiteralPath $targetsPath)) {
+        $errors.Add('Directory.Build.targets is missing.')
+    }
+    else {
+        $targetsContent = Get-Content -LiteralPath $targetsPath -Raw
+        foreach ($requiredSetting in @(
+            'Microsoft.SourceLink.GitHub',
+            'PublishRepositoryUrl',
+            'EmbedUntrackedSources',
+            'Deterministic',
+            'DebugType',
+            'IncludeSymbols',
+            'SymbolPackageFormat'
+        )) {
+            if ($targetsContent -notmatch [regex]::Escape($requiredSetting)) {
+                $errors.Add("Directory.Build.targets is missing $requiredSetting.")
+            }
         }
     }
 

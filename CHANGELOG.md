@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Added deterministic portable PDB and SourceLink settings for all twelve NuGet packages.
+- Corrected package repository metadata to `https://github.com/nandub/StateForge`.
+- Bound package repository metadata to the exact 40-character Git commit.
+- Added package artifact validation for NuGet metadata, assemblies, symbols, and SourceLink mappings.
+- Added isolated `net8.0` and `net481` local-feed package installation smoke tests.
+- Added the `Packages` suite to Production and Release validation.
 - Updated Docker and Kubernetes assets from the original v0.9.0 baseline to v0.35.0.
 - Aligned cache, Prometheus, and snapshot paths on `STATEFORGE_ROOT_PATH`.
 - Disabled Kestrel harness demo session endpoints by default in containers.
