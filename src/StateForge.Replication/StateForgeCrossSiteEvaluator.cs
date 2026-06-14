@@ -2,8 +2,10 @@ using System;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge cross site evaluator operations.</summary>
     public static class StateForgeCrossSiteEvaluator
     {
+        /// <summary>Evaluates whether a recovery site satisfies the cross-site promotion policy.</summary>
         public static StateForgeCrossSiteResult Evaluate(
             StateForgeSiteState source,
             StateForgeSiteState target,

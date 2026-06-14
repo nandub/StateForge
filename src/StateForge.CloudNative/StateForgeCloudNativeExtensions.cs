@@ -7,8 +7,22 @@ using StateForge.FileStore;
 
 namespace StateForge.CloudNative
 {
+    /// <summary>Registers container-oriented StateForge defaults and Kubernetes health endpoints.</summary>
     public static class StateForgeCloudNativeExtensions
     {
+        /// <summary>Registers StateForge as the distributed cache using environment-driven container defaults.</summary>
+        /// <param name="services">The application service collection.</param>
+        /// <returns><paramref name="services"/> for chaining.</returns>
+        /// <exception cref="ArgumentNullException"><paramref name="services"/> is <see langword="null"/>.</exception>
+        /// <example>
+        /// Configure a minimal cloud-native application:
+        /// <code language="csharp">
+        /// builder.Services.AddStateForgeCloudNativeCache();
+        /// builder.Services.AddSession();
+        /// WebApplication app = builder.Build();
+        /// app.MapStateForgeCloudNativeHealth();
+        /// </code>
+        /// </example>
         public static IServiceCollection AddStateForgeCloudNativeCache(this IServiceCollection services)
         {
             if (services == null)
@@ -30,6 +44,9 @@ namespace StateForge.CloudNative
             return services;
         }
 
+        /// <summary>Maps <c>/livez</c>, <c>/readyz</c>, and <c>/healthz</c> endpoints.</summary>
+        /// <param name="app">The application endpoint builder.</param>
+        /// <returns><paramref name="app"/> for chaining.</returns>
         public static WebApplication MapStateForgeCloudNativeHealth(this WebApplication app)
         {
             if (app == null)

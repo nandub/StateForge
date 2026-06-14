@@ -4,8 +4,12 @@ using System.Text;
 
 namespace StateForge.Snapshots
 {
+    /// <summary>Evaluates primary health and performs fenced replica promotion when required.</summary>
     public sealed class StateForgeFailoverService
     {
+        /// <summary>Evaluates the primary and promotes an eligible replica when failover is required.</summary>
+        /// <param name="options">Health, replica, fencing, cross-site, and destination settings.</param>
+        /// <returns>The health decision, promoted replica, marker path, and any errors.</returns>
         public StateForgeFailoverResult EvaluateAndFailover(StateForgeFailoverOptions options)
         {
             if (options == null)
@@ -91,6 +95,9 @@ namespace StateForge.Snapshots
             return result;
         }
 
+        /// <summary>Determines whether a store has a readable sessions directory and valid STFG records.</summary>
+        /// <param name="rootPath">The candidate store root path.</param>
+        /// <returns><see langword="true"/> when the store passes the failover health probe.</returns>
         public bool IsHealthy(string rootPath)
         {
             if (string.IsNullOrWhiteSpace(rootPath))

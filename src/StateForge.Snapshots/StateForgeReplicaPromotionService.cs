@@ -5,8 +5,10 @@ using StateForge.Replication;
 
 namespace StateForge.Snapshots
 {
+    /// <summary>Represents state forge replica promotion service.</summary>
     public sealed class StateForgeReplicaPromotionService
     {
+        /// <summary>Promotes the configured replica to a primary store.</summary>
         public StateForgeReplicaPromotionResult Promote(StateForgeReplicaPromotionOptions options)
         {
             if (options == null)

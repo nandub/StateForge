@@ -3,8 +3,14 @@ using System.Collections.Generic;
 
 namespace StateForge.Replication
 {
+    /// <summary>Evaluates voting-member availability and promotion-candidate eligibility.</summary>
     public static class StateForgeQuorumEvaluator
     {
+        /// <summary>Evaluates whether the cluster has quorum and the named candidate may be promoted.</summary>
+        /// <param name="members">The configured primary, replica, and witness members.</param>
+        /// <param name="policy">The quorum policy; <see langword="null"/> selects majority quorum.</param>
+        /// <param name="candidateName">The replica proposed for promotion.</param>
+        /// <returns>Vote counts, candidate state, and rejection reasons.</returns>
         public static StateForgeQuorumResult Evaluate(
             IEnumerable<StateForgeClusterMember> members,
             StateForgeQuorumPolicy policy,

@@ -4,7 +4,7 @@ Validates the generated StateForge .NET API documentation.
 
 .DESCRIPTION
 Builds the DocFX site, verifies that every shipped package namespace appears in generated
-metadata, and confirms that foundational packages enforce missing XML comments as errors.
+metadata, and confirms that every shipped package enforces missing XML comments as errors.
 
 .EXAMPLE
 .\scripts\Test-StateForgeApiDocs.ps1
@@ -60,21 +60,35 @@ try {
 
     $targetsText = Get-Content -LiteralPath $targetsPath -Raw
     $documentedProjects = @(
+        'StateForge.AspNet',
+        'StateForge.AspNetCore',
+        'StateForge.CloudNative',
         'StateForge.Core',
         'StateForge.FileStore',
         'StateForge.Format',
-        'StateForge.Security'
+        'StateForge.Performance',
+        'StateForge.Prometheus',
+        'StateForge.Replication',
+        'StateForge.Security',
+        'StateForge.Snapshots',
+        'StateForge.Telemetry'
     )
 
     foreach ($documentedProject in $documentedProjects) {
-        if ($targetsText -notmatch [regex]::Escape($documentedProject)) {
-            throw "Missing XML documentation enforcement for project: $documentedProject"
+        $projectPath = Join-Path -Path $repositoryRoot -ChildPath (
+            'src\' + $documentedProject + '\' + $documentedProject + '.csproj')
+        $projectText = Get-Content -LiteralPath $projectPath -Raw
+        if ($projectText -notmatch 'PackageReadmeFile') {
+            throw "Shipped project is not covered by package XML documentation enforcement: $documentedProject"
         }
     }
 
     if ($targetsText -notmatch 'GenerateDocumentationFile' -or
-        $targetsText -notmatch 'WarningsAsErrors') {
-        throw 'Package XML documentation generation or foundational coverage enforcement is missing.'
+        $targetsText -notmatch 'DocumentationFile' -or
+        $targetsText -notmatch 'WarningsAsErrors' -or
+        $targetsText -notmatch '1591' -or
+        $targetsText -match '<NoWarn>[^<]*1591') {
+        throw 'Package XML documentation generation or complete coverage enforcement is missing.'
     }
 
     $apiIndexPath = Join-Path -Path $siteRoot -ChildPath 'api\index.html'
@@ -132,6 +146,14 @@ try {
             Text = 'Register StateForge before adding ASP.NET Core session services'
         },
         @{
+            Page = 'api\StateForge.AspNet.StateForgeSessionStateProvider.html'
+            Text = 'Register the provider for out-of-process durable session state'
+        },
+        @{
+            Page = 'api\StateForge.CloudNative.StateForgeCloudNativeExtensions.html'
+            Text = 'Configure a minimal cloud-native application'
+        },
+        @{
             Page = 'api\StateForge.Format.StateForgeStfg2.html'
             Text = 'Write and verify an envelope whose payload was already compressed'
         },
@@ -144,12 +166,20 @@ try {
             Text = 'Return the metrics from an ASP.NET Core endpoint'
         },
         @{
+            Page = 'api\StateForge.Performance.StateForgeStoreSnapshotCache.html'
+            Text = 'Persist a snapshot for a monitoring sidecar'
+        },
+        @{
             Page = 'api\StateForge.Replication.StateForgeFileReplicator.html'
             Text = 'Replicate the current records to one named replica'
         },
         @{
             Page = 'api\StateForge.Snapshots.StateForgeSnapshotService.html'
             Text = 'Create a named snapshot and check its result'
+        },
+        @{
+            Page = 'api\StateForge.Telemetry.StateForgeMetrics.html'
+            Text = 'Capture counters for a custom health or metrics endpoint'
         }
     )
 

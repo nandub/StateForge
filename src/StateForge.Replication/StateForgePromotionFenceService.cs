@@ -2,8 +2,12 @@ using System;
 
 namespace StateForge.Replication
 {
+    /// <summary>Acquires and renews primary leases that fence concurrent or stale promotions.</summary>
     public sealed class StateForgePromotionFenceService
     {
+        /// <summary>Acquires a new primary lease or renews the matching active lease.</summary>
+        /// <param name="options">Cluster, candidate, quorum, lease-root, and duration settings.</param>
+        /// <returns>The acquired lease or the reasons promotion was fenced.</returns>
         public StateForgePromotionFenceResult Acquire(StateForgePromotionFenceOptions options)
         {
             if (options == null)
@@ -81,6 +85,14 @@ namespace StateForge.Replication
             }
         }
 
+        /// <summary>Renews an unexpired primary lease using its ownership token.</summary>
+        /// <param name="leaseRootPath">The directory containing primary lease state.</param>
+        /// <param name="clusterName">The owning cluster name.</param>
+        /// <param name="primaryName">The active primary name.</param>
+        /// <param name="leaseId">The opaque lease ownership token.</param>
+        /// <param name="leaseDuration">The new positive lease duration.</param>
+        /// <param name="renewalUtc">The evaluation time, or <see langword="null"/> for the current UTC time.</param>
+        /// <returns>The renewed lease or rejection reasons.</returns>
         public StateForgePromotionFenceResult Renew(
             string leaseRootPath,
             string clusterName,
@@ -134,6 +146,10 @@ namespace StateForge.Replication
             }
         }
 
+        /// <summary>Determines whether a lease is absent or expired at the specified time.</summary>
+        /// <param name="lease">The lease to evaluate.</param>
+        /// <param name="evaluationUtc">The UTC evaluation time.</param>
+        /// <returns><see langword="true"/> when the lease cannot represent an active primary.</returns>
         public static bool IsStale(StateForgePrimaryLease lease, DateTimeOffset evaluationUtc)
         {
             return lease == null || lease.ExpiresUtc <= evaluationUtc;

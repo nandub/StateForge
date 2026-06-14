@@ -4,8 +4,10 @@ using System.IO;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge replica monitor operations.</summary>
     public static class StateForgeReplicaMonitor
     {
+        /// <summary>Performs the capture operation.</summary>
         public static StateForgeReplicaMonitorSnapshot Capture(
             IEnumerable<StateForgeReplicaNode> replicas,
             TimeSpan staleThreshold)
@@ -13,6 +15,7 @@ namespace StateForge.Replication
             return Capture(replicas, staleThreshold, DateTimeOffset.UtcNow);
         }
 
+        /// <summary>Performs the capture operation.</summary>
         public static StateForgeReplicaMonitorSnapshot Capture(
             IEnumerable<StateForgeReplicaNode> replicas,
             TimeSpan staleThreshold,

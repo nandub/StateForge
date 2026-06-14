@@ -6,10 +6,13 @@ using System.Text.RegularExpressions;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge primary lease store operations.</summary>
     public static class StateForgePrimaryLeaseStore
     {
+        /// <summary>Gets the primary lease file name.</summary>
         public const string FileName = "stateforge-primary-lease.json";
 
+        /// <summary>Reads the current primary lease, or returns <see langword="null"/> when absent.</summary>
         public static StateForgePrimaryLease Read(string leaseRootPath)
         {
             string path = GetPath(leaseRootPath);
@@ -48,6 +51,7 @@ namespace StateForge.Replication
             return lease;
         }
 
+        /// <summary>Gets the primary lease path beneath the specified root.</summary>
         public static string GetPath(string leaseRootPath)
         {
             if (string.IsNullOrWhiteSpace(leaseRootPath))

@@ -3,8 +3,11 @@ using System.Reflection;
 
 namespace StateForge.CloudNative
 {
+    /// <summary>Applies supported <c>STATEFORGE_*</c> environment variables to an options object.</summary>
     public static class StateForgeEnvironmentOptions
     {
+        /// <summary>Applies matching environment settings to compatible public option properties.</summary>
+        /// <param name="options">A StateForge options object.</param>
         public static void Apply(object options)
         {
             if (options == null)

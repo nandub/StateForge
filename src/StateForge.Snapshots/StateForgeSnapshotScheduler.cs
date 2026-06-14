@@ -3,8 +3,10 @@ using System.IO;
 
 namespace StateForge.Snapshots
 {
+    /// <summary>Represents state forge snapshot scheduler.</summary>
     public sealed class StateForgeSnapshotScheduler
     {
+        /// <summary>Performs the run once operation.</summary>
         public StateForgeSnapshotResult RunOnce(StateForgeSnapshotScheduleOptions options)
         {
             if (options == null)
@@ -24,6 +26,7 @@ namespace StateForge.Snapshots
             return result;
         }
 
+        /// <summary>Deletes snapshots beyond the configured retention count.</summary>
         public void ApplyRetention(StateForgeSnapshotScheduleOptions options)
         {
             if (options.RetainLast <= 0 || !Directory.Exists(options.SnapshotRepositoryPath))

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge replica configuration operations.</summary>
     public static class StateForgeReplicaConfiguration
     {
+        /// <summary>Performs the parse operation.</summary>
         public static List<StateForgeReplicaNode> Parse(string value)
         {
             List<StateForgeReplicaNode> replicas = new List<StateForgeReplicaNode>();

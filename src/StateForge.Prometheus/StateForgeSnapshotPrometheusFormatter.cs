@@ -4,8 +4,10 @@ using StateForge.Performance;
 
 namespace StateForge.Prometheus
 {
+    /// <summary>Provides state forge snapshot prometheus formatter operations.</summary>
     public static class StateForgeSnapshotPrometheusFormatter
     {
+        /// <summary>Formats store snapshot metrics for Prometheus.</summary>
         public static string Format(StateForgeStoreSnapshot snapshot)
         {
             if (snapshot == null)

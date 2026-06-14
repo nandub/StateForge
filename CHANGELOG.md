@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Completed compiler-enforced XML documentation coverage across all twelve shipped packages.
+- Corrected package XML documentation generation so `CS1591` enforcement is effective during compilation.
+- Added ASP.NET Framework, CloudNative, Telemetry, and Performance API examples to the generated reference.
 - Completed compiler-enforced XML documentation coverage for the StateForge.FileStore package.
 - Added detailed STFG2 envelope and migration behavior, safety boundaries, and a single-file migration example.
 - Added a linked documentation home page and direct generated-API links throughout the API guide.

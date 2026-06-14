@@ -3,8 +3,10 @@ using System.Text;
 
 namespace StateForge.Prometheus
 {
+    /// <summary>Provides state forge prometheus formatter operations.</summary>
     public static class StateForgePrometheusFormatter
     {
+        /// <summary>Formats a metric snapshot using the Prometheus text exposition format.</summary>
         public static string Format(StateForgePrometheusSnapshot snapshot)
         {
             if (snapshot == null)

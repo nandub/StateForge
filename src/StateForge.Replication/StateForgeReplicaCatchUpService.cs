@@ -6,8 +6,13 @@ using System.Text;
 
 namespace StateForge.Replication
 {
+    /// <summary>Plans and applies deterministic file-level replica resynchronization.</summary>
+    /// <remarks>Changed-file detection uses SHA-256 content hashes and does not rely on timestamps or file length alone.</remarks>
     public sealed class StateForgeReplicaCatchUpService
     {
+        /// <summary>Compares primary and replica content without modifying either store.</summary>
+        /// <param name="options">Primary, replica, and deletion-policy settings.</param>
+        /// <returns>A dry-run plan containing missing, changed, and extra files.</returns>
         public StateForgeReplicaCatchUpResult Plan(StateForgeReplicaCatchUpOptions options)
         {
             ValidateOptions(options);
@@ -52,6 +57,9 @@ namespace StateForge.Replication
             return result;
         }
 
+        /// <summary>Applies a catch-up plan to converge the replica with the primary.</summary>
+        /// <param name="options">Primary, replica, dry-run, and deletion-policy settings.</param>
+        /// <returns>The plan and resulting copy, deletion, and error counts.</returns>
         public StateForgeReplicaCatchUpResult Apply(StateForgeReplicaCatchUpOptions options)
         {
             ValidateOptions(options);

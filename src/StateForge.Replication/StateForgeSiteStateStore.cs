@@ -6,10 +6,13 @@ using System.Text.RegularExpressions;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge site state store operations.</summary>
     public static class StateForgeSiteStateStore
     {
+        /// <summary>Gets the site state file name.</summary>
         public const string FileName = "stateforge-site-state.json";
 
+        /// <summary>Reads the current site state.</summary>
         public static StateForgeSiteState Read(string siteRootPath)
         {
             string path = GetPath(siteRootPath);
@@ -51,6 +54,7 @@ namespace StateForge.Replication
             return state;
         }
 
+        /// <summary>Writes site state atomically.</summary>
         public static void Write(string siteRootPath, StateForgeSiteState state)
         {
             if (state == null)
@@ -68,6 +72,7 @@ namespace StateForge.Replication
             }
         }
 
+        /// <summary>Gets the site state path beneath the specified root.</summary>
         public static string GetPath(string siteRootPath)
         {
             if (string.IsNullOrWhiteSpace(siteRootPath))

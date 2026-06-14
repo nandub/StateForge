@@ -3,8 +3,10 @@ using System.IO;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge witness evaluator operations.</summary>
     public static class StateForgeWitnessEvaluator
     {
+        /// <summary>Evaluates witness freshness and candidate voting state.</summary>
         public static StateForgeWitnessHealthEntry Evaluate(
             StateForgeWitnessNode witness,
             string candidateName,
@@ -13,6 +15,7 @@ namespace StateForge.Replication
             return Evaluate(witness, candidateName, staleThreshold, DateTimeOffset.UtcNow);
         }
 
+        /// <summary>Evaluates witness state using an explicit evaluation time.</summary>
         public static StateForgeWitnessHealthEntry Evaluate(
             StateForgeWitnessNode witness,
             string candidateName,
@@ -123,6 +126,7 @@ namespace StateForge.Replication
             return result;
         }
 
+        /// <summary>Performs the to cluster member operation.</summary>
         public static StateForgeClusterMember ToClusterMember(
             StateForgeWitnessNode witness,
             StateForgeWitnessHealthEntry health)

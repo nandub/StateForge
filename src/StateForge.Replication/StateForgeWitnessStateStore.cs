@@ -6,10 +6,13 @@ using System.Text.RegularExpressions;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge witness state store operations.</summary>
     public static class StateForgeWitnessStateStore
     {
+        /// <summary>Gets the witness state file name.</summary>
         public const string FileName = "stateforge-witness-state.json";
 
+        /// <summary>Reads the current witness state.</summary>
         public static StateForgeWitnessState Read(string witnessRootPath)
         {
             string path = GetPath(witnessRootPath);
@@ -42,6 +45,7 @@ namespace StateForge.Replication
             return state;
         }
 
+        /// <summary>Writes witness state atomically.</summary>
         public static void Write(string witnessRootPath, StateForgeWitnessState state)
         {
             if (state == null)
@@ -63,6 +67,7 @@ namespace StateForge.Replication
             }
         }
 
+        /// <summary>Gets the witness state path beneath the specified root.</summary>
         public static string GetPath(string witnessRootPath)
         {
             if (string.IsNullOrWhiteSpace(witnessRootPath))

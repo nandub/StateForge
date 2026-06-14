@@ -3,8 +3,10 @@ using System.IO;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge replication planner operations.</summary>
     public static class StateForgeReplicationPlanner
     {
+        /// <summary>Creates a validated replication plan from the supplied options.</summary>
         public static StateForgeReplicationPlan CreatePlan(StateForgeReplicationOptions options)
         {
             if (options == null)

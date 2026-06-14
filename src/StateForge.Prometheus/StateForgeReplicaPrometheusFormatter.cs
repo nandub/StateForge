@@ -5,8 +5,10 @@ using StateForge.Replication;
 
 namespace StateForge.Prometheus
 {
+    /// <summary>Provides state forge replica prometheus formatter operations.</summary>
     public static class StateForgeReplicaPrometheusFormatter
     {
+        /// <summary>Formats replica-monitoring metrics for Prometheus.</summary>
         public static string Format(StateForgeReplicaMonitorSnapshot snapshot)
         {
             StringBuilder builder = new StringBuilder();

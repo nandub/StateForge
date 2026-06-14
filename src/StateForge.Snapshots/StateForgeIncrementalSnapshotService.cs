@@ -8,14 +8,22 @@ using System.Text.RegularExpressions;
 
 namespace StateForge.Snapshots
 {
+    /// <summary>Creates and restores full-plus-incremental snapshot chains.</summary>
+    /// <remarks>File changes are detected with SHA-256 content hashes, including equal-length modifications.</remarks>
     public sealed class StateForgeIncrementalSnapshotService
     {
+        /// <summary>Creates the full snapshot that anchors an incremental chain.</summary>
+        /// <param name="options">The base snapshot settings.</param>
+        /// <returns>The full snapshot result.</returns>
         public StateForgeSnapshotResult CreateBase(StateForgeSnapshotOptions options)
         {
             StateForgeSnapshotService service = new StateForgeSnapshotService();
             return service.Create(options);
         }
 
+        /// <summary>Creates a delta containing added, modified, and deleted-file entries.</summary>
+        /// <param name="options">The source, parent, repository, and overwrite settings.</param>
+        /// <returns>The incremental snapshot result and change counts.</returns>
         public StateForgeIncrementalSnapshotResult CreateIncremental(StateForgeIncrementalSnapshotOptions options)
         {
             ValidateOptions(options);
@@ -114,6 +122,12 @@ namespace StateForge.Snapshots
             return result;
         }
 
+        /// <summary>Restores a base snapshot and replays the named incremental snapshots in order.</summary>
+        /// <param name="snapshotRepositoryPath">The snapshot repository root.</param>
+        /// <param name="baseSnapshotName">The base snapshot name.</param>
+        /// <param name="incrementalSnapshotNames">Incremental snapshot names in replay order.</param>
+        /// <param name="destinationRootPath">The destination StateForge root.</param>
+        /// <returns>The aggregate restore result.</returns>
         public StateForgeSnapshotResult RestoreChain(string snapshotRepositoryPath, string baseSnapshotName, string[] incrementalSnapshotNames, string destinationRootPath)
         {
             StateForgeSnapshotService service = new StateForgeSnapshotService();
@@ -271,6 +285,7 @@ namespace StateForge.Snapshots
             }
         }
 
+        /// <summary>Writes an incremental snapshot manifest as UTF-8 JSON.</summary>
         public static void WriteManifest(string manifestPath, StateForgeIncrementalSnapshotManifest manifest)
         {
             string directory = Path.GetDirectoryName(Path.GetFullPath(manifestPath));
@@ -317,6 +332,7 @@ namespace StateForge.Snapshots
             File.WriteAllText(manifestPath, builder.ToString(), Encoding.UTF8);
         }
 
+        /// <summary>Reads an incremental snapshot manifest.</summary>
         public static StateForgeIncrementalSnapshotManifest ReadManifest(string manifestPath)
         {
             string json = File.ReadAllText(manifestPath);

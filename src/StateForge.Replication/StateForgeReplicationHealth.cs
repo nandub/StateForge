@@ -2,8 +2,10 @@ using System.IO;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge replication health operations.</summary>
     public static class StateForgeReplicationHealth
     {
+        /// <summary>Performs the check operation.</summary>
         public static StateForgeReplicationResult Check(StateForgeReplicationOptions options)
         {
             StateForgeReplicationPlan plan = StateForgeReplicationPlanner.CreatePlan(options);

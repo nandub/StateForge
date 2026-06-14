@@ -3,8 +3,13 @@ using System.IO;
 
 namespace StateForge.Performance
 {
+    /// <summary>Analyzes how STFG session files are distributed across shard directories.</summary>
     public static class StateForgeShardAnalyzer
     {
+        /// <summary>Analyzes the session layout beneath a StateForge root path.</summary>
+        /// <param name="rootPath">The StateForge store root path.</param>
+        /// <returns>Counts, distribution statistics, and layout warnings.</returns>
+        /// <exception cref="ArgumentException"><paramref name="rootPath"/> is empty.</exception>
         public static StateForgeShardAnalysisResult Analyze(string rootPath)
         {
             if (string.IsNullOrWhiteSpace(rootPath))

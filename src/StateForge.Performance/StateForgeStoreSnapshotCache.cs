@@ -8,8 +8,13 @@ using StateForge.FileStore;
 
 namespace StateForge.Performance
 {
+    /// <summary>Captures, persists, and reads lightweight StateForge store snapshots.</summary>
     public static class StateForgeStoreSnapshotCache
     {
+        /// <summary>Captures current store capacity and state counters.</summary>
+        /// <param name="rootPath">The StateForge store root path.</param>
+        /// <returns>The captured snapshot.</returns>
+        /// <exception cref="ArgumentException"><paramref name="rootPath"/> is empty.</exception>
         public static StateForgeStoreSnapshot Capture(string rootPath)
         {
             if (string.IsNullOrWhiteSpace(rootPath))
@@ -43,6 +48,18 @@ namespace StateForge.Performance
             return snapshot;
         }
 
+        /// <summary>Captures a store snapshot and writes it to a JSON file.</summary>
+        /// <param name="rootPath">The StateForge store root path.</param>
+        /// <param name="snapshotPath">The destination JSON path.</param>
+        /// <returns>The captured snapshot.</returns>
+        /// <example>
+        /// Persist a snapshot for a monitoring sidecar:
+        /// <code language="csharp">
+        /// StateForgeStoreSnapshot snapshot =
+        ///     StateForgeStoreSnapshotCache.CaptureAndWrite(storeRoot, "stateforge-snapshot.json");
+        /// Console.WriteLine(snapshot.CaptureElapsedMs);
+        /// </code>
+        /// </example>
         public static StateForgeStoreSnapshot CaptureAndWrite(string rootPath, string snapshotPath)
         {
             StateForgeStoreSnapshot snapshot = Capture(rootPath);
@@ -50,6 +67,9 @@ namespace StateForge.Performance
             return snapshot;
         }
 
+        /// <summary>Writes a snapshot as UTF-8 JSON.</summary>
+        /// <param name="snapshotPath">The destination JSON path.</param>
+        /// <param name="snapshot">The snapshot to write.</param>
         public static void Write(string snapshotPath, StateForgeStoreSnapshot snapshot)
         {
             if (string.IsNullOrWhiteSpace(snapshotPath))
@@ -68,6 +88,10 @@ namespace StateForge.Performance
             File.WriteAllText(fullPath, ToJson(snapshot), Encoding.UTF8);
         }
 
+        /// <summary>Reads a snapshot from a JSON file.</summary>
+        /// <param name="snapshotPath">The snapshot JSON path.</param>
+        /// <returns>The parsed snapshot.</returns>
+        /// <exception cref="FileNotFoundException">The snapshot file does not exist.</exception>
         public static StateForgeStoreSnapshot Read(string snapshotPath)
         {
             if (!File.Exists(snapshotPath))
@@ -91,6 +115,9 @@ namespace StateForge.Performance
             return snapshot;
         }
 
+        /// <summary>Serializes a snapshot to the stable StateForge snapshot JSON shape.</summary>
+        /// <param name="snapshot">The snapshot to serialize; <see langword="null"/> produces zero values.</param>
+        /// <returns>The formatted JSON document.</returns>
         public static string ToJson(StateForgeStoreSnapshot snapshot)
         {
             if (snapshot == null)

@@ -8,6 +8,9 @@ namespace StateForge.Prometheus
     /// <summary>Collects StateForge runtime and store statistics in Prometheus-compatible form.</summary>
     public static class StateForgePrometheusCollector
     {
+        /// <summary>Captures process-local telemetry counters and optional file-store statistics.</summary>
+        /// <param name="rootPath">The StateForge root path, or a blank value to omit store statistics.</param>
+        /// <returns>A snapshot suitable for Prometheus formatting.</returns>
         public static StateForgePrometheusSnapshot Collect(string rootPath)
         {
             StateForgePrometheusSnapshot snapshot = new StateForgePrometheusSnapshot();

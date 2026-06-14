@@ -6,10 +6,13 @@ using System.Text.RegularExpressions;
 
 namespace StateForge.Replication
 {
+    /// <summary>Provides state forge replica state store operations.</summary>
     public static class StateForgeReplicaStateStore
     {
+        /// <summary>Gets the replica synchronization state file name.</summary>
         public const string FileName = "stateforge-replica-state.json";
 
+        /// <summary>Reads the current replica synchronization state.</summary>
         public static StateForgeReplicaSyncState Read(string replicaRootPath)
         {
             string path = GetPath(replicaRootPath);
@@ -36,6 +39,7 @@ namespace StateForge.Replication
             return state;
         }
 
+        /// <summary>Performs the record replication operation.</summary>
         public static void RecordReplication(
             string replicaRootPath,
             string replicaName,
@@ -46,6 +50,7 @@ namespace StateForge.Replication
             Update(replicaRootPath, replicaName, success, false, error, attemptedUtc);
         }
 
+        /// <summary>Performs the record catch up operation.</summary>
         public static void RecordCatchUp(
             string replicaRootPath,
             string replicaName,
@@ -56,6 +61,7 @@ namespace StateForge.Replication
             Update(replicaRootPath, replicaName, success, true, error, attemptedUtc);
         }
 
+        /// <summary>Gets the replica state path beneath the specified root.</summary>
         public static string GetPath(string replicaRootPath)
         {
             if (string.IsNullOrWhiteSpace(replicaRootPath))

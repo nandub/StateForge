@@ -227,6 +227,7 @@ namespace StateForge.Replication
             return Path.GetFileName(filePath);
         }
 
+        /// <summary>Writes a replication manifest as UTF-8 JSON.</summary>
         public static void WriteManifest(string manifestPath, StateForgeReplicationManifest manifest)
         {
             string fullPath = Path.GetFullPath(manifestPath);

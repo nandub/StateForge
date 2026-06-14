@@ -13,13 +13,13 @@ StateForge also produces a Microsoft-style DocFX reference for every shipped pac
 
 Open [`artifacts\docfx\site\index.html`](index.md) after the build, then select
 [Generated .NET API](api/index.md). Public type and member pages are generated from
-compiler XML comments. Missing comments fail the build for the completed Core, FileStore, Format,
-and Security packages; the remaining package comments will be hardened incrementally.
+compiler XML comments. Missing comments fail the build for all twelve shipped packages.
 
-Selected high-value APIs also include rendered C# examples. The initial curated set covers direct file
-storage, lock-token updates, ASP.NET Core registration, STFG2 envelopes, AES key-ring lifecycle,
-Prometheus endpoints, replication, and snapshots. `Test-StateForgeApiDocs.ps1` verifies that these
-examples remain present in their generated API pages.
+Selected high-value APIs also include rendered C# examples. The curated set covers direct file storage,
+lock-token updates, ASP.NET Framework and ASP.NET Core registration, cloud-native health endpoints,
+STFG2 envelopes, AES key-ring lifecycle, telemetry and performance snapshots, Prometheus endpoints,
+replication, and snapshots. `Test-StateForgeApiDocs.ps1` verifies that these examples remain present
+in their generated API pages.
 
 Implementation references are cited only where they materially inform behavior:
 

@@ -5,15 +5,12 @@
     <Deterministic>true</Deterministic>
     <DebugType>portable</DebugType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(PackageReadmeFile)' != '' And '$(MSBuildProjectName)' != 'StateForge.Core' And '$(MSBuildProjectName)' != 'StateForge.FileStore' And '$(MSBuildProjectName)' != 'StateForge.Format' And '$(MSBuildProjectName)' != 'StateForge.Security'">
-    <NoWarn>$(NoWarn);1591</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'StateForge.Core' Or '$(MSBuildProjectName)' == 'StateForge.FileStore' Or '$(MSBuildProjectName)' == 'StateForge.Format' Or '$(MSBuildProjectName)' == 'StateForge.Security'">
+  <PropertyGroup Condition="'$(PackageReadmeFile)' != ''">
     <WarningsAsErrors>$(WarningsAsErrors);1591</WarningsAsErrors>
   </PropertyGroup>
 

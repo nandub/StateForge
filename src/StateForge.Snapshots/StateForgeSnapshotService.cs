@@ -115,6 +115,7 @@ namespace StateForge.Snapshots
             return result;
         }
 
+        /// <summary>Restores a full snapshot into a StateForge root.</summary>
         public StateForgeSnapshotResult Restore(string snapshotPath, string destinationRootPath, bool overwriteExisting)
         {
             StateForgeSnapshotResult result = new StateForgeSnapshotResult();
@@ -166,6 +167,7 @@ namespace StateForge.Snapshots
             return result;
         }
 
+        /// <summary>Performs the list operation.</summary>
         public string[] List(string snapshotRepositoryPath)
         {
             if (!Directory.Exists(snapshotRepositoryPath))
@@ -194,11 +196,13 @@ namespace StateForge.Snapshots
             }
         }
 
+        /// <summary>Performs the resolve sessions path operation.</summary>
         public static string ResolveSessionsPath(string rootPath)
         {
             return Path.Combine(Path.GetFullPath(rootPath), "sessions");
         }
 
+        /// <summary>Performs the make relative operation.</summary>
         public static string MakeRelative(string rootPath, string filePath)
         {
             string root = Path.GetFullPath(rootPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar;
@@ -212,6 +216,7 @@ namespace StateForge.Snapshots
             return Path.GetFileName(filePath);
         }
 
+        /// <summary>Writes a full snapshot manifest as UTF-8 JSON.</summary>
         public static void WriteManifest(string manifestPath, StateForgeSnapshotManifest manifest)
         {
             string directory = Path.GetDirectoryName(Path.GetFullPath(manifestPath));
@@ -254,6 +259,7 @@ namespace StateForge.Snapshots
             File.WriteAllText(manifestPath, builder.ToString(), Encoding.UTF8);
         }
 
+        /// <summary>Performs the escape operation.</summary>
         public static string Escape(string value)
         {
             if (value == null)
