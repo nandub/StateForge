@@ -7,5 +7,6 @@ namespace StateForge.Core
         public const int FlagCompressed = 1;
         public const int FlagEncrypted = 2;
         public const int FlagAesEncrypted = 4;
+        public const int FlagAuthenticated = 8;
     }
 }

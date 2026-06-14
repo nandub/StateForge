@@ -57,6 +57,7 @@ It validates:
 - package installation on `net8.0` and `net481`
 - reviewed public API compatibility baselines
 - rolling-upgrade and migration compatibility
+- authenticated AES record and key-ring security validation
 
 ## Completed v1 Readiness Gates
 
@@ -69,6 +70,8 @@ It validates:
 - same-layout mixed-version STFG1 read/write compatibility
 - shard transition, replication, and snapshot upgrade checks
 - documented AES and STFG2 downgrade boundaries
+- record-level HMAC authentication and tamper rejection for new AES records
+- bounded compressed-payload expansion and atomic validated key-ring saves
 
 ## v1.0.0 — Production Release
 
@@ -76,5 +79,4 @@ Required before v1.0:
 
 - long-duration soak tests
 - DR drill documentation
-- security review
 - performance baseline

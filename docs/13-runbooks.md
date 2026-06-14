@@ -80,6 +80,22 @@ Do not enable AES until every node can read AES records and has the same key mat
 do not understand `FlagAesEncrypted` cannot read those records. Rolling back after AES writes requires
 restoring a pre-AES snapshot or using a reviewed conversion process.
 
+Current writers add `FlagAuthenticated` and an HMAC-SHA256 trailer covering the complete serialized
+record. Older AES-capable readers can read the encrypted payload but do not enforce the authentication
+trailer. During a rolling upgrade, treat nodes running older packages as unable to detect record
+tampering. Complete the rollout before relying on authenticated-record enforcement.
+
+Security validation:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Security
+```
+
+Protect the store root and key-ring file with least-privilege filesystem permissions. Do not place the
+AES key or key-ring file inside the replicated session root, snapshots, container image, source tree, or
+logs. Rotate keys through `Rotate-StateForgeKeyRing.ps1`; invalid rings are rejected before the existing
+file is atomically replaced.
+
 ### STFG2 Boundary
 
 STFG2 utilities currently provide an offline envelope and migration format. `StateForgeFileStore` live

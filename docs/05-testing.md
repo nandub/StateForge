@@ -69,6 +69,7 @@ StateForge uses a single suite-based validation runner:
 .\scripts\Test-StateForge.ps1 -Suite Version
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
+.\scripts\Test-StateForge.ps1 -Suite Security
 .\scripts\Test-StateForge.ps1 -Suite Format
 .\scripts\Test-StateForge.ps1 -Suite Migration
 .\scripts\Test-StateForge.ps1 -Suite Observability
@@ -115,6 +116,16 @@ An approved public API change must also update `docs\08-api-reference.md` and `C
 The suite uses an independent legacy STFG1 reader/writer fixture. It verifies supported same-shard mixed
 reads, writes, refreshes, and removes; legacy replication and snapshot restore; shard fallback and
 post-drain migration; and explicit AES and STFG2 downgrade boundaries.
+
+## Security Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Security
+```
+
+The suite verifies authenticated AES records, full-record tamper rejection, authentication flag
+stripping, wrong-key rejection, legacy AES read compatibility, bounded decompression, and validated
+atomic key-ring saves.
 
 ## Package Readiness
 

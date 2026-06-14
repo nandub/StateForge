@@ -23,6 +23,7 @@ This suite validates:
 - NuGet metadata, symbols, SourceLink, and install compatibility
 - reviewed public API compatibility
 - rolling-upgrade and migration compatibility
+- authenticated AES record and key-ring security validation
 - repository layout
 - source guards
 - health checks
@@ -174,3 +175,18 @@ The supported mixed-version path keeps all nodes on the same shard depth and STF
 The suite validates bidirectional reads and writes on that path, along with refresh, remove, replication,
 and snapshot restore. Shard-depth migration occurs only after older writers are drained. AES records and
 STFG2 envelopes are explicit downgrade boundaries.
+
+## Security Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Security
+```
+
+New AES records use AES-CBC plus an encrypt-then-MAC HMAC-SHA256 tag over the complete serialized STFG1
+record. Current readers reject changed metadata, ciphertext, tags, unknown flags, authentication flag
+stripping, wrong keys, trailing bytes, oversized records, and decompressed payloads beyond
+`MaxPayloadBytes`. Existing unauthenticated AES records remain readable for migration.
+
+Key-ring saves validate the complete ring before writing and replace existing files atomically. Store
+roots and key-ring files still require operating-system access controls; encryption does not replace
+least-privilege filesystem permissions.

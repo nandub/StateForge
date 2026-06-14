@@ -23,7 +23,7 @@ namespace StateForge.FileStore
             }
         }
 
-        public static byte[] Decompress(byte[] value)
+        public static byte[] Decompress(byte[] value, int maxOutputBytes)
         {
             if (value == null || value.Length == 0)
             {
@@ -34,7 +34,19 @@ namespace StateForge.FileStore
             using (GZipStream gzip = new GZipStream(input, CompressionMode.Decompress))
             using (MemoryStream output = new MemoryStream())
             {
-                gzip.CopyTo(output);
+                byte[] buffer = new byte[81920];
+                int read;
+
+                while ((read = gzip.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    if (output.Length + read > maxOutputBytes)
+                    {
+                        throw new InvalidDataException("Decompressed payload exceeds MaxPayloadBytes.");
+                    }
+
+                    output.Write(buffer, 0, read);
+                }
+
                 return output.ToArray();
             }
         }

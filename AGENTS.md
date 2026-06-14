@@ -171,7 +171,7 @@ v1.0.0 — Production Release
 
 Expected areas:
 
-- security and performance review
+- performance review
 - long-duration soak tests
 - Production suite validation
 
@@ -194,6 +194,7 @@ Do not:
 - change public APIs without updating `docs/08-api-reference.md`
 - update API baselines without reviewing and documenting the public surface change
 - change store-format or sharding compatibility without updating the upgrade suite and migration guide
+- change encryption or record authentication without updating the security suite and security runbook
 - change version numbers inconsistently
 
 ## Definition of Done

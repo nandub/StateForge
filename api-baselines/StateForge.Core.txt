@@ -29,6 +29,7 @@ public static class StateForge.Core.StateForgeConstants
   const System.Int32 FileMagic = 1195791443
   const System.Int32 FileVersion = 1
   const System.Int32 FlagAesEncrypted = 4
+  const System.Int32 FlagAuthenticated = 8
   const System.Int32 FlagCompressed = 1
   const System.Int32 FlagEncrypted = 2
 

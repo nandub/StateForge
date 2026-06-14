@@ -21,6 +21,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Layout
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
+.\scripts\Test-StateForge.ps1 -Suite Security
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForge.ps1 -Suite Quorum
@@ -167,6 +168,16 @@ change, regenerate the baselines explicitly:
 
 The suite validates the supported same-shard STFG1 rolling-upgrade path, post-drain sharding migration,
 legacy replication and snapshot restore, and unsupported downgrade boundaries.
+
+## Security Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Security
+.\scripts\Test-StateForgeSecurity.ps1
+```
+
+The suite validates authenticated AES records, tamper and wrong-key rejection, legacy AES compatibility,
+bounded decompression, and atomic validated key-ring persistence.
 
 Dashboard replica health uses semicolon-separated `name=path` entries:
 

@@ -22,9 +22,12 @@ Baseline updates are approvals, not automatic formatting steps.
 - `StateForgeFileStore`
 - `StateForgeFileStoreOptions`
 - `StateForgeStoreStats`
+- `StateForgeConstants.FlagAuthenticated`
 
 Lock IDs returned by `GetAndLock` are fencing tokens. `SetAndUnlock` succeeds for an existing entry only
 when the entry is actively locked with the supplied lock ID. `Refresh` returns `false` for expired entries.
+New AES records set `FlagAuthenticated` and carry a record-level HMAC-SHA256 trailer. Readers retain
+compatibility with legacy AES records that do not set the flag.
 
 ## ASP.NET Core Cache
 

@@ -137,14 +137,48 @@ namespace StateForge.Security
                 throw new ArgumentException("Path is required.", "path");
             }
 
-            string directory = Path.GetDirectoryName(Path.GetFullPath(path));
+            List<string> errors = Validate(ring);
+            if (errors.Count > 0)
+            {
+                throw new InvalidOperationException("Key ring validation failed: " + string.Join("; ", errors.ToArray()));
+            }
+
+            string fullPath = Path.GetFullPath(path);
+            string directory = Path.GetDirectoryName(fullPath);
 
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
 
-            File.WriteAllText(path, StateForgeAesKeyRingJson.ToJson(ring));
+            string tempPath = Path.Combine(directory, "." + Path.GetFileName(fullPath) + "." + Guid.NewGuid().ToString("N") + ".tmp");
+
+            try
+            {
+                using (FileStream stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+                using (StreamWriter writer = new StreamWriter(stream))
+                {
+                    writer.Write(StateForgeAesKeyRingJson.ToJson(ring));
+                    writer.Flush();
+                    stream.Flush();
+                }
+
+                if (File.Exists(fullPath))
+                {
+                    File.Replace(tempPath, fullPath, null, true);
+                }
+                else
+                {
+                    File.Move(tempPath, fullPath);
+                }
+            }
+            finally
+            {
+                if (File.Exists(tempPath))
+                {
+                    File.Delete(tempPath);
+                }
+            }
         }
 
         private static void ValidateAesKey(string keyBase64, List<string> errors, string keyId)

@@ -1059,6 +1059,55 @@ if ($monitoringRunnerText -notmatch "'UpgradeCompatibility'") {
     throw 'Test-StateForge.ps1 must expose the UpgradeCompatibility suite.'
 }
 
+# Validate v1 security hardening coverage.
+$securityProjectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.SecurityTests\StateForge.SecurityTests.csproj'
+$securitySourcePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.SecurityTests\Program.cs'
+$securityScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeSecurity.ps1'
+$fileStoreSourcePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.FileStore\StateForgeFileStore.cs'
+$aesProtectorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.FileStore\AesPayloadProtector.cs'
+
+foreach ($securityPath in @(
+    $securityProjectPath,
+    $securitySourcePath,
+    $securityScriptPath,
+    $fileStoreSourcePath,
+    $aesProtectorPath
+)) {
+    if (-not (Test-Path -LiteralPath $securityPath)) {
+        throw "Missing security hardening asset: $securityPath"
+    }
+}
+
+$securitySourceText = Get-Content -LiteralPath $securitySourcePath -Raw
+$fileStoreSecurityText = Get-Content -LiteralPath $fileStoreSourcePath -Raw
+$aesProtectorText = Get-Content -LiteralPath $aesProtectorPath -Raw
+
+foreach ($requiredSecurityPattern in @(
+    'TestAuthenticatedRoundTrip',
+    'TestTamperRejection',
+    'TestAuthenticationFlagStripping',
+    'TestWrongKeyRejection',
+    'TestLegacyAesRead',
+    'TestCompressedExpansionLimit',
+    'TestValidatedAtomicKeyRingSave'
+)) {
+    if ($securitySourceText -notmatch [regex]::Escape($requiredSecurityPattern)) {
+        throw "Security tests are missing required coverage: $requiredSecurityPattern"
+    }
+}
+
+if ($fileStoreSecurityText -notmatch 'FlagAuthenticated' -or
+    $fileStoreSecurityText -notmatch 'AuthenticationTrailerMarker' -or
+    $fileStoreSecurityText -notmatch 'maximumRecordBytes' -or
+    $aesProtectorText -notmatch 'HMACSHA256' -or
+    $aesProtectorText -notmatch 'difference \|=') {
+    throw 'FileStore AES records must use bounded, fixed-time authenticated validation.'
+}
+
+if ($monitoringRunnerText -notmatch "'Security'") {
+    throw 'Test-StateForge.ps1 must expose the Security suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {

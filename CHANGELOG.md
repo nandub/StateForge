@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added record-level HMAC-SHA256 authentication for new STFG1 AES records.
+- Added fail-closed validation for metadata, ciphertext, tag, flag-stripping, wrong-key, and oversized compressed payload attacks.
+- Preserved read compatibility for legacy AES-CBC records while making authenticated writes the default.
+- Added validated atomic AES key-ring persistence.
+- Added the `Security` suite to Production and Release validation.
 - Added deterministic mixed-version STFG1 upgrade compatibility fixtures.
 - Added old-writer/current-reader and current-writer/old-reader checks for the supported same-layout path.
 - Added shard fallback, post-drain migration, replication, and snapshot restore compatibility checks.

@@ -443,7 +443,69 @@ namespace StateForge.FileStore
 
             try
             {
-                using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                long maximumRecordBytes = (long)_options.MaxPayloadBytes + 1048576L;
+                FileInfo fileInfo = new FileInfo(path);
+
+                if (fileInfo.Length < 12 || fileInfo.Length > maximumRecordBytes)
+                {
+                    invalid = true;
+                    return null;
+                }
+
+                byte[] fileBytes = File.ReadAllBytes(path);
+                int recordLength = fileBytes.Length;
+
+                if (fileBytes.Length < 12 || fileBytes.LongLength > maximumRecordBytes)
+                {
+                    invalid = true;
+                    return null;
+                }
+
+                flags = BitConverter.ToInt32(fileBytes, 8);
+                int knownFlags = StateForgeConstants.FlagCompressed |
+                    StateForgeConstants.FlagEncrypted |
+                    StateForgeConstants.FlagAesEncrypted |
+                    StateForgeConstants.FlagAuthenticated;
+
+                if ((flags & ~knownFlags) != 0 ||
+                    ((flags & StateForgeConstants.FlagAuthenticated) != 0 &&
+                     (flags & StateForgeConstants.FlagAesEncrypted) == 0))
+                {
+                    invalid = true;
+                    return null;
+                }
+
+                if ((flags & StateForgeConstants.FlagAuthenticated) != 0)
+                {
+                    if (fileBytes.Length <= AesPayloadProtector.AuthenticationTrailerLength ||
+                        fileBytes[fileBytes.Length - 1] != AesPayloadProtector.AuthenticationTrailerMarker)
+                    {
+                        invalid = true;
+                        return null;
+                    }
+
+                    recordLength = fileBytes.Length - AesPayloadProtector.AuthenticationTrailerLength;
+                    byte[] expectedTag = new byte[AesPayloadProtector.AuthenticationTagLength];
+                    Buffer.BlockCopy(
+                        fileBytes,
+                        recordLength,
+                        expectedTag,
+                        0,
+                        expectedTag.Length);
+
+                    if (!AesPayloadProtector.VerifyAuthenticationTag(
+                        fileBytes,
+                        0,
+                        recordLength,
+                        expectedTag,
+                        _options.AesKeyBase64))
+                    {
+                        invalid = true;
+                        return null;
+                    }
+                }
+
+                using (MemoryStream stream = new MemoryStream(fileBytes, 0, recordLength, false, true))
                 using (BinaryReader reader = new BinaryReader(stream))
                 {
                     int magic = reader.ReadInt32();
@@ -472,7 +534,7 @@ namespace StateForge.FileStore
                     }
 
                     int length = reader.ReadInt32();
-                    if (length < 0 || length > _options.MaxPayloadBytes)
+                    if (length < 0 || length > maximumRecordBytes)
                     {
                         invalid = true;
                         return null;
@@ -480,6 +542,12 @@ namespace StateForge.FileStore
 
                     byte[] payload = reader.ReadBytes(length);
                     if (payload.Length != length)
+                    {
+                        invalid = true;
+                        return null;
+                    }
+
+                    if (stream.Position != stream.Length)
                     {
                         invalid = true;
                         return null;
@@ -497,7 +565,13 @@ namespace StateForge.FileStore
 
                     if ((flags & StateForgeConstants.FlagCompressed) == StateForgeConstants.FlagCompressed)
                     {
-                        payload = CompressionUtility.Decompress(payload);
+                        payload = CompressionUtility.Decompress(payload, _options.MaxPayloadBytes);
+                    }
+
+                    if (payload.Length > _options.MaxPayloadBytes)
+                    {
+                        invalid = true;
+                        return null;
                     }
 
                     entry.Value = payload;
@@ -535,20 +609,19 @@ namespace StateForge.FileStore
                 flags = flags | StateForgeConstants.FlagCompressed;
             }
 
-            if (storedValue.Length > 0)
-            {
-                StateForgeProtectionMode mode = ResolveProtectionMode();
+            StateForgeProtectionMode mode = ResolveProtectionMode();
 
-                if (mode == StateForgeProtectionMode.Aes)
-                {
-                    storedValue = AesPayloadProtector.Protect(storedValue, _options.AesKeyBase64);
-                    flags = flags | StateForgeConstants.FlagAesEncrypted;
-                }
-                else if (mode == StateForgeProtectionMode.Dpapi)
-                {
-                    storedValue = DpapiPayloadProtector.Protect(storedValue);
-                    flags = flags | StateForgeConstants.FlagEncrypted;
-                }
+            if (mode == StateForgeProtectionMode.Aes)
+            {
+                storedValue = AesPayloadProtector.Protect(storedValue, _options.AesKeyBase64);
+                flags = flags |
+                    StateForgeConstants.FlagAesEncrypted |
+                    StateForgeConstants.FlagAuthenticated;
+            }
+            else if (mode == StateForgeProtectionMode.Dpapi && storedValue.Length > 0)
+            {
+                storedValue = DpapiPayloadProtector.Protect(storedValue);
+                flags = flags | StateForgeConstants.FlagEncrypted;
             }
 
             using (FileStream stream = new FileStream(tempPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
@@ -572,6 +645,22 @@ namespace StateForge.FileStore
 
                 writer.Write(storedValue.Length);
                 writer.Write(storedValue);
+            }
+
+            if ((flags & StateForgeConstants.FlagAuthenticated) != 0)
+            {
+                byte[] recordBytes = File.ReadAllBytes(tempPath);
+                byte[] tag = AesPayloadProtector.ComputeAuthenticationTag(
+                    recordBytes,
+                    0,
+                    recordBytes.Length,
+                    _options.AesKeyBase64);
+
+                using (FileStream stream = new FileStream(tempPath, FileMode.Append, FileAccess.Write, FileShare.None))
+                {
+                    stream.Write(tag, 0, tag.Length);
+                    stream.WriteByte(AesPayloadProtector.AuthenticationTrailerMarker);
+                }
             }
 
             try

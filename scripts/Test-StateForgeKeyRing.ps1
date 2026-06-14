@@ -23,16 +23,23 @@ Compatible with Windows PowerShell 5.1.
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$OutFile = '.\stateforge-keyring-test.json'
+    [string]$OutFile
 )
 
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
+$removeOnCompletion = -not $PSBoundParameters.ContainsKey('OutFile')
+$resolvedOutFile = $null
 
 try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
     $toolProject = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Tools\StateForge.Tools.csproj'
+
+    if ($removeOnCompletion) {
+        $OutFile = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath ('stateforge-keyring-test-' + [Guid]::NewGuid().ToString('N') + '.json')
+    }
+
     $resolvedOutFile = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutFile)
 
     if (Test-Path -LiteralPath $resolvedOutFile) {
@@ -58,4 +65,9 @@ try {
 }
 catch {
     Write-Error -ErrorRecord $_
+}
+finally {
+    if ($removeOnCompletion -and -not [string]::IsNullOrWhiteSpace($resolvedOutFile) -and (Test-Path -LiteralPath $resolvedOutFile)) {
+        Remove-Item -LiteralPath $resolvedOutFile -Force
+    }
 }

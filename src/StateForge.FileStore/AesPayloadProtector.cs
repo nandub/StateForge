@@ -1,37 +1,49 @@
 using System;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace StateForge.FileStore
 {
     internal static class AesPayloadProtector
     {
+        public const int AuthenticationTagLength = 32;
+        public const int AuthenticationTrailerLength = AuthenticationTagLength + 1;
+        public const byte AuthenticationTrailerMarker = 0xA5;
+
         public static byte[] Protect(byte[] value, string keyBase64)
         {
-            if (value == null || value.Length == 0) return new byte[0];
+            if (value == null) value = new byte[0];
 
             byte[] key = DecodeKey(keyBase64);
 
-            using (Aes aes = Aes.Create())
+            try
             {
-                aes.Key = key;
-                aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.PKCS7;
-                aes.GenerateIV();
-
-                using (ICryptoTransform encryptor = aes.CreateEncryptor())
-                using (MemoryStream output = new MemoryStream())
+                using (Aes aes = Aes.Create())
                 {
-                    output.Write(aes.IV, 0, aes.IV.Length);
+                    aes.Key = key;
+                    aes.Mode = CipherMode.CBC;
+                    aes.Padding = PaddingMode.PKCS7;
+                    aes.GenerateIV();
 
-                    using (CryptoStream crypto = new CryptoStream(output, encryptor, CryptoStreamMode.Write))
+                    using (ICryptoTransform encryptor = aes.CreateEncryptor())
+                    using (MemoryStream output = new MemoryStream())
                     {
-                        crypto.Write(value, 0, value.Length);
-                        crypto.FlushFinalBlock();
-                    }
+                        output.Write(aes.IV, 0, aes.IV.Length);
 
-                    return output.ToArray();
+                        using (CryptoStream crypto = new CryptoStream(output, encryptor, CryptoStreamMode.Write))
+                        {
+                            crypto.Write(value, 0, value.Length);
+                            crypto.FlushFinalBlock();
+                        }
+
+                        return output.ToArray();
+                    }
                 }
+            }
+            finally
+            {
+                Array.Clear(key, 0, key.Length);
             }
         }
 
@@ -52,21 +64,83 @@ namespace StateForge.FileStore
             byte[] cipherText = new byte[value.Length - iv.Length];
             Buffer.BlockCopy(value, iv.Length, cipherText, 0, cipherText.Length);
 
-            using (Aes aes = Aes.Create())
+            try
             {
-                aes.Key = key;
-                aes.IV = iv;
-                aes.Mode = CipherMode.CBC;
-                aes.Padding = PaddingMode.PKCS7;
-
-                using (ICryptoTransform decryptor = aes.CreateDecryptor())
-                using (MemoryStream input = new MemoryStream(cipherText))
-                using (CryptoStream crypto = new CryptoStream(input, decryptor, CryptoStreamMode.Read))
-                using (MemoryStream output = new MemoryStream())
+                using (Aes aes = Aes.Create())
                 {
-                    crypto.CopyTo(output);
-                    return output.ToArray();
+                    aes.Key = key;
+                    aes.IV = iv;
+                    aes.Mode = CipherMode.CBC;
+                    aes.Padding = PaddingMode.PKCS7;
+
+                    using (ICryptoTransform decryptor = aes.CreateDecryptor())
+                    using (MemoryStream input = new MemoryStream(cipherText))
+                    using (CryptoStream crypto = new CryptoStream(input, decryptor, CryptoStreamMode.Read))
+                    using (MemoryStream output = new MemoryStream())
+                    {
+                        crypto.CopyTo(output);
+                        return output.ToArray();
+                    }
                 }
+            }
+            finally
+            {
+                Array.Clear(key, 0, key.Length);
+            }
+        }
+
+        public static byte[] ComputeAuthenticationTag(byte[] value, int offset, int count, string keyBase64)
+        {
+            byte[] key = DecodeKey(keyBase64);
+            byte[] context = Encoding.UTF8.GetBytes("StateForge-STFG1-HMAC-v1");
+            byte[] authenticationKey;
+
+            using (HMACSHA256 derivation = new HMACSHA256(key))
+            {
+                authenticationKey = derivation.ComputeHash(context);
+            }
+
+            try
+            {
+                using (HMACSHA256 hmac = new HMACSHA256(authenticationKey))
+                {
+                    return hmac.ComputeHash(value, offset, count);
+                }
+            }
+            finally
+            {
+                Array.Clear(authenticationKey, 0, authenticationKey.Length);
+                Array.Clear(key, 0, key.Length);
+            }
+        }
+
+        public static bool VerifyAuthenticationTag(
+            byte[] value,
+            int offset,
+            int count,
+            byte[] expectedTag,
+            string keyBase64)
+        {
+            byte[] actualTag = ComputeAuthenticationTag(value, offset, count, keyBase64);
+
+            try
+            {
+                if (expectedTag == null || expectedTag.Length != actualTag.Length)
+                {
+                    return false;
+                }
+
+                int difference = 0;
+                for (int i = 0; i < actualTag.Length; i++)
+                {
+                    difference |= actualTag[i] ^ expectedTag[i];
+                }
+
+                return difference == 0;
+            }
+            finally
+            {
+                Array.Clear(actualTag, 0, actualTag.Length);
             }
         }
 
