@@ -93,9 +93,58 @@ try {
         }
     }
 
+    $requiredExamples = @(
+        @{
+            Page = 'api\StateForge.FileStore.StateForgeFileStore.html'
+            Text = 'Create a store, write a UTF-8 value, and read it back'
+        },
+        @{
+            Page = 'api\StateForge.FileStore.StateForgeFileStore.html'
+            Text = 'Use the returned lock ID as a fencing token when updating'
+        },
+        @{
+            Page = 'api\StateForge.AspNetCore.StateForgeServiceCollectionExtensions.html'
+            Text = 'Register StateForge before adding ASP.NET Core session services'
+        },
+        @{
+            Page = 'api\StateForge.Format.StateForgeStfg2.html'
+            Text = 'Write and verify an envelope whose payload was already compressed'
+        },
+        @{
+            Page = 'api\StateForge.Security.StateForgeAesKeyRingManager.html'
+            Text = 'Create, save, and later rotate a key ring'
+        },
+        @{
+            Page = 'api\StateForge.Prometheus.StateForgePrometheusCollector.html'
+            Text = 'Return the metrics from an ASP.NET Core endpoint'
+        },
+        @{
+            Page = 'api\StateForge.Replication.StateForgeFileReplicator.html'
+            Text = 'Replicate the current records to one named replica'
+        },
+        @{
+            Page = 'api\StateForge.Snapshots.StateForgeSnapshotService.html'
+            Text = 'Create a named snapshot and check its result'
+        }
+    )
+
+    foreach ($requiredExample in $requiredExamples) {
+        $examplePagePath = Join-Path -Path $siteRoot -ChildPath $requiredExample.Page
+        if (-not (Test-Path -LiteralPath $examplePagePath)) {
+            throw "Generated API example page is missing: $examplePagePath"
+        }
+
+        $examplePageText = Get-Content -LiteralPath $examplePagePath -Raw
+        if ($examplePageText -notmatch '<h[24][^>]+examples[^>]*>Examples</h[24]>' -or
+            $examplePageText -notmatch [regex]::Escape($requiredExample.Text)) {
+            throw "Generated API example is missing from $($requiredExample.Page): $($requiredExample.Text)"
+        }
+    }
+
     [PSCustomObject]@{
         PackageNamespaces = $requiredNamespaces.Count
         EnforcedProjects  = 3
+        CuratedExamples   = $requiredExamples.Count
         Success           = $true
     }
 }

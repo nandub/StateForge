@@ -15,6 +15,18 @@ namespace StateForge.Security
         /// <summary>Creates a key ring containing one current key.</summary>
         /// <param name="keyId">The key identifier, or a blank value to generate a timestamp-based identifier.</param>
         /// <returns>A new key ring.</returns>
+        /// <example>
+        /// Create, save, and later rotate a key ring:
+        /// <code language="csharp">
+        /// string path = Path.Combine(AppContext.BaseDirectory, "stateforge-keyring.json");
+        ///
+        /// StateForgeAesKeyRing ring = StateForgeAesKeyRingManager.CreateNew("key-001");
+        /// StateForgeAesKeyRingManager.Save(path, ring);
+        ///
+        /// StateForgeAesKeyRingRotationResult rotation =
+        ///     StateForgeAesKeyRingManager.RotateAndSave(path, "key-002", true);
+        /// </code>
+        /// </example>
         public static StateForgeAesKeyRing CreateNew(string keyId)
         {
             StateForgeAesKeyRing ring = new StateForgeAesKeyRing();

@@ -5,6 +5,7 @@ using StateForge.Telemetry;
 
 namespace StateForge.Prometheus
 {
+    /// <summary>Collects StateForge runtime and store statistics in Prometheus-compatible form.</summary>
     public static class StateForgePrometheusCollector
     {
         public static StateForgePrometheusSnapshot Collect(string rootPath)
@@ -41,6 +42,20 @@ namespace StateForge.Prometheus
             return snapshot;
         }
 
+        /// <summary>Collects and formats StateForge metrics in the Prometheus text exposition format.</summary>
+        /// <param name="rootPath">The StateForge store root, or a blank value to omit store statistics.</param>
+        /// <returns>Prometheus text containing process metrics and, when requested, store statistics.</returns>
+        /// <example>
+        /// Return the metrics from an ASP.NET Core endpoint:
+        /// <code language="csharp">
+        /// app.MapGet("/metrics", (IConfiguration configuration) =>
+        /// {
+        ///     string rootPath = configuration["StateForge:RootPath"];
+        ///     string metrics = StateForgePrometheusCollector.CollectText(rootPath);
+        ///     return Results.Text(metrics, "text/plain; version=0.0.4");
+        /// });
+        /// </code>
+        /// </example>
         public static string CollectText(string rootPath)
         {
             return StateForgePrometheusFormatter.Format(Collect(rootPath));

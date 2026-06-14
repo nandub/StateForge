@@ -5,6 +5,24 @@ using StateForge.Core;
 
 namespace StateForge.FileStore
 {
+    /// <summary>Provides a file-backed implementation of the StateForge state-store contracts.</summary>
+    /// <example>
+    /// Create a store, write a UTF-8 value, and read it back:
+    /// <code language="csharp">
+    /// var options = new StateForgeFileStoreOptions
+    /// {
+    ///     RootPath = Path.Combine(AppContext.BaseDirectory, "App_Data", "StateForge"),
+    ///     EnableCompression = true,
+    ///     KeepBackups = false
+    /// };
+    ///
+    /// var store = new StateForgeFileStore(options);
+    /// store.Set("sample:greeting", Encoding.UTF8.GetBytes("hello"), TimeSpan.FromMinutes(20));
+    ///
+    /// StateForgeEntry entry = store.Get("sample:greeting");
+    /// string value = entry == null ? null : Encoding.UTF8.GetString(entry.Value);
+    /// </code>
+    /// </example>
     public sealed class StateForgeFileStore : IStateForgeStore
     {
         private readonly StateForgeFileStoreOptions _options;
@@ -14,6 +32,10 @@ namespace StateForge.FileStore
         private readonly string _backupPath;
         private readonly string _quarantinePath;
 
+        /// <summary>Initializes a file-backed store and creates its operational directories.</summary>
+        /// <param name="options">The store paths, limits, and payload-protection settings.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="options"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentException"><see cref="StateForgeOptions.RootPath"/> is blank.</exception>
         public StateForgeFileStore(StateForgeFileStoreOptions options)
         {
             if (options == null) { throw new ArgumentNullException("options"); }
@@ -52,6 +74,26 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Gets an entry and attempts to acquire its exclusive application lock.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <param name="lockTimeout">The age after which an existing lock is considered stale.</param>
+        /// <returns>A result describing whether the entry was found, acquired, or held by another request.</returns>
+        /// <example>
+        /// Use the returned lock ID as a fencing token when updating:
+        /// <code language="csharp">
+        /// StateForgeLockResult locked = store.GetAndLock("cart:42", TimeSpan.FromSeconds(30));
+        ///
+        /// if (locked.Found &amp;&amp; !locked.LockedByOtherRequest)
+        /// {
+        ///     byte[] updated = UpdateCart(locked.Entry.Value);
+        ///     bool saved = store.SetAndUnlock(
+        ///         "cart:42",
+        ///         updated,
+        ///         TimeSpan.FromMinutes(20),
+        ///         locked.LockId);
+        /// }
+        /// </code>
+        /// </example>
         public StateForgeLockResult GetAndLock(string key, TimeSpan lockTimeout)
         {
             string hash = SafeKey.Hash(key);

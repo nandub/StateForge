@@ -15,6 +15,11 @@ Open `artifacts\docfx\site\README.html` after the build. Public type and member 
 compiler XML comments. Missing comments fail the build for the completed Core, Format, and Security
 documentation slice; the remaining package comments will be hardened incrementally.
 
+Selected high-value APIs also include rendered C# examples. The initial curated set covers direct file
+storage, lock-token updates, ASP.NET Core registration, STFG2 envelopes, AES key-ring lifecycle,
+Prometheus endpoints, replication, and snapshots. `Test-StateForgeApiDocs.ps1` verifies that these
+examples remain present in their generated API pages.
+
 Implementation references are cited only where they materially inform behavior:
 
 - STFG2 payload checksums use SHA-256 as specified by [NIST FIPS 180-4](https://csrc.nist.gov/pubs/fips/180-4/upd1/final).

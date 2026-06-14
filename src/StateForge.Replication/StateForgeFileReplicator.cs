@@ -5,8 +5,32 @@ using System.Text;
 
 namespace StateForge.Replication
 {
+    /// <summary>Copies StateForge records from a primary store to configured replica stores.</summary>
     public sealed class StateForgeFileReplicator
     {
+        /// <summary>Executes one replication pass and optionally writes a replication manifest.</summary>
+        /// <param name="options">The primary path, replica nodes, conflict policy, and manifest settings.</param>
+        /// <returns>Replication counts, errors, messages, and the generated manifest.</returns>
+        /// <example>
+        /// Replicate the current records to one named replica:
+        /// <code language="csharp">
+        /// var options = new StateForgeReplicationOptions
+        /// {
+        ///     PrimaryRootPath = @"C:\StateForge\primary",
+        ///     ManifestPath = @"C:\StateForge\manifests\latest.json",
+        ///     DetectConflicts = true
+        /// };
+        ///
+        /// options.Replicas.Add(new StateForgeReplicaNode
+        /// {
+        ///     Name = "replica-a",
+        ///     RootPath = @"D:\StateForge\replica-a"
+        /// });
+        ///
+        /// StateForgeReplicationResult result =
+        ///     new StateForgeFileReplicator().Replicate(options);
+        /// </code>
+        /// </example>
         public StateForgeReplicationResult Replicate(StateForgeReplicationOptions options)
         {
             StateForgeReplicationPlan plan = StateForgeReplicationPlanner.CreatePlan(options);

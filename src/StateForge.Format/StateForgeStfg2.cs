@@ -44,6 +44,21 @@ namespace StateForge.Format
         /// <returns>The complete binary envelope.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="payload"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">The UTF-8 key identifier exceeds 65,535 bytes.</exception>
+        /// <example>
+        /// Write and verify an envelope whose payload was already compressed:
+        /// <code language="csharp">
+        /// byte[] envelope = StateForgeStfg2.Write(
+        ///     Encoding.UTF8.GetBytes("payload"),
+        ///     StateForgeFormatFlags.Compressed,
+        ///     "key-2026-01");
+        ///
+        /// StateForgeStfg2ReadResult result = StateForgeStfg2.Read(envelope);
+        /// if (!result.ChecksumValid)
+        /// {
+        ///     throw new InvalidDataException("The STFG2 payload is corrupt.");
+        /// }
+        /// </code>
+        /// </example>
         public static byte[] Write(byte[] payload, StateForgeFormatFlags flags, string keyId)
         {
             if (payload == null) throw new ArgumentNullException("payload");

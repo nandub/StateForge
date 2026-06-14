@@ -5,8 +5,31 @@ using System.Text;
 
 namespace StateForge.Snapshots
 {
+    /// <summary>Creates, restores, and lists full StateForge snapshots.</summary>
     public sealed class StateForgeSnapshotService
     {
+        /// <summary>Creates a full snapshot and JSON manifest from a StateForge store.</summary>
+        /// <param name="options">The source root, snapshot repository, name, and overwrite policy.</param>
+        /// <returns>The snapshot path, manifest path, file counts, and success status.</returns>
+        /// <example>
+        /// Create a named snapshot and check its result:
+        /// <code language="csharp">
+        /// var options = new StateForgeSnapshotOptions
+        /// {
+        ///     SourceRootPath = @"C:\StateForge\primary",
+        ///     SnapshotRepositoryPath = @"E:\StateForge\snapshots",
+        ///     SnapshotName = "before-deployment"
+        /// };
+        ///
+        /// StateForgeSnapshotResult result =
+        ///     new StateForgeSnapshotService().Create(options);
+        ///
+        /// if (!result.Success)
+        /// {
+        ///     throw new InvalidOperationException("Snapshot creation failed.");
+        /// }
+        /// </code>
+        /// </example>
         public StateForgeSnapshotResult Create(StateForgeSnapshotOptions options)
         {
             ValidateCreateOptions(options);
