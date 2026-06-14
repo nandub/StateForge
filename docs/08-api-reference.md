@@ -11,7 +11,8 @@ StateForge also produces a Microsoft-style DocFX reference for every shipped pac
 .\scripts\Build-StateForgeApiDocs.ps1
 ```
 
-Open `artifacts\docfx\site\README.html` after the build. Public type and member pages are generated from
+Open [`artifacts\docfx\site\index.html`](index.md) after the build, then select
+[Generated .NET API](api/index.md). Public type and member pages are generated from
 compiler XML comments. Missing comments fail the build for the completed Core, Format, and Security
 documentation slice; the remaining package comments will be hardened incrementally.
 
@@ -45,10 +46,10 @@ Baseline updates are approvals, not automatic formatting steps.
 
 ## File Store
 
-- `StateForgeFileStore`
-- `StateForgeFileStoreOptions`
-- `StateForgeStoreStats`
-- `StateForgeConstants.FlagAuthenticated`
+- <xref:StateForge.FileStore.StateForgeFileStore>
+- <xref:StateForge.FileStore.StateForgeFileStoreOptions>
+- <xref:StateForge.Core.StateForgeStoreStats>
+- <xref:StateForge.Core.StateForgeConstants.FlagAuthenticated>
 
 Lock IDs returned by `GetAndLock` are fencing tokens. `SetAndUnlock` succeeds for an existing entry only
 when the entry is actively locked with the supplied lock ID. `Refresh` returns `false` for expired entries.
@@ -57,96 +58,96 @@ compatibility with legacy AES records that do not set the flag.
 
 ## ASP.NET Core Cache
 
-- `StateForgeDistributedCache`
-- `StateForgeDistributedCacheOptions`
+- <xref:StateForge.AspNetCore.StateForgeDistributedCache>
+- <xref:StateForge.AspNetCore.StateForgeDistributedCacheOptions>
 
 The cache adapter preserves sliding expiration and absolute expiration independently. Refresh extends the
 sliding window without extending an absolute expiration deadline.
 
 ## Replication
 
-- `StateForgeFileReplicator`
-- `StateForgeReplicationOptions`
-- `StateForgeReplicationResult`
-- `StateForgeReplicationManifest`
-- `StateForgeReplicaSyncState`
-- `StateForgeReplicaStateStore`
-- `StateForgeReplicaConfiguration`
-- `StateForgeReplicaMonitor`
-- `StateForgeReplicaMonitorSnapshot`
-- `StateForgeReplicaMonitorEntry`
+- <xref:StateForge.Replication.StateForgeFileReplicator>
+- <xref:StateForge.Replication.StateForgeReplicationOptions>
+- <xref:StateForge.Replication.StateForgeReplicationResult>
+- <xref:StateForge.Replication.StateForgeReplicationManifest>
+- <xref:StateForge.Replication.StateForgeReplicaSyncState>
+- <xref:StateForge.Replication.StateForgeReplicaStateStore>
+- <xref:StateForge.Replication.StateForgeReplicaConfiguration>
+- <xref:StateForge.Replication.StateForgeReplicaMonitor>
+- <xref:StateForge.Replication.StateForgeReplicaMonitorSnapshot>
+- <xref:StateForge.Replication.StateForgeReplicaMonitorEntry>
 
-`StateForgeReplicaMonitor.Capture` accepts a stale threshold and can accept an explicit capture timestamp
+[StateForgeReplicaMonitor.Capture](xref:StateForge.Replication.StateForgeReplicaMonitor.Capture*) accepts a stale threshold and can accept an explicit capture timestamp
 for deterministic evaluation. Missing or stale state is reported as unhealthy.
-`StateForgeReplicaConfiguration.Parse` accepts semicolon-separated `name=path` or positional path entries.
-`StateForgeReplicaStateStore.Read` throws `InvalidDataException` for incomplete or invalid persisted state.
+[StateForgeReplicaConfiguration.Parse](xref:StateForge.Replication.StateForgeReplicaConfiguration.Parse*) accepts semicolon-separated `name=path` or positional path entries.
+[StateForgeReplicaStateStore.Read](xref:StateForge.Replication.StateForgeReplicaStateStore.Read*) throws `InvalidDataException` for incomplete or invalid persisted state.
 
 ## Quorum
 
-- `StateForgeClusterMember`
-- `StateForgeClusterMemberRole`
-- `StateForgeQuorumPolicy`
-- `StateForgeQuorumEvaluator`
-- `StateForgeQuorumResult`
+- <xref:StateForge.Replication.StateForgeClusterMember>
+- <xref:StateForge.Replication.StateForgeClusterMemberRole>
+- <xref:StateForge.Replication.StateForgeQuorumPolicy>
+- <xref:StateForge.Replication.StateForgeQuorumEvaluator>
+- <xref:StateForge.Replication.StateForgeQuorumResult>
 
-`StateForgeQuorumEvaluator.Evaluate` calculates available and required votes and evaluates one explicitly
+[StateForgeQuorumEvaluator.Evaluate](xref:StateForge.Replication.StateForgeQuorumEvaluator.Evaluate*) calculates available and required votes and evaluates one explicitly
 named promotion candidate. A zero `MinimumVotes` uses a strict majority of enabled voting members.
 The evaluator does not select candidates, elect leaders, or invoke promotion.
 
 ## Witness Nodes
 
-- `StateForgeWitnessNode`
-- `StateForgeWitnessState`
-- `StateForgeWitnessStateStore`
-- `StateForgeWitnessHealthEntry`
-- `StateForgeWitnessEvaluator`
+- <xref:StateForge.Replication.StateForgeWitnessNode>
+- <xref:StateForge.Replication.StateForgeWitnessState>
+- <xref:StateForge.Replication.StateForgeWitnessStateStore>
+- <xref:StateForge.Replication.StateForgeWitnessHealthEntry>
+- <xref:StateForge.Replication.StateForgeWitnessEvaluator>
 
-`StateForgeWitnessStateStore` persists atomic `stateforge-witness-state.json` files.
-`StateForgeWitnessEvaluator.Evaluate` validates heartbeat freshness, witness identity, errors, and a
+[StateForgeWitnessStateStore](xref:StateForge.Replication.StateForgeWitnessStateStore) persists atomic `stateforge-witness-state.json` files.
+[StateForgeWitnessEvaluator.Evaluate](xref:StateForge.Replication.StateForgeWitnessEvaluator.Evaluate*) validates heartbeat freshness, witness identity, errors, and a
 candidate-specific granted vote. `ToClusterMember` creates a non-promotable witness quorum member whose
 availability reflects the validated vote.
 
 ## Split-Brain Prevention
 
-- `StateForgePrimaryLease`
-- `StateForgePrimaryLeaseStore`
-- `StateForgePromotionFenceOptions`
-- `StateForgePromotionFenceResult`
-- `StateForgePromotionFenceService`
+- <xref:StateForge.Replication.StateForgePrimaryLease>
+- <xref:StateForge.Replication.StateForgePrimaryLeaseStore>
+- <xref:StateForge.Replication.StateForgePromotionFenceOptions>
+- <xref:StateForge.Replication.StateForgePromotionFenceResult>
+- <xref:StateForge.Replication.StateForgePromotionFenceService>
 
-`StateForgePromotionFenceService.Acquire` requires an eligible quorum result for the exact candidate.
+[StateForgePromotionFenceService.Acquire](xref:StateForge.Replication.StateForgePromotionFenceService.Acquire*) requires an eligible quorum result for the exact candidate.
 Lease acquisition uses machine-local serialization plus an exclusive shared-file lock. A stale takeover
 increments the epoch; active-owner reacquisition and `Renew` require the exact lease ID.
 
 ## Multi-Site Disaster Recovery
 
-- `StateForgeSiteRole`
-- `StateForgeSiteState`
-- `StateForgeSiteStateStore`
-- `StateForgeCrossSitePolicy`
-- `StateForgeCrossSiteResult`
-- `StateForgeCrossSiteEvaluator`
+- <xref:StateForge.Replication.StateForgeSiteRole>
+- <xref:StateForge.Replication.StateForgeSiteState>
+- <xref:StateForge.Replication.StateForgeSiteStateStore>
+- <xref:StateForge.Replication.StateForgeCrossSitePolicy>
+- <xref:StateForge.Replication.StateForgeCrossSiteResult>
+- <xref:StateForge.Replication.StateForgeCrossSiteEvaluator>
 
-`StateForgeSiteStateStore` atomically persists strict `stateforge-site-state.json` metadata.
-`StateForgeCrossSiteEvaluator.Evaluate` validates site identity, region separation, target health,
+[StateForgeSiteStateStore](xref:StateForge.Replication.StateForgeSiteStateStore) atomically persists strict `stateforge-site-state.json` metadata.
+[StateForgeCrossSiteEvaluator.Evaluate](xref:StateForge.Replication.StateForgeCrossSiteEvaluator.Evaluate*) validates site identity, region separation, target health,
 heartbeat freshness, recovery-point freshness, promotion eligibility, and quorum for one exact candidate.
 It does not elect a site or invoke failover.
 
 ## Snapshots
 
-- `StateForgeSnapshotService`
-- `StateForgeSnapshotOptions`
-- `StateForgeSnapshotResult`
-- `StateForgeIncrementalSnapshotService`
-- `StateForgeIncrementalSnapshotOptions`
-- `StateForgeIncrementalSnapshotResult`
+- <xref:StateForge.Snapshots.StateForgeSnapshotService>
+- <xref:StateForge.Snapshots.StateForgeSnapshotOptions>
+- <xref:StateForge.Snapshots.StateForgeSnapshotResult>
+- <xref:StateForge.Snapshots.StateForgeIncrementalSnapshotService>
+- <xref:StateForge.Snapshots.StateForgeIncrementalSnapshotOptions>
+- <xref:StateForge.Snapshots.StateForgeIncrementalSnapshotResult>
 
 ## Promotion / Failover
 
-- `StateForgeReplicaPromotionService`
-- `StateForgeReplicaPromotionOptions`
-- `StateForgeFailoverService`
-- `StateForgeFailoverOptions`
+- <xref:StateForge.Snapshots.StateForgeReplicaPromotionService>
+- <xref:StateForge.Snapshots.StateForgeReplicaPromotionOptions>
+- <xref:StateForge.Snapshots.StateForgeFailoverService>
+- <xref:StateForge.Snapshots.StateForgeFailoverOptions>
 
 Set `RequirePromotionFence` and provide `PromotionFence` to make lease acquisition mandatory. Rejected
 fencing returns an error without restoring data or writing promotion/failover markers.
@@ -155,5 +156,5 @@ whose target root exactly matches the selected failover replica.
 
 ## Replica Prometheus
 
-- `StateForgeReplicaPrometheusCollector`
-- `StateForgeReplicaPrometheusFormatter`
+- <xref:StateForge.Prometheus.StateForgeReplicaPrometheusCollector>
+- <xref:StateForge.Prometheus.StateForgeReplicaPrometheusFormatter>

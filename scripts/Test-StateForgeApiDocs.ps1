@@ -71,10 +71,11 @@ try {
     }
 
     $apiIndexPath = Join-Path -Path $siteRoot -ChildPath 'api\index.html'
+    $apiGuidePath = Join-Path -Path $siteRoot -ChildPath '08-api-reference.html'
     $rootTocPath = Join-Path -Path $siteRoot -ChildPath 'toc.html'
     $apiTocPath = Join-Path -Path $siteRoot -ChildPath 'api\toc.html'
 
-    foreach ($navigationPath in @($apiIndexPath, $rootTocPath, $apiTocPath)) {
+    foreach ($navigationPath in @($apiIndexPath, $apiGuidePath, $rootTocPath, $apiTocPath)) {
         if (-not (Test-Path -LiteralPath $navigationPath)) {
             throw "Generated API navigation file is missing: $navigationPath"
         }
@@ -90,6 +91,19 @@ try {
     foreach ($requiredNamespace in $requiredNamespaces) {
         if ($apiTocText -notmatch [regex]::Escape($requiredNamespace + '.html')) {
             throw "Generated API navigation is missing namespace link: $requiredNamespace"
+        }
+    }
+
+    $apiGuideText = Get-Content -LiteralPath $apiGuidePath -Raw
+    foreach ($requiredApiGuideLink in @(
+        'href="index\.html"><code>artifacts\\docfx\\site\\index\.html</code>',
+        'href="api/index\.html">Generated \.NET API</a>',
+        'href="api/StateForge\.FileStore\.StateForgeFileStore\.html"',
+        'href="api/StateForge\.Snapshots\.StateForgeSnapshotService\.html"',
+        'StateForgeReplicaMonitor_Capture_'
+    )) {
+        if ($apiGuideText -notmatch $requiredApiGuideLink) {
+            throw "The generated API guide is missing a required clickable reference: $requiredApiGuideLink"
         }
     }
 
@@ -141,10 +155,65 @@ try {
         }
     }
 
+    $brokenLinks = New-Object System.Collections.Generic.List[string]
+    $sitePath = (Resolve-Path -LiteralPath $siteRoot).Path
+
+    Get-ChildItem -LiteralPath $sitePath -Filter '*.html' -Recurse | ForEach-Object {
+        $page = $_
+        $pageText = Get-Content -LiteralPath $page.FullName -Raw
+
+        foreach ($linkMatch in [regex]::Matches($pageText, 'href="(?<href>[^"]+)"')) {
+            $href = $linkMatch.Groups['href'].Value
+            if ([string]::IsNullOrWhiteSpace($href) -or
+                $href -match '^(https?:|mailto:|#|javascript:|data:)') {
+                continue
+            }
+
+            $targetText = ($href -split '[?#]')[0]
+            if ([string]::IsNullOrWhiteSpace($targetText)) {
+                continue
+            }
+
+            $decodedTarget = [uri]::UnescapeDataString($targetText).Replace(
+                '/',
+                [System.IO.Path]::DirectorySeparatorChar)
+            $targetPath = [System.IO.Path]::GetFullPath(
+                (Join-Path -Path $page.DirectoryName -ChildPath $decodedTarget))
+
+            if (-not (Test-Path -LiteralPath $targetPath)) {
+                $relativePage = $page.FullName.Substring($sitePath.Length + 1)
+                $brokenLinks.Add($relativePage + ' -> ' + $href)
+                continue
+            }
+
+            if ($href.Contains('#') -and
+                [string]::Equals(
+                    [System.IO.Path]::GetExtension($targetPath),
+                    '.html',
+                    [System.StringComparison]::OrdinalIgnoreCase)) {
+                $fragment = [uri]::UnescapeDataString(($href -split '#', 2)[1])
+                if (-not [string]::IsNullOrWhiteSpace($fragment)) {
+                    $targetPageText = Get-Content -LiteralPath $targetPath -Raw
+                    $fragmentPattern = '(id|name)="' + [regex]::Escape($fragment) + '"'
+                    if ($targetPageText -notmatch $fragmentPattern) {
+                        $relativePage = $page.FullName.Substring($sitePath.Length + 1)
+                        $brokenLinks.Add($relativePage + ' -> ' + $href + ' (missing fragment)')
+                    }
+                }
+            }
+        }
+    }
+
+    if ($brokenLinks.Count -gt 0) {
+        $uniqueBrokenLinks = $brokenLinks | Sort-Object -Unique
+        throw "Generated documentation contains broken internal links: $($uniqueBrokenLinks -join '; ')"
+    }
+
     [PSCustomObject]@{
         PackageNamespaces = $requiredNamespaces.Count
         EnforcedProjects  = 3
         CuratedExamples   = $requiredExamples.Count
+        BrokenLinks       = 0
         Success           = $true
     }
 }

@@ -160,6 +160,7 @@ try {
         'scripts\Test-StateForgeHealth.ps1',
         'scripts\Show-StateForgeSmokeDemo.ps1',
     'docs\README.md',
+    'docs\index.md',
     'docs\01-getting-started.md',
     'docs\02-architecture.md',
     'docs\03-disaster-recovery.md',
@@ -172,6 +173,7 @@ try {
     'docs\10-contributing.md'
     'docs\toc.yml'
     'docs\api\index.md'
+    'docs\api\StateForge.md'
     'docs\api\toc.yml'
     'scripts\Invoke-StateForge.ps1'
     'docs\11-script-reference.md'

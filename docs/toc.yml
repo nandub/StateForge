@@ -1,5 +1,5 @@
 - name: Documentation home
-  href: README.md
+  href: index.md
 - name: Getting started
   href: 01-getting-started.md
 - name: Architecture

@@ -26,6 +26,7 @@ $ErrorActionPreference = 'Stop'
 try {
     $requiredDocs = @(
         'docs\README.md',
+        'docs\index.md',
         'docs\01-getting-started.md',
         'docs\02-architecture.md',
         'docs\03-disaster-recovery.md',
@@ -42,6 +43,7 @@ try {
         'docs\12-production-readiness.md',
         'docs\toc.yml',
         'docs\api\index.md',
+        'docs\api\StateForge.md',
         'docs\api\toc.yml',
         'docfx.json'
     )

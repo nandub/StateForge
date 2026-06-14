@@ -1,5 +1,7 @@
 - name: API home
   href: index.md
+- name: StateForge namespace
+  href: StateForge.md
 - name: StateForge.Core
   href: xref:StateForge.Core
 - name: StateForge.FileStore

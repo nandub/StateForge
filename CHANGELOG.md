@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a linked documentation home page and direct generated-API links throughout the API guide.
 - Added curated Microsoft-style C# examples to eight high-value API workflows and validated their generated pages.
 - Added a visible generated API landing page and package navigation tree to the DocFX sidebar.
 - Added a repository-pinned DocFX site for conceptual documentation and all twelve shipped package APIs.
