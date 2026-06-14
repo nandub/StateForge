@@ -56,6 +56,9 @@ namespace StateForge.FileStore
             CleanupTemporaryFiles();
         }
 
+        /// <summary>Gets an unexpired entry without acquiring its application lock.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <returns>The entry, or <see langword="null"/> when it does not exist or has expired.</returns>
         public StateForgeEntry Get(string key)
         {
             string hash = SafeKey.Hash(key);
@@ -129,6 +132,10 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Creates or replaces an entry and clears any existing application lock.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <param name="value">The binary payload. A <see langword="null"/> value is stored as an empty array.</param>
+        /// <param name="timeout">The lifetime of the entry measured from this write.</param>
         public void Set(string key, byte[] value, TimeSpan timeout)
         {
             string hash = SafeKey.Hash(key);
@@ -151,6 +158,12 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Replaces an entry and releases its application lock when the fencing token matches.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <param name="value">The binary payload. A <see langword="null"/> value is stored as an empty array.</param>
+        /// <param name="timeout">The new lifetime of the entry.</param>
+        /// <param name="lockId">The lock token returned by <see cref="GetAndLock"/>.</param>
+        /// <returns><see langword="true"/> when the update was written; otherwise, <see langword="false"/>.</returns>
         public bool SetAndUnlock(string key, byte[] value, TimeSpan timeout, long lockId)
         {
             string hash = SafeKey.Hash(key);
@@ -179,6 +192,10 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Releases an application lock when the supplied fencing token matches.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <param name="lockId">The lock token returned by <see cref="GetAndLock"/>.</param>
+        /// <returns><see langword="true"/> when the lock was released; otherwise, <see langword="false"/>.</returns>
         public bool Unlock(string key, long lockId)
         {
             string hash = SafeKey.Hash(key);
@@ -200,11 +217,18 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Removes an entry using the store's normal synchronized removal path.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <returns><see langword="true"/> when an entry file was removed; otherwise, <see langword="false"/>.</returns>
+        /// <remarks>This implementation is equivalent to calling <see cref="Remove"/>.</remarks>
         public bool ForceRemove(string key)
         {
             return Remove(key);
         }
 
+        /// <summary>Removes an entry.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <returns><see langword="true"/> when an entry file was removed; otherwise, <see langword="false"/>.</returns>
         public bool Remove(string key)
         {
             string hash = SafeKey.Hash(key);
@@ -214,6 +238,10 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Extends the expiration time of an existing unexpired entry.</summary>
+        /// <param name="key">The logical entry key.</param>
+        /// <param name="timeout">The new lifetime measured from the refresh operation.</param>
+        /// <returns><see langword="true"/> when the entry was refreshed; otherwise, <see langword="false"/>.</returns>
         public bool Refresh(string key, TimeSpan timeout)
         {
             string hash = SafeKey.Hash(key);
@@ -236,6 +264,9 @@ namespace StateForge.FileStore
             }
         }
 
+        /// <summary>Deletes expired records and either quarantines or deletes invalid records.</summary>
+        /// <param name="quarantineInvalid"><see langword="true"/> to move invalid records to quarantine; <see langword="false"/> to delete them.</param>
+        /// <returns>Counts for expired, invalid, and failed cleanup operations.</returns>
         public StateForgeCleanupResult CleanupExpired(bool quarantineInvalid)
         {
             StateForgeCleanupResult result = new StateForgeCleanupResult();
@@ -268,6 +299,8 @@ namespace StateForge.FileStore
             return result;
         }
 
+        /// <summary>Enumerates readable entry metadata without returning payload bytes.</summary>
+        /// <returns>A lazy sequence of metadata records. Invalid records are omitted.</returns>
         public IEnumerable<StateForgeEntryInfo> Enumerate()
         {
             foreach (string file in Directory.GetFiles(_sessionsPath, "*.stfg", SearchOption.AllDirectories))
@@ -296,6 +329,8 @@ namespace StateForge.FileStore
         }
 
 
+        /// <summary>Calculates aggregate entry counts and payload sizes.</summary>
+        /// <returns>The current store statistics.</returns>
         public StateForgeStoreStats GetStats()
         {
             StateForgeStoreStats stats = new StateForgeStoreStats();
@@ -340,6 +375,8 @@ namespace StateForge.FileStore
         }
 
 
+        /// <summary>Validates store paths, sharding, mutex timing, write access, and AES key configuration.</summary>
+        /// <returns>Configuration errors and non-fatal warnings.</returns>
         public StateForgeValidationResult ValidateConfiguration()
         {
             StateForgeValidationResult result = new StateForgeValidationResult();
@@ -390,6 +427,8 @@ namespace StateForge.FileStore
             return result;
         }
 
+        /// <summary>Runs write, read, lock, enumeration, and cleanup probes against a temporary entry.</summary>
+        /// <returns>The capability results and any exception captured by the probe.</returns>
         public StateForgeHealthResult CheckHealth()
         {
             StateForgeHealthResult result = new StateForgeHealthResult();
@@ -437,6 +476,8 @@ namespace StateForge.FileStore
             return result;
         }
 
+        /// <summary>Gets operational directories and their current file counts.</summary>
+        /// <returns>The current store diagnostics.</returns>
         public StateForgeStoreDiagnostics GetDiagnostics()
         {
             StateForgeStoreDiagnostics diagnostics = new StateForgeStoreDiagnostics();

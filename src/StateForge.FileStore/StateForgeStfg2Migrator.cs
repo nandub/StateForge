@@ -4,8 +4,33 @@ using StateForge.Format;
 
 namespace StateForge.FileStore
 {
+    /// <summary>Migrates individual opaque record files into STFG2 envelopes.</summary>
     public static class StateForgeStfg2Migrator
     {
+        /// <summary>Copies an STFG2 file or wraps legacy bytes into a new STFG2 destination.</summary>
+        /// <param name="sourcePath">The existing record path.</param>
+        /// <param name="destinationPath">The destination record path.</param>
+        /// <param name="keyId">The optional key identifier for newly wrapped legacy bytes.</param>
+        /// <param name="overwrite"><see langword="true"/> to replace an existing destination.</param>
+        /// <returns>Source-format, migration, path, and length details.</returns>
+        /// <exception cref="ArgumentException"><paramref name="sourcePath"/> or <paramref name="destinationPath"/> is blank.</exception>
+        /// <exception cref="IOException">The destination exists and <paramref name="overwrite"/> is <see langword="false"/>.</exception>
+        /// <remarks>
+        /// Legacy source bytes are wrapped as an opaque payload. This operation does not decode or
+        /// transform the underlying STFG1 record.
+        /// </remarks>
+        /// <example>
+        /// Migrate one legacy record while preserving the source:
+        /// <code language="csharp">
+        /// StateForgeStfg2MigrationResult result = StateForgeStfg2Migrator.MigrateFile(
+        ///     @"C:\StateForge\legacy.stfg",
+        ///     @"C:\StateForge\migrated.stfg",
+        ///     "key-002",
+        ///     false);
+        ///
+        /// Console.WriteLine(result.Migrated);
+        /// </code>
+        /// </example>
         public static StateForgeStfg2MigrationResult MigrateFile(
             string sourcePath,
             string destinationPath,

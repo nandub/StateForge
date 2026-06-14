@@ -13,8 +13,8 @@ StateForge also produces a Microsoft-style DocFX reference for every shipped pac
 
 Open [`artifacts\docfx\site\index.html`](index.md) after the build, then select
 [Generated .NET API](api/index.md). Public type and member pages are generated from
-compiler XML comments. Missing comments fail the build for the completed Core, Format, and Security
-documentation slice; the remaining package comments will be hardened incrementally.
+compiler XML comments. Missing comments fail the build for the completed Core, FileStore, Format,
+and Security packages; the remaining package comments will be hardened incrementally.
 
 Selected high-value APIs also include rendered C# examples. The initial curated set covers direct file
 storage, lock-token updates, ASP.NET Core registration, STFG2 envelopes, AES key-ring lifecycle,

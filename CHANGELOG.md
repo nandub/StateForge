@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Completed compiler-enforced XML documentation coverage for the StateForge.FileStore package.
+- Added detailed STFG2 envelope and migration behavior, safety boundaries, and a single-file migration example.
 - Added a linked documentation home page and direct generated-API links throughout the API guide.
 - Added curated Microsoft-style C# examples to eight high-value API workflows and validated their generated pages.
 - Added a visible generated API landing page and package navigation tree to the DocFX sidebar.

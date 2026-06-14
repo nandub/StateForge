@@ -59,7 +59,14 @@ try {
     }
 
     $targetsText = Get-Content -LiteralPath $targetsPath -Raw
-    foreach ($documentedProject in @('StateForge.Core', 'StateForge.Format', 'StateForge.Security')) {
+    $documentedProjects = @(
+        'StateForge.Core',
+        'StateForge.FileStore',
+        'StateForge.Format',
+        'StateForge.Security'
+    )
+
+    foreach ($documentedProject in $documentedProjects) {
         if ($targetsText -notmatch [regex]::Escape($documentedProject)) {
             throw "Missing XML documentation enforcement for project: $documentedProject"
         }
@@ -115,6 +122,10 @@ try {
         @{
             Page = 'api\StateForge.FileStore.StateForgeFileStore.html'
             Text = 'Use the returned lock ID as a fencing token when updating'
+        },
+        @{
+            Page = 'api\StateForge.FileStore.StateForgeStfg2Migrator.html'
+            Text = 'Migrate one legacy record while preserving the source'
         },
         @{
             Page = 'api\StateForge.AspNetCore.StateForgeServiceCollectionExtensions.html'
@@ -211,7 +222,7 @@ try {
 
     [PSCustomObject]@{
         PackageNamespaces = $requiredNamespaces.Count
-        EnforcedProjects  = 3
+        EnforcedProjects  = $documentedProjects.Count
         CuratedExamples   = $requiredExamples.Count
         BrokenLinks       = 0
         Success           = $true

@@ -4,8 +4,22 @@ using StateForge.Format;
 
 namespace StateForge.FileStore
 {
+    /// <summary>Scans a store tree and optionally converts legacy record files to STFG2 envelopes in place.</summary>
     public static class StateForgeStfg2StoreMigrator
     {
+        /// <summary>Scans matching records and optionally applies in-place STFG2 wrapping with backups.</summary>
+        /// <param name="rootPath">The directory tree to scan.</param>
+        /// <param name="keyId">The optional key identifier for newly wrapped legacy bytes.</param>
+        /// <param name="dryRun"><see langword="true"/> to report legacy records without writing files.</param>
+        /// <param name="apply"><see langword="true"/> to enable migration writes when not in dry-run mode.</param>
+        /// <param name="searchPattern">The file search pattern, or a blank value to use <c>*.stfg</c>.</param>
+        /// <returns>Scan, skip, migration, failure, and error details.</returns>
+        /// <exception cref="ArgumentException"><paramref name="rootPath"/> is blank.</exception>
+        /// <exception cref="DirectoryNotFoundException"><paramref name="rootPath"/> does not exist.</exception>
+        /// <remarks>
+        /// Before replacing a legacy record, the migrator creates a sibling <c>.stfg1.bak</c> file
+        /// when one does not already exist. Legacy bytes are wrapped without decoding their payload.
+        /// </remarks>
         public static StateForgeStfg2StoreMigrationResult MigrateStore(
             string rootPath,
             string keyId,
