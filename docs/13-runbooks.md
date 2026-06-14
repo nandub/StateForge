@@ -141,3 +141,23 @@ epoch. A blocked operation must not produce promotion or failover markers.
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 ```
+
+## Multi-Site Disaster Recovery Drill
+
+1. Persist `stateforge-site-state.json` for the primary and recovery sites.
+2. Confirm site names and regions are unique and roles are correct.
+3. Replicate to a named replica carrying the recovery site and region metadata.
+4. Confirm the replication manifest includes the expected site and region.
+5. Create a snapshot and restore it into an isolated drill root.
+6. Verify session counts and application-readable state in the drill root.
+7. Evaluate `StateForgeCrossSiteEvaluator` for the exact recovery replica candidate.
+8. Require both `RequireCrossSitePolicy` and `RequirePromotionFence` during site failover.
+9. Confirm the failover marker records source and target site names.
+10. Record recovery-point age, lease epoch, and drill results in the operational change record.
+
+Do not treat the policy evaluator as site election. Operators or an external orchestrator must select the
+candidate explicitly, and the cross-site result must match the promoted replica root.
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite MultiSite
+```

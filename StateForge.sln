@@ -98,6 +98,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.WitnessTests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SplitBrainTests", "src\StateForge.SplitBrainTests\StateForge.SplitBrainTests.csproj", "{C7C45EF1-820D-454D-8BA1-365FA5B66648}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.MultiSiteTests", "src\StateForge.MultiSiteTests\StateForge.MultiSiteTests.csproj", "{1D2E0245-37D1-480A-8447-C070515778BD}"
+EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
         Debug|Any CPU = Debug|Any CPU
@@ -296,5 +298,9 @@ Global
         {C7C45EF1-820D-454D-8BA1-365FA5B66648}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {C7C45EF1-820D-454D-8BA1-365FA5B66648}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {C7C45EF1-820D-454D-8BA1-365FA5B66648}.Release|Any CPU.Build.0 = Release|Any CPU
+        {1D2E0245-37D1-480A-8447-C070515778BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {1D2E0245-37D1-480A-8447-C070515778BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {1D2E0245-37D1-480A-8447-C070515778BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {1D2E0245-37D1-480A-8447-C070515778BD}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal

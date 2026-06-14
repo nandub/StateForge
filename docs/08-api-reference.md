@@ -74,6 +74,20 @@ availability reflects the validated vote.
 Lease acquisition uses machine-local serialization plus an exclusive shared-file lock. A stale takeover
 increments the epoch; active-owner reacquisition and `Renew` require the exact lease ID.
 
+## Multi-Site Disaster Recovery
+
+- `StateForgeSiteRole`
+- `StateForgeSiteState`
+- `StateForgeSiteStateStore`
+- `StateForgeCrossSitePolicy`
+- `StateForgeCrossSiteResult`
+- `StateForgeCrossSiteEvaluator`
+
+`StateForgeSiteStateStore` atomically persists strict `stateforge-site-state.json` metadata.
+`StateForgeCrossSiteEvaluator.Evaluate` validates site identity, region separation, target health,
+heartbeat freshness, recovery-point freshness, promotion eligibility, and quorum for one exact candidate.
+It does not elect a site or invoke failover.
+
 ## Snapshots
 
 - `StateForgeSnapshotService`
@@ -92,6 +106,8 @@ increments the epoch; active-owner reacquisition and `Renew` require the exact l
 
 Set `RequirePromotionFence` and provide `PromotionFence` to make lease acquisition mandatory. Rejected
 fencing returns an error without restoring data or writing promotion/failover markers.
+Set `RequireCrossSitePolicy` and provide an eligible `CrossSitePolicy` result to require a policy decision
+whose target root exactly matches the selected failover replica.
 
 ## Replica Prometheus
 

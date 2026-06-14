@@ -120,6 +120,8 @@ namespace StateForge.Replication
                 entry.SourceLength = sourceInfo.Length;
                 entry.SourceLastWriteUtc = sourceInfo.LastWriteTimeUtc.ToString("o");
                 entry.ReplicaName = target.Name;
+                entry.SiteName = target.SiteName;
+                entry.Region = target.Region;
                 entry.DestinationPath = destination;
 
                 if (destinationInfo.Exists)
@@ -228,6 +230,8 @@ namespace StateForge.Replication
                 builder.AppendLine("      \"sourceLength\": " + entry.SourceLength.ToString(CultureInfo.InvariantCulture) + ",");
                 builder.AppendLine("      \"sourceLastWriteUtc\": \"" + Escape(entry.SourceLastWriteUtc) + "\",");
                 builder.AppendLine("      \"replicaName\": \"" + Escape(entry.ReplicaName) + "\",");
+                builder.AppendLine("      \"siteName\": \"" + Escape(entry.SiteName) + "\",");
+                builder.AppendLine("      \"region\": \"" + Escape(entry.Region) + "\",");
                 builder.AppendLine("      \"destinationPath\": \"" + Escape(entry.DestinationPath) + "\",");
                 builder.AppendLine("      \"action\": \"" + Escape(entry.Action) + "\",");
                 builder.AppendLine("      \"reason\": \"" + Escape(entry.Reason) + "\"");

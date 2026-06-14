@@ -7,5 +7,9 @@ namespace StateForge.Replication
         public string RootPath { get; set; }
 
         public string SessionsPath { get; set; }
+
+        public string SiteName { get; set; }
+
+        public string Region { get; set; }
     }
 }

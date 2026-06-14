@@ -15,5 +15,7 @@ namespace StateForge.Snapshots
         public int Errors { get; set; }
 
         public StateForgePromotionFenceResult PromotionFence { get; set; }
+
+        public StateForgeCrossSiteResult CrossSitePolicy { get; set; }
     }
 }

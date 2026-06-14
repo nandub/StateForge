@@ -34,6 +34,7 @@
 | `StateForge.QuorumTests` | Cluster membership, quorum, and promotion eligibility validation |
 | `StateForge.WitnessTests` | Witness persistence, health, vote, and quorum validation |
 | `StateForge.SplitBrainTests` | Primary lease, promotion fencing, and failover safety validation |
+| `StateForge.MultiSiteTests` | Site metadata, cross-site policy, restore drill, and fenced failover validation |
 
 ## Harnesses and Tests
 
@@ -50,6 +51,7 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.QuorumTests`
 - `StateForge.WitnessTests`
 - `StateForge.SplitBrainTests`
+- `StateForge.MultiSiteTests`
 - `StateForge.SnapshotServiceTests`
 - `StateForge.IncrementalSnapshotTests`
 - `StateForge.RecoveryFlowTests`

@@ -18,6 +18,7 @@ Applications
         -> Quorum policy evaluation
         -> Witness health and votes
         -> Primary lease and fencing epoch
+        -> Site metadata and cross-site policy
      -> Snapshots
      -> Promotion / Failover
 ```
@@ -56,6 +57,10 @@ Primary leases are stored in a shared lease root outside session data. Promotion
 eligible quorum result with an exclusive shared-file lock, an expiring owner token, and a monotonically
 increasing epoch. A different candidate cannot acquire ownership until the active lease expires.
 
+Multi-site recovery persists site identity, region, role, health, heartbeat, and recovery-point metadata
+outside session data. Cross-site policy checks distinct sites, region separation, target freshness and
+health, promotion eligibility, and quorum for the exact candidate.
+
 ## Snapshots
 
 Snapshots copy session files into a repository. Incremental snapshots add delta manifests containing `add`, `modify`, and `delete` entries.
@@ -64,3 +69,4 @@ Snapshots copy session files into a repository. Incremental snapshots add delta 
 
 Failover evaluates primary health, selects a replica, and can require promotion fencing before restoring
 the new primary. Fenced rejection suppresses promotion and failover markers.
+Cross-site failover can additionally require an eligible site policy result bound to the exact replica root.

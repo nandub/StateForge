@@ -841,6 +841,57 @@ if ($monitoringRunnerText -notmatch "'SplitBrain'") {
     throw 'Test-StateForge.ps1 must expose the SplitBrain suite.'
 }
 
+# Validate v0.35.0 multi-site disaster recovery.
+$siteStateStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeSiteStateStore.cs'
+$crossSiteEvaluatorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeCrossSiteEvaluator.cs'
+$replicationManifestEntryPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicationManifestEntry.cs'
+$multiSiteTestPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.MultiSiteTests\Program.cs'
+$multiSiteScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeMultiSite.ps1'
+
+foreach ($multiSitePath in @(
+    $siteStateStorePath,
+    $crossSiteEvaluatorPath,
+    $replicationManifestEntryPath,
+    $multiSiteTestPath,
+    $multiSiteScriptPath
+)) {
+    if (-not (Test-Path -LiteralPath $multiSitePath)) {
+        throw "Missing multi-site disaster recovery file: $multiSitePath"
+    }
+}
+
+$siteStateStoreText = Get-Content -LiteralPath $siteStateStorePath -Raw
+$crossSiteEvaluatorText = Get-Content -LiteralPath $crossSiteEvaluatorPath -Raw
+$replicationManifestEntryText = Get-Content -LiteralPath $replicationManifestEntryPath -Raw
+$multiSiteTestText = Get-Content -LiteralPath $multiSiteTestPath -Raw
+
+if ($siteStateStoreText -notmatch 'File\.Replace' -or
+    $siteStateStoreText -notmatch 'InvalidDataException' -or
+    $siteStateStoreText -notmatch 'LastRecoveryPointUtc') {
+    throw 'Site state must be atomic, strictly parsed, and include recovery-point metadata.'
+}
+
+if ($crossSiteEvaluatorText -notmatch 'RequireDifferentRegion' -or
+    $crossSiteEvaluatorText -notmatch 'MaximumRecoveryPointAge' -or
+    $crossSiteEvaluatorText -notmatch 'CandidateEligible' -or
+    $crossSiteEvaluatorText -match 'EvaluateAndFailover') {
+    throw 'Cross-site policy must validate region, freshness, and quorum without automatic failover.'
+}
+
+if ($replicationManifestEntryText -notmatch 'SiteName' -or
+    $replicationManifestEntryText -notmatch 'Region') {
+    throw 'Replication manifests must carry target site identity and region.'
+}
+
+if ($multiSiteTestText -notmatch 'multi-site snapshot restore drill' -or
+    $multiSiteTestText -notmatch 'cross-site policy root binding') {
+    throw 'Multi-site tests must cover restore drills and policy-to-replica binding.'
+}
+
+if ($monitoringRunnerText -notmatch "'MultiSite'") {
+    throw 'Test-StateForge.ps1 must expose the MultiSite suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {
@@ -865,6 +916,6 @@ if ($agentsText -notmatch 'Test-StateForge.ps1 -Suite Production') {
     throw 'AGENTS.md must document Production suite validation.'
 }
 
-if ($agentsText -notmatch 'Multi-Site Disaster Recovery') {
+if ($agentsText -notmatch 'Production Release') {
     throw 'AGENTS.md must document the next roadmap milestone.'
 }

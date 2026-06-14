@@ -36,6 +36,12 @@ namespace StateForge.Replication
                 target.Name = string.IsNullOrWhiteSpace(replica.Name) ? "replica-" + i.ToString() : replica.Name;
                 target.RootPath = Path.GetFullPath(replica.RootPath);
                 target.SessionsPath = ResolveSessionsPath(target.RootPath);
+                target.SiteName = string.IsNullOrWhiteSpace(replica.SiteName)
+                    ? string.Empty
+                    : replica.SiteName.Trim();
+                target.Region = string.IsNullOrWhiteSpace(replica.Region)
+                    ? string.Empty
+                    : replica.Region.Trim();
 
                 plan.Targets.Add(target);
             }

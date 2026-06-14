@@ -10,6 +10,10 @@ namespace StateForge.Replication
 
         public string ReplicaName { get; set; }
 
+        public string SiteName { get; set; }
+
+        public string Region { get; set; }
+
         public string DestinationPath { get; set; }
 
         public string Action { get; set; }

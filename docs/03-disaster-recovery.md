@@ -24,6 +24,16 @@ Version 0.34.0 adds `stateforge-primary-lease.json` in a shared lease root. A fe
 New owners receive a new lease ID and a monotonically increasing epoch. Existing owners must present the
 lease ID to reacquire or renew an active lease. Expired leases cannot be renewed.
 
+## Multi-Site Recovery
+
+Version 0.35.0 persists `stateforge-site-state.json` in each site root. It records site identity, region,
+primary or recovery role, health, heartbeat, promotion eligibility, recovery-point time, and errors.
+
+`StateForgeCrossSiteEvaluator` requires an enabled primary source, an enabled recovery target, distinct
+site identities and regions, a healthy and fresh recovery point, and quorum for the exact replica candidate.
+The result is policy evidence only. Set `RequireCrossSitePolicy` to bind it to the selected replica root,
+and continue to require promotion fencing for cross-site failover.
+
 StateForge disaster recovery is built from snapshots, incremental deltas, promotion, and failover.
 
 ## Full Snapshots

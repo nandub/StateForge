@@ -27,7 +27,7 @@ Implemented areas include:
 
 ## Current Version
 
-Current repository version target: **0.34.0**
+Current repository version target: **0.35.0**
 
 When making release changes, keep project versions and validation defaults aligned.
 
@@ -166,21 +166,21 @@ The deterministic test fixture in `StateForge.ReplicaCatchUpTests` must remain i
 Next recommended milestone:
 
 ```text
-v0.35.0 — Multi-Site Disaster Recovery
+v1.0.0 — Production Release
 ```
 
 Expected areas:
 
-- site metadata
-- cross-site replication policy
-- site failover runbooks
-- restore drills
+- public API review
+- package and SourceLink validation
+- rolling upgrade checks
+- security and performance review
 - Production suite validation
 
 Later milestones:
 
 ```text
-v1.0.0  — Production Release
+Post-1.0 roadmap to be defined after production release.
 ```
 
 ## Safety Rules

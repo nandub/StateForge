@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v0.34.0 includes primary lease and promotion-fencing validation in the production-readiness layer.
+StateForge v0.35.0 includes multi-site disaster-recovery validation in the production-readiness layer.
 
 ## Production Suite
 
@@ -18,6 +18,7 @@ This suite validates:
 - quorum and promotion eligibility policy
 - witness heartbeat and candidate vote validation
 - primary lease, fencing epoch, and stale-primary validation
+- site metadata, cross-site policy, restore drill, and fenced site failover
 - repository layout
 - source guards
 - health checks
@@ -110,3 +111,13 @@ candidate-specific votes, quorum restoration, and witness promotion rejection.
 The suite validates atomic strict lease state, shared-file coordination, quorum rejection, active-primary
 fencing, stale takeover, epoch advancement, ownership-token renewal, concurrent candidates, and failover
 marker suppression.
+
+## Multi-Site Disaster Recovery
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite MultiSite
+```
+
+The suite validates atomic strict site state, site-tagged replication manifests, region separation,
+heartbeat and recovery-point freshness, exact quorum candidate binding, snapshot restore drills, fenced
+cross-site failover, and rejection when policy evidence targets a different replica root.

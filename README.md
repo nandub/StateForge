@@ -2,7 +2,7 @@
 
 StateForge is a resilient, file-backed session and state platform for .NET applications.
 
-Current version: **0.34.0**
+Current version: **0.35.0**
 
 ## Features
 
@@ -18,6 +18,7 @@ Current version: **0.34.0**
 - Quorum and promotion eligibility policy
 - Witness health and vote validation
 - Primary leases and promotion fencing
+- Multi-site metadata and disaster-recovery policy
 - Snapshot services
 - Snapshot scheduling
 - Replica promotion

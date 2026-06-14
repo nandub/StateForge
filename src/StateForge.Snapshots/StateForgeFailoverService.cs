@@ -15,6 +15,7 @@ namespace StateForge.Snapshots
 
             StateForgeFailoverResult result = new StateForgeFailoverResult();
             result.PrimaryHealthy = IsHealthy(options.PrimaryRootPath);
+            result.CrossSitePolicy = options.CrossSitePolicy;
 
             if (result.PrimaryHealthy && !options.Force)
             {
@@ -23,6 +24,41 @@ namespace StateForge.Snapshots
             }
 
             string selectedReplica = SelectReplica(options);
+
+            if (options.RequireCrossSitePolicy &&
+                (options.CrossSitePolicy == null || !options.CrossSitePolicy.Eligible))
+            {
+                result.Errors++;
+                result.Success = false;
+                return result;
+            }
+
+            if (options.CrossSitePolicy != null)
+            {
+                string selectedRoot = string.IsNullOrWhiteSpace(selectedReplica)
+                    ? string.Empty
+                    : Path.GetFullPath(selectedReplica);
+                string policyRoot = string.IsNullOrWhiteSpace(options.CrossSitePolicy.TargetRootPath)
+                    ? string.Empty
+                    : Path.GetFullPath(options.CrossSitePolicy.TargetRootPath);
+                if (!string.Equals(selectedRoot, policyRoot, StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Errors++;
+                    result.Success = false;
+                    return result;
+                }
+
+                if (options.PromotionFence != null &&
+                    !string.Equals(
+                        options.CrossSitePolicy.CandidateName,
+                        options.PromotionFence.CandidateName,
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    result.Errors++;
+                    result.Success = false;
+                    return result;
+                }
+            }
 
             if (string.IsNullOrWhiteSpace(selectedReplica))
             {
@@ -139,7 +175,11 @@ namespace StateForge.Snapshots
             builder.AppendLine("  \"version\": \"0.26.1\",");
             builder.AppendLine("  \"failedOverUtc\": \"" + StateForgeSnapshotService.Escape(DateTimeOffset.UtcNow.ToString("o")) + "\",");
             builder.AppendLine("  \"primaryRootPath\": \"" + StateForgeSnapshotService.Escape(options.PrimaryRootPath) + "\",");
-            builder.AppendLine("  \"promotedReplicaRootPath\": \"" + StateForgeSnapshotService.Escape(selectedReplica) + "\"");
+            builder.AppendLine("  \"promotedReplicaRootPath\": \"" + StateForgeSnapshotService.Escape(selectedReplica) + "\",");
+            builder.AppendLine("  \"sourceSiteName\": \"" +
+                StateForgeSnapshotService.Escape(options.CrossSitePolicy == null ? string.Empty : options.CrossSitePolicy.SourceSiteName) + "\",");
+            builder.AppendLine("  \"targetSiteName\": \"" +
+                StateForgeSnapshotService.Escape(options.CrossSitePolicy == null ? string.Empty : options.CrossSitePolicy.TargetSiteName) + "\"");
             builder.AppendLine("}");
 
             File.WriteAllText(markerPath, builder.ToString(), Encoding.UTF8);

@@ -44,6 +44,7 @@
 .\scripts\Test-StateForgeQuorum.ps1
 .\scripts\Test-StateForgeWitness.ps1
 .\scripts\Test-StateForgeSplitBrain.ps1
+.\scripts\Test-StateForgeMultiSite.ps1
 .\scripts\Test-StateForgeSnapshotServices.ps1
 .\scripts\Test-StateForgeAutomaticFailover.ps1
 .\scripts\Test-StateForgeIncrementalSnapshots.ps1
@@ -75,6 +76,7 @@ StateForge uses a single suite-based validation runner:
 .\scripts\Test-StateForge.ps1 -Suite Quorum
 .\scripts\Test-StateForge.ps1 -Suite Witness
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
+.\scripts\Test-StateForge.ps1 -Suite MultiSite
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite Recovery
 .\scripts\Test-StateForge.ps1 -Suite Release

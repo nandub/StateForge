@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.34.0 split-brain prevention.
+This roadmap reflects the current StateForge direction after v0.35.0 multi-site disaster recovery.
 
 ## Completed
 
@@ -23,10 +23,11 @@ This roadmap reflects the current StateForge direction after v0.34.0 split-brain
 | v0.32.0 | Quorum foundations and promotion eligibility policy |
 | v0.33.0 | Witness state, health, and quorum vote validation |
 | v0.34.0 | Primary leases, promotion fencing, and stale-primary takeover |
+| v0.35.0 | Site metadata, cross-site recovery policy, restore drills, and fenced site failover |
 
 ## Current Stable Candidate
 
-`v0.34.0` is the current stable production-candidate baseline.
+`v0.35.0` is the current stable production-candidate baseline.
 
 It validates:
 
@@ -45,22 +46,13 @@ It validates:
 - quorum policy
 - witness health and votes
 - split-brain prevention
+- multi-site disaster recovery
 - snapshots
 - incremental snapshots
 - replica promotion
 - automatic failover
 - recovery flow
 - package metadata
-
-## v0.35.0 — Multi-Site Disaster Recovery
-
-Planned capabilities:
-
-- site metadata
-- cross-site replication policy
-- site failover runbooks
-- restore drills
-- package/runtime validation
 
 ## v1.0.0 — Production Release
 

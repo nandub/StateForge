@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.35.0
+
+- Added atomic site metadata with identity, region, role, health, and recovery-point timestamps.
+- Added deterministic cross-site failover policy for region, freshness, health, and exact quorum candidate validation.
+- Added site and region metadata to replication targets and manifests.
+- Bound cross-site failover policy decisions to the exact promoted replica root.
+- Added source and target site identity to failover markers.
+- Added a multi-site snapshot restore drill and fenced site failover validation.
+- Added the `MultiSite` suite to Production and Release validation.
+- Kept automatic site election and cross-site orchestration out of this release.
+
 ## 0.34.0
 
 - Added atomic primary lease markers with monotonic fencing epochs.

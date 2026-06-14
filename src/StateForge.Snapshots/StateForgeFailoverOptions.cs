@@ -17,6 +17,10 @@ namespace StateForge.Snapshots
 
         public StateForgePromotionFenceOptions PromotionFence { get; set; }
 
+        public bool RequireCrossSitePolicy { get; set; }
+
+        public StateForgeCrossSiteResult CrossSitePolicy { get; set; }
+
         public StateForgeFailoverOptions()
         {
             ReplicaRootPaths = new List<string>();
