@@ -1,0 +1,8 @@
+# StateForge.CloudNative
+
+public static class StateForge.CloudNative.StateForgeCloudNativeExtensions
+  static method Microsoft.AspNetCore.Builder.WebApplication MapStateForgeCloudNativeHealth(Microsoft.AspNetCore.Builder.WebApplication app)
+  static method Microsoft.Extensions.DependencyInjection.IServiceCollection AddStateForgeCloudNativeCache(Microsoft.Extensions.DependencyInjection.IServiceCollection services)
+
+public static class StateForge.CloudNative.StateForgeEnvironmentOptions
+  static method System.Void Apply(System.Object options)

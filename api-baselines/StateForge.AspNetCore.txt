@@ -1,0 +1,19 @@
+# StateForge.AspNetCore
+
+public sealed class StateForge.AspNetCore.StateForgeDistributedCache : Microsoft.Extensions.Caching.Distributed.IDistributedCache
+  constructor StateForgeDistributedCache(StateForge.Core.IStateForgeStore store, StateForge.AspNetCore.StateForgeDistributedCacheOptions options)
+  method System.Byte[] Get(System.String key)
+  method System.Threading.Tasks.Task RefreshAsync(System.String key, System.Threading.CancellationToken token)
+  method System.Threading.Tasks.Task RemoveAsync(System.String key, System.Threading.CancellationToken token)
+  method System.Threading.Tasks.Task SetAsync(System.String key, System.Byte[] value, Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions options, System.Threading.CancellationToken token)
+  method System.Threading.Tasks.Task<System.Byte[]> GetAsync(System.String key, System.Threading.CancellationToken token)
+  method System.Void Refresh(System.String key)
+  method System.Void Remove(System.String key)
+  method System.Void Set(System.String key, System.Byte[] value, Microsoft.Extensions.Caching.Distributed.DistributedCacheEntryOptions options)
+
+public sealed class StateForge.AspNetCore.StateForgeDistributedCacheOptions : StateForge.FileStore.StateForgeFileStoreOptions
+  constructor StateForgeDistributedCacheOptions()
+  property System.Int32 DefaultExpirationMinutes { get;set; }
+
+public static class StateForge.AspNetCore.StateForgeServiceCollectionExtensions
+  static method Microsoft.Extensions.DependencyInjection.IServiceCollection AddStateForgeDistributedCache(Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action<StateForge.AspNetCore.StateForgeDistributedCacheOptions> configure)

@@ -1,0 +1,17 @@
+# StateForge.AspNet
+
+public sealed class StateForge.AspNet.StateForgeSessionStateProvider : System.Web.SessionState.SessionStateStoreProviderBase
+  constructor StateForgeSessionStateProvider()
+  method System.Boolean SetItemExpireCallback(System.Web.SessionState.SessionStateItemExpireCallback expireCallback)
+  method System.Void CreateUninitializedItem(System.Web.HttpContext context, System.String id, System.Int32 timeout)
+  method System.Void Dispose()
+  method System.Void EndRequest(System.Web.HttpContext context)
+  method System.Void Initialize(System.String name, System.Collections.Specialized.NameValueCollection config)
+  method System.Void InitializeRequest(System.Web.HttpContext context)
+  method System.Void ReleaseItemExclusive(System.Web.HttpContext context, System.String id, System.Object lockId)
+  method System.Void RemoveItem(System.Web.HttpContext context, System.String id, System.Object lockId, System.Web.SessionState.SessionStateStoreData item)
+  method System.Void ResetItemTimeout(System.Web.HttpContext context, System.String id)
+  method System.Void SetAndReleaseItemExclusive(System.Web.HttpContext context, System.String id, System.Web.SessionState.SessionStateStoreData item, System.Object lockId, System.Boolean newItem)
+  method System.Web.SessionState.SessionStateStoreData CreateNewStoreData(System.Web.HttpContext context, System.Int32 timeout)
+  method System.Web.SessionState.SessionStateStoreData GetItem(System.Web.HttpContext context, System.String id, out System.Boolean locked, out System.TimeSpan lockAge, out System.Object lockId, out System.Web.SessionState.SessionStateActions actions)
+  method System.Web.SessionState.SessionStateStoreData GetItemExclusive(System.Web.HttpContext context, System.String id, out System.Boolean locked, out System.TimeSpan lockAge, out System.Object lockId, out System.Web.SessionState.SessionStateActions actions)

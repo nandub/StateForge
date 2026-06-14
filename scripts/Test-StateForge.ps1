@@ -35,6 +35,7 @@ param(
         'Version',
         'Layout',
         'Source',
+        'ApiCompatibility',
         'Format',
         'Migration',
         'Observability',
@@ -130,6 +131,11 @@ function Invoke-SourceSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSource.ps1'
 }
 
+function Invoke-ApiCompatibilitySuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeApiValidation.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeApiCompatibility.ps1'
+}
+
 function Invoke-FormatSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeFormat.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeStfg2Envelope.ps1'
@@ -215,6 +221,7 @@ function Invoke-ProductionSuite {
     Invoke-VersionSuite
     Invoke-LayoutSuite
     Invoke-SourceSuite
+    Invoke-ApiCompatibilitySuite
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeHealth.ps1' -Arguments @{ RootPath = (Get-StateForgeProductionHealthRoot) }
     Invoke-StateForgeScript -Path '.\scripts\Invoke-StateForgeSmokeTest.ps1'
     Invoke-ObservabilitySuite
@@ -236,6 +243,7 @@ function Invoke-ReleaseSuite {
     Invoke-VersionSuite
     Invoke-LayoutSuite
     Invoke-SourceSuite
+    Invoke-ApiCompatibilitySuite
     Invoke-FormatSuite
     Invoke-MigrationSuite
     Invoke-ObservabilitySuite
@@ -259,6 +267,7 @@ try {
         'Version' { Invoke-VersionSuite }
         'Layout' { Invoke-LayoutSuite }
         'Source' { Invoke-SourceSuite }
+        'ApiCompatibility' { Invoke-ApiCompatibilitySuite }
         'Format' { Invoke-FormatSuite }
         'Migration' { Invoke-MigrationSuite }
         'Observability' { Invoke-ObservabilitySuite }

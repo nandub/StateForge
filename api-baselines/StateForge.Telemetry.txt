@@ -1,0 +1,46 @@
+# StateForge.Telemetry
+
+public static class StateForge.Telemetry.StateForgeDiagnosticSource
+  static field System.Diagnostics.DiagnosticListener Listener
+  static method System.Void Write(System.String name, System.Object payload)
+  static method System.Void WriteOperation(System.String operation, System.String key)
+
+public sealed class StateForge.Telemetry.StateForgeEventSource : System.Diagnostics.Tracing.EventSource, System.IDisposable
+  static field StateForge.Telemetry.StateForgeEventSource Log
+  method System.Void CleanupCompleted()
+  method System.Void CorruptionDetected()
+  method System.Void FileQuarantined()
+  method System.Void HealthCheckFailed(System.String message)
+  method System.Void HealthCheckPassed()
+  method System.Void LockAcquired()
+  method System.Void LockContention()
+  method System.Void SessionDeleted()
+  method System.Void SessionRead()
+  method System.Void SessionWritten()
+
+public sealed class StateForge.Telemetry.StateForgeMetricSnapshot
+  constructor StateForgeMetricSnapshot()
+  property System.DateTimeOffset CapturedUtc { get;set; }
+  property System.Int64 Cleanups { get;set; }
+  property System.Int64 Corruptions { get;set; }
+  property System.Int64 Deletes { get;set; }
+  property System.Int64 LockContentions { get;set; }
+  property System.Int64 LocksAcquired { get;set; }
+  property System.Int64 Quarantines { get;set; }
+  property System.Int64 Reads { get;set; }
+  property System.Int64 Writes { get;set; }
+
+public static class StateForge.Telemetry.StateForgeMetrics
+  static method StateForge.Telemetry.StateForgeMetricSnapshot Snapshot()
+  static method System.Void RecordCleanup()
+  static method System.Void RecordCorruption()
+  static method System.Void RecordDelete()
+  static method System.Void RecordLockAcquired()
+  static method System.Void RecordLockContention()
+  static method System.Void RecordQuarantine()
+  static method System.Void RecordRead()
+  static method System.Void RecordWrite()
+  static method System.Void Reset()
+
+public static class StateForge.Telemetry.StateForgeTelemetryScope
+  static method System.Void SafeRecord(System.Action action)

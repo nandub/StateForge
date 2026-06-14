@@ -1,0 +1,127 @@
+# StateForge.Core
+
+public interface StateForge.Core.IStateForgeAdminStore
+  abstract method StateForge.Core.StateForgeCleanupResult CleanupExpired(System.Boolean quarantineInvalid)
+  abstract method StateForge.Core.StateForgeHealthResult CheckHealth()
+  abstract method StateForge.Core.StateForgeStoreDiagnostics GetDiagnostics()
+  abstract method StateForge.Core.StateForgeStoreStats GetStats()
+  abstract method StateForge.Core.StateForgeValidationResult ValidateConfiguration()
+  abstract method System.Boolean ForceRemove(System.String key)
+  abstract method System.Collections.Generic.IEnumerable<StateForge.Core.StateForgeEntryInfo> Enumerate()
+
+public interface StateForge.Core.IStateForgeStore : StateForge.Core.IStateForgeAdminStore
+  abstract method StateForge.Core.StateForgeEntry Get(System.String key)
+  abstract method StateForge.Core.StateForgeLockResult GetAndLock(System.String key, System.TimeSpan lockTimeout)
+  abstract method System.Boolean Refresh(System.String key, System.TimeSpan timeout)
+  abstract method System.Boolean Remove(System.String key)
+  abstract method System.Boolean SetAndUnlock(System.String key, System.Byte[] value, System.TimeSpan timeout, System.Int64 lockId)
+  abstract method System.Boolean Unlock(System.String key, System.Int64 lockId)
+  abstract method System.Void Set(System.String key, System.Byte[] value, System.TimeSpan timeout)
+
+public sealed class StateForge.Core.StateForgeCleanupResult
+  constructor StateForgeCleanupResult()
+  property System.Int32 ExpiredDeleted { get;set; }
+  property System.Int32 Failed { get;set; }
+  property System.Int32 InvalidDeleted { get;set; }
+  property System.Int32 InvalidQuarantined { get;set; }
+
+public static class StateForge.Core.StateForgeConstants
+  const System.Int32 FileMagic = 1195791443
+  const System.Int32 FileVersion = 1
+  const System.Int32 FlagAesEncrypted = 4
+  const System.Int32 FlagCompressed = 1
+  const System.Int32 FlagEncrypted = 2
+
+public sealed class StateForge.Core.StateForgeEntry
+  constructor StateForgeEntry()
+  property System.Boolean Locked { get;set; }
+  property System.Byte[] Value { get;set; }
+  property System.DateTimeOffset CreatedUtc { get;set; }
+  property System.DateTimeOffset ExpiresUtc { get;set; }
+  property System.DateTimeOffset UpdatedUtc { get;set; }
+  property System.Int64 LockId { get;set; }
+  property System.Nullable<System.DateTimeOffset> LockDateUtc { get;set; }
+  property System.String Key { get;set; }
+  method System.Boolean IsExpired(System.DateTimeOffset utcNow)
+
+public sealed class StateForge.Core.StateForgeEntryInfo
+  constructor StateForgeEntryInfo()
+  property System.Boolean AesEncrypted { get;set; }
+  property System.Boolean Compressed { get;set; }
+  property System.Boolean Encrypted { get;set; }
+  property System.Boolean Expired { get;set; }
+  property System.Boolean Locked { get;set; }
+  property System.DateTimeOffset CreatedUtc { get;set; }
+  property System.DateTimeOffset ExpiresUtc { get;set; }
+  property System.DateTimeOffset UpdatedUtc { get;set; }
+  property System.Int64 LockId { get;set; }
+  property System.Int64 PayloadLength { get;set; }
+  property System.String Key { get;set; }
+  property System.String PhysicalPath { get;set; }
+
+public sealed class StateForge.Core.StateForgeHealthResult
+  constructor StateForgeHealthResult()
+  property System.Boolean CanCleanup { get;set; }
+  property System.Boolean CanEnumerate { get;set; }
+  property System.Boolean CanLock { get;set; }
+  property System.Boolean CanRead { get;set; }
+  property System.Boolean CanWrite { get;set; }
+  property System.Boolean Healthy { get; }
+  property System.Collections.Generic.IList<System.String> Errors { get; }
+  method System.Void AddError(System.String message)
+
+public sealed class StateForge.Core.StateForgeLockResult
+  constructor StateForgeLockResult()
+  property StateForge.Core.StateForgeEntry Entry { get;set; }
+  property System.Boolean Found { get;set; }
+  property System.Boolean LockedByOtherRequest { get;set; }
+  property System.Int64 LockId { get;set; }
+  property System.TimeSpan LockAge { get;set; }
+  static method StateForge.Core.StateForgeLockResult Acquired(StateForge.Core.StateForgeEntry entry)
+  static method StateForge.Core.StateForgeLockResult Locked(System.TimeSpan lockAge, System.Int64 lockId)
+  static method StateForge.Core.StateForgeLockResult NotFound()
+
+public class StateForge.Core.StateForgeOptions
+  constructor StateForgeOptions()
+  property System.Boolean EnableCompression { get;set; }
+  property System.Boolean EnableEncryption { get;set; }
+  property System.Int32 ShardDepth { get;set; }
+  property System.Int32 StaleLockMinutes { get;set; }
+  property System.String RootPath { get;set; }
+
+public enum StateForge.Core.StateForgeProtectionMode : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  const StateForge.Core.StateForgeProtectionMode Aes = 2
+  const StateForge.Core.StateForgeProtectionMode Dpapi = 1
+  const StateForge.Core.StateForgeProtectionMode None = 0
+  field System.Int32 value__
+
+public sealed class StateForge.Core.StateForgeStoreDiagnostics
+  constructor StateForgeStoreDiagnostics()
+  property System.Int32 BackupFileCount { get;set; }
+  property System.Int32 QuarantineFileCount { get;set; }
+  property System.Int32 SessionFileCount { get;set; }
+  property System.Int32 TempFileCount { get;set; }
+  property System.String BackupPath { get;set; }
+  property System.String QuarantinePath { get;set; }
+  property System.String RootPath { get;set; }
+  property System.String SessionsPath { get;set; }
+  property System.String TempPath { get;set; }
+
+public sealed class StateForge.Core.StateForgeStoreStats
+  constructor StateForgeStoreStats()
+  property System.Int32 AesEncryptedSessions { get;set; }
+  property System.Int32 CompressedSessions { get;set; }
+  property System.Int32 EncryptedSessions { get;set; }
+  property System.Int32 ExpiredSessions { get;set; }
+  property System.Int32 LockedSessions { get;set; }
+  property System.Int32 TotalSessions { get;set; }
+  property System.Int64 AveragePayloadBytes { get;set; }
+  property System.Int64 TotalPayloadBytes { get;set; }
+
+public sealed class StateForge.Core.StateForgeValidationResult
+  constructor StateForgeValidationResult()
+  property System.Boolean Success { get; }
+  property System.Collections.Generic.IList<System.String> Errors { get; }
+  property System.Collections.Generic.IList<System.String> Warnings { get; }
+  method System.Void AddError(System.String message)
+  method System.Void AddWarning(System.String message)

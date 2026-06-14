@@ -1,0 +1,50 @@
+# StateForge.Security
+
+public sealed class StateForge.Security.StateForgeAesKeyInfo
+  constructor StateForgeAesKeyInfo()
+  property System.Boolean IsRetired { get; }
+  property System.DateTimeOffset CreatedUtc { get;set; }
+  property System.Nullable<System.DateTimeOffset> NotBeforeUtc { get;set; }
+  property System.Nullable<System.DateTimeOffset> RetiredUtc { get;set; }
+  property System.String KeyBase64 { get;set; }
+  property System.String KeyId { get;set; }
+
+public sealed class StateForge.Security.StateForgeAesKeyRing
+  constructor StateForgeAesKeyRing()
+  property System.Collections.Generic.List<StateForge.Security.StateForgeAesKeyInfo> Keys { get; }
+  property System.String CurrentKeyId { get;set; }
+  property System.String Version { get;set; }
+  method StateForge.Security.StateForgeAesKeyInfo FindKey(System.String keyId)
+  method StateForge.Security.StateForgeAesKeyInfo GetCurrentKey()
+
+public static class StateForge.Security.StateForgeAesKeyRingJson
+  static method System.String ToJson(StateForge.Security.StateForgeAesKeyRing ring)
+
+public static class StateForge.Security.StateForgeAesKeyRingManager
+  static method StateForge.Security.StateForgeAesKeyInfo CreateKey(System.String keyId)
+  static method StateForge.Security.StateForgeAesKeyInfo Rotate(StateForge.Security.StateForgeAesKeyRing ring, System.String newKeyId, System.Boolean retirePrevious)
+  static method StateForge.Security.StateForgeAesKeyRing CreateNew(System.String keyId)
+  static method StateForge.Security.StateForgeAesKeyRingRotationResult RotateAndSave(System.String path, System.String newKeyId, System.Boolean retirePrevious)
+  static method System.Collections.Generic.List<System.String> Validate(StateForge.Security.StateForgeAesKeyRing ring)
+  static method System.Void Save(System.String path, StateForge.Security.StateForgeAesKeyRing ring)
+
+public static class StateForge.Security.StateForgeAesKeyRingReader
+  static method StateForge.Security.StateForgeAesKeyRing FromJson(System.String json)
+  static method StateForge.Security.StateForgeAesKeyRing Load(System.String path)
+
+public sealed class StateForge.Security.StateForgeAesKeyRingRotationResult
+  constructor StateForgeAesKeyRingRotationResult()
+  property System.DateTimeOffset RotatedUtc { get;set; }
+  property System.Int32 KeyCount { get;set; }
+  property System.String CurrentKeyId { get;set; }
+  property System.String PreviousKeyId { get;set; }
+
+public static class StateForge.Security.StateForgeKeyRingCryptoPlan
+  const System.String CurrentBehavior = "Current StateForge file encryption remains single-key AES."
+  const System.String NextBehavior = "Future STFG2 records should embed KeyId and decrypt through the key ring."
+  const System.String PlannedFileFormatVersion = "STFG2"
+
+public sealed class StateForge.Security.StateForgeKeyedPayload
+  constructor StateForgeKeyedPayload()
+  property System.Byte[] Payload { get;set; }
+  property System.String KeyId { get;set; }

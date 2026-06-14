@@ -1,0 +1,39 @@
+# StateForge.Prometheus
+
+public static class StateForge.Prometheus.StateForgePrometheusCollector
+  static method StateForge.Prometheus.StateForgePrometheusSnapshot Collect(System.String rootPath)
+  static method System.String CollectText(System.String rootPath)
+
+public static class StateForge.Prometheus.StateForgePrometheusFormatter
+  static method System.String Format(StateForge.Prometheus.StateForgePrometheusSnapshot snapshot)
+
+public sealed class StateForge.Prometheus.StateForgePrometheusSnapshot
+  constructor StateForgePrometheusSnapshot()
+  property System.Int32 SessionsActive { get;set; }
+  property System.Int32 SessionsAesEncrypted { get;set; }
+  property System.Int32 SessionsCompressed { get;set; }
+  property System.Int32 SessionsEncrypted { get;set; }
+  property System.Int32 SessionsExpired { get;set; }
+  property System.Int32 SessionsLocked { get;set; }
+  property System.Int64 Cleanups { get;set; }
+  property System.Int64 Corruptions { get;set; }
+  property System.Int64 Deletes { get;set; }
+  property System.Int64 LockContentions { get;set; }
+  property System.Int64 LocksAcquired { get;set; }
+  property System.Int64 Quarantines { get;set; }
+  property System.Int64 Reads { get;set; }
+  property System.Int64 TotalPayloadBytes { get;set; }
+  property System.Int64 Writes { get;set; }
+
+public static class StateForge.Prometheus.StateForgeReplicaPrometheusCollector
+  static method System.String CollectText(System.Collections.Generic.IEnumerable<StateForge.Replication.StateForgeReplicaNode> replicas, System.TimeSpan staleThreshold)
+
+public static class StateForge.Prometheus.StateForgeReplicaPrometheusFormatter
+  static method System.String Format(StateForge.Replication.StateForgeReplicaMonitorSnapshot snapshot)
+
+public static class StateForge.Prometheus.StateForgeSnapshotPrometheusCollector
+  static method System.String CaptureAndCollectText(System.String rootPath, System.String snapshotPath)
+  static method System.String CollectTextFromSnapshotFile(System.String snapshotPath)
+
+public static class StateForge.Prometheus.StateForgeSnapshotPrometheusFormatter
+  static method System.String Format(StateForge.Performance.StateForgeStoreSnapshot snapshot)

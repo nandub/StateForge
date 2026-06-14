@@ -21,6 +21,7 @@ This suite validates:
 - site metadata, cross-site policy, restore drill, and fenced site failover
 - Docker and Kubernetes deployment invariants
 - NuGet metadata, symbols, SourceLink, and install compatibility
+- reviewed public API compatibility
 - repository layout
 - source guards
 - health checks
@@ -151,3 +152,13 @@ Encryption is disabled in the generic ConfigMap. To enable AES, populate `statef
 The package suite builds all twelve `.nupkg` and `.snupkg` artifacts, checks repository URL and commit
 metadata, validates portable PDB SourceLink mappings, and restores plus builds isolated `net8.0` and
 `net481` consumer projects from the local package feed.
+
+## Public API Compatibility
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
+```
+
+The suite runs exact API smoke compilation and compares all shipped package surfaces with reviewed
+baselines. Any addition, removal, enum-value change, inheritance change, or member signature change
+blocks Production and Release validation until explicitly reviewed and approved.

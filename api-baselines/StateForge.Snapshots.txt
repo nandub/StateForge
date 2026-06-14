@@ -1,0 +1,152 @@
+# StateForge.Snapshots
+
+public sealed class StateForge.Snapshots.StateForgeFailoverOptions
+  constructor StateForgeFailoverOptions()
+  property StateForge.Replication.StateForgeCrossSiteResult CrossSitePolicy { get;set; }
+  property StateForge.Replication.StateForgePromotionFenceOptions PromotionFence { get;set; }
+  property System.Boolean Force { get;set; }
+  property System.Boolean RequireCrossSitePolicy { get;set; }
+  property System.Boolean RequirePromotionFence { get;set; }
+  property System.Collections.Generic.List<System.String> ReplicaRootPaths { get; }
+  property System.String NewPrimaryRootPath { get;set; }
+  property System.String PrimaryRootPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeFailoverResult
+  constructor StateForgeFailoverResult()
+  property StateForge.Replication.StateForgeCrossSiteResult CrossSitePolicy { get;set; }
+  property StateForge.Replication.StateForgePromotionFenceResult PromotionFence { get;set; }
+  property System.Boolean PrimaryHealthy { get;set; }
+  property System.Boolean Success { get;set; }
+  property System.Int32 Errors { get;set; }
+  property System.String MarkerPath { get;set; }
+  property System.String PromotedReplicaRootPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeFailoverService
+  constructor StateForgeFailoverService()
+  method StateForge.Snapshots.StateForgeFailoverResult EvaluateAndFailover(StateForge.Snapshots.StateForgeFailoverOptions options)
+  method System.Boolean IsHealthy(System.String rootPath)
+
+public sealed class StateForge.Snapshots.StateForgeIncrementalSnapshotEntry
+  constructor StateForgeIncrementalSnapshotEntry()
+  property System.Int64 Length { get;set; }
+  property System.String Action { get;set; }
+  property System.String LastWriteUtc { get;set; }
+  property System.String RelativePath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeIncrementalSnapshotManifest
+  constructor StateForgeIncrementalSnapshotManifest()
+  property System.Collections.Generic.List<StateForge.Snapshots.StateForgeIncrementalSnapshotEntry> Entries { get; }
+  property System.Int32 FilesAdded { get;set; }
+  property System.Int32 FilesDeleted { get;set; }
+  property System.Int32 FilesModified { get;set; }
+  property System.String CreatedUtc { get;set; }
+  property System.String ParentSnapshotName { get;set; }
+  property System.String SnapshotName { get;set; }
+  property System.String SnapshotPath { get;set; }
+  property System.String SnapshotType { get;set; }
+  property System.String SourceRootPath { get;set; }
+  property System.String Version { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeIncrementalSnapshotOptions
+  constructor StateForgeIncrementalSnapshotOptions()
+  property System.Boolean OverwriteExisting { get;set; }
+  property System.String ParentSnapshotName { get;set; }
+  property System.String SnapshotName { get;set; }
+  property System.String SnapshotRepositoryPath { get;set; }
+  property System.String SourceRootPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeIncrementalSnapshotResult
+  constructor StateForgeIncrementalSnapshotResult()
+  property System.Boolean Success { get;set; }
+  property System.Int32 Errors { get;set; }
+  property System.Int32 FilesAdded { get;set; }
+  property System.Int32 FilesCopied { get;set; }
+  property System.Int32 FilesDeleted { get;set; }
+  property System.Int32 FilesModified { get;set; }
+  property System.String ManifestPath { get;set; }
+  property System.String SnapshotName { get;set; }
+  property System.String SnapshotPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeIncrementalSnapshotService
+  constructor StateForgeIncrementalSnapshotService()
+  method StateForge.Snapshots.StateForgeIncrementalSnapshotResult CreateIncremental(StateForge.Snapshots.StateForgeIncrementalSnapshotOptions options)
+  method StateForge.Snapshots.StateForgeSnapshotResult CreateBase(StateForge.Snapshots.StateForgeSnapshotOptions options)
+  method StateForge.Snapshots.StateForgeSnapshotResult RestoreChain(System.String snapshotRepositoryPath, System.String baseSnapshotName, System.String[] incrementalSnapshotNames, System.String destinationRootPath)
+  static method StateForge.Snapshots.StateForgeIncrementalSnapshotManifest ReadManifest(System.String manifestPath)
+  static method System.Void WriteManifest(System.String manifestPath, StateForge.Snapshots.StateForgeIncrementalSnapshotManifest manifest)
+
+public sealed class StateForge.Snapshots.StateForgeReplicaPromotionOptions
+  constructor StateForgeReplicaPromotionOptions()
+  property StateForge.Replication.StateForgePromotionFenceOptions PromotionFence { get;set; }
+  property System.Boolean OverwriteExisting { get;set; }
+  property System.Boolean RequirePromotionFence { get;set; }
+  property System.String NewPrimaryRootPath { get;set; }
+  property System.String ReplicaRootPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeReplicaPromotionResult
+  constructor StateForgeReplicaPromotionResult()
+  property StateForge.Replication.StateForgePromotionFenceResult PromotionFence { get;set; }
+  property System.Boolean Success { get;set; }
+  property System.Int32 Errors { get;set; }
+  property System.Int32 FilesCopied { get;set; }
+  property System.Int32 FilesSkipped { get;set; }
+  property System.String PromotionMarkerPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeReplicaPromotionService
+  constructor StateForgeReplicaPromotionService()
+  method StateForge.Snapshots.StateForgeReplicaPromotionResult Promote(StateForge.Snapshots.StateForgeReplicaPromotionOptions options)
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotManifest
+  constructor StateForgeSnapshotManifest()
+  property System.Collections.Generic.List<StateForge.Snapshots.StateForgeSnapshotManifestEntry> Entries { get; }
+  property System.Int32 FileCount { get;set; }
+  property System.Int64 TotalBytes { get;set; }
+  property System.String CreatedUtc { get;set; }
+  property System.String SnapshotName { get;set; }
+  property System.String SnapshotPath { get;set; }
+  property System.String SourceRootPath { get;set; }
+  property System.String Version { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotManifestEntry
+  constructor StateForgeSnapshotManifestEntry()
+  property System.Int64 Length { get;set; }
+  property System.String LastWriteUtc { get;set; }
+  property System.String RelativePath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotOptions
+  constructor StateForgeSnapshotOptions()
+  property System.Boolean OverwriteExisting { get;set; }
+  property System.String SnapshotName { get;set; }
+  property System.String SnapshotRepositoryPath { get;set; }
+  property System.String SourceRootPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotResult
+  constructor StateForgeSnapshotResult()
+  property System.Boolean Success { get;set; }
+  property System.Int32 Errors { get;set; }
+  property System.Int32 FilesCopied { get;set; }
+  property System.Int32 FilesSkipped { get;set; }
+  property System.String ManifestPath { get;set; }
+  property System.String SnapshotName { get;set; }
+  property System.String SnapshotPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotScheduleOptions
+  constructor StateForgeSnapshotScheduleOptions()
+  property System.Int32 RetainLast { get;set; }
+  property System.String SnapshotRepositoryPath { get;set; }
+  property System.String SourceRootPath { get;set; }
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotScheduler
+  constructor StateForgeSnapshotScheduler()
+  method StateForge.Snapshots.StateForgeSnapshotResult RunOnce(StateForge.Snapshots.StateForgeSnapshotScheduleOptions options)
+  method System.Void ApplyRetention(StateForge.Snapshots.StateForgeSnapshotScheduleOptions options)
+
+public sealed class StateForge.Snapshots.StateForgeSnapshotService
+  constructor StateForgeSnapshotService()
+  method StateForge.Snapshots.StateForgeSnapshotResult Create(StateForge.Snapshots.StateForgeSnapshotOptions options)
+  method StateForge.Snapshots.StateForgeSnapshotResult Restore(System.String snapshotPath, System.String destinationRootPath, System.Boolean overwriteExisting)
+  method System.String[] List(System.String snapshotRepositoryPath)
+  static method System.String Escape(System.String value)
+  static method System.String MakeRelative(System.String rootPath, System.String filePath)
+  static method System.String ResolveSessionsPath(System.String rootPath)
+  static method System.Void WriteManifest(System.String manifestPath, StateForge.Snapshots.StateForgeSnapshotManifest manifest)

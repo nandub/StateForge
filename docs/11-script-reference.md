@@ -19,6 +19,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Docs
 .\scripts\Test-StateForge.ps1 -Suite Version
 .\scripts\Test-StateForge.ps1 -Suite Layout
+.\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
 .\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
 .\scripts\Test-StateForge.ps1 -Suite Quorum
@@ -141,6 +142,20 @@ kubectl apply -k .\deploy\k8s
 
 `Build-StateForgePackages.ps1` emits `.nupkg` and `.snupkg` files with deterministic portable PDBs,
 SourceLink mappings, and the exact repository commit in package metadata.
+
+## Public API Compatibility
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
+.\scripts\Test-StateForgeApiCompatibility.ps1
+```
+
+The default mode compares all twelve package assemblies with `api-baselines`. For a reviewed intentional
+change, regenerate the baselines explicitly:
+
+```powershell
+.\scripts\Test-StateForgeApiCompatibility.ps1 -UpdateBaseline
+```
 
 Dashboard replica health uses semicolon-separated `name=path` entries:
 

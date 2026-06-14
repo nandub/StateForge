@@ -171,7 +171,6 @@ v1.0.0 — Production Release
 
 Expected areas:
 
-- public API review
 - rolling upgrade checks
 - security and performance review
 - long-duration soak tests
@@ -194,6 +193,7 @@ Do not:
 - make parameter-heavy operations dispatcher-only
 - expand docs back into many small overlapping files
 - change public APIs without updating `docs/08-api-reference.md`
+- update API baselines without reviewing and documenting the public surface change
 - change version numbers inconsistently
 
 ## Definition of Done

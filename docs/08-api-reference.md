@@ -2,6 +2,21 @@
 
 This is a human-maintained API index. It should remain concise.
 
+## Compatibility Policy
+
+Every shipped package has a reviewed machine-readable signature file under `api-baselines`.
+`Test-StateForgeApiCompatibility.ps1` rejects public type, constructor, field, constant, property, event,
+method, inheritance, and enum-value drift.
+
+For an intentional public API change:
+
+1. Review the compatibility failure and versioning impact.
+2. Update this document and `CHANGELOG.md`.
+3. Run `.\scripts\Test-StateForgeApiCompatibility.ps1 -UpdateBaseline`.
+4. Review the baseline diff before committing it.
+
+Baseline updates are approvals, not automatic formatting steps.
+
 ## File Store
 
 - `StateForgeFileStore`

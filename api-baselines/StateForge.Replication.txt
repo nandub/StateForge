@@ -1,0 +1,310 @@
+# StateForge.Replication
+
+public sealed class StateForge.Replication.StateForgeClusterMember
+  constructor StateForgeClusterMember()
+  property StateForge.Replication.StateForgeClusterMemberRole Role { get;set; }
+  property System.Boolean Available { get;set; }
+  property System.Boolean Enabled { get;set; }
+  property System.Boolean PromotionEligible { get;set; }
+  property System.Boolean Voting { get;set; }
+  property System.String Name { get;set; }
+
+public enum StateForge.Replication.StateForgeClusterMemberRole : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  const StateForge.Replication.StateForgeClusterMemberRole Primary = 0
+  const StateForge.Replication.StateForgeClusterMemberRole Replica = 1
+  const StateForge.Replication.StateForgeClusterMemberRole Witness = 2
+  field System.Int32 value__
+
+public static class StateForge.Replication.StateForgeCrossSiteEvaluator
+  static method StateForge.Replication.StateForgeCrossSiteResult Evaluate(StateForge.Replication.StateForgeSiteState source, StateForge.Replication.StateForgeSiteState target, StateForge.Replication.StateForgeCrossSitePolicy policy, StateForge.Replication.StateForgeQuorumResult quorum, System.String candidateName, System.DateTimeOffset evaluationUtc)
+
+public sealed class StateForge.Replication.StateForgeCrossSitePolicy
+  constructor StateForgeCrossSitePolicy()
+  property System.Boolean RequireDifferentRegion { get;set; }
+  property System.Boolean RequireHealthyTarget { get;set; }
+  property System.TimeSpan MaximumHeartbeatAge { get;set; }
+  property System.TimeSpan MaximumRecoveryPointAge { get;set; }
+
+public sealed class StateForge.Replication.StateForgeCrossSiteResult
+  constructor StateForgeCrossSiteResult()
+  property System.Boolean Eligible { get;set; }
+  property System.Collections.Generic.List<System.String> Reasons { get; }
+  property System.String CandidateName { get;set; }
+  property System.String SourceSiteName { get;set; }
+  property System.String TargetRootPath { get;set; }
+  property System.String TargetSiteName { get;set; }
+
+public sealed class StateForge.Replication.StateForgeFileReplicator
+  constructor StateForgeFileReplicator()
+  method StateForge.Replication.StateForgeReplicationResult Replicate(StateForge.Replication.StateForgeReplicationOptions options)
+  static method System.Void WriteManifest(System.String manifestPath, StateForge.Replication.StateForgeReplicationManifest manifest)
+
+public sealed class StateForge.Replication.StateForgePrimaryLease
+  constructor StateForgePrimaryLease()
+  property System.DateTimeOffset AcquiredUtc { get;set; }
+  property System.DateTimeOffset ExpiresUtc { get;set; }
+  property System.DateTimeOffset RenewedUtc { get;set; }
+  property System.Int64 Epoch { get;set; }
+  property System.String ClusterName { get;set; }
+  property System.String LeaseId { get;set; }
+  property System.String PrimaryName { get;set; }
+  property System.String Version { get;set; }
+
+public static class StateForge.Replication.StateForgePrimaryLeaseStore
+  const System.String FileName = "stateforge-primary-lease.json"
+  static method StateForge.Replication.StateForgePrimaryLease Read(System.String leaseRootPath)
+  static method System.String GetPath(System.String leaseRootPath)
+
+public sealed class StateForge.Replication.StateForgePromotionFenceOptions
+  constructor StateForgePromotionFenceOptions()
+  property StateForge.Replication.StateForgeQuorumResult QuorumResult { get;set; }
+  property System.Nullable<System.DateTimeOffset> EvaluationUtc { get;set; }
+  property System.String CandidateName { get;set; }
+  property System.String ClusterName { get;set; }
+  property System.String LeaseId { get;set; }
+  property System.String LeaseRootPath { get;set; }
+  property System.TimeSpan LeaseDuration { get;set; }
+
+public sealed class StateForge.Replication.StateForgePromotionFenceResult
+  constructor StateForgePromotionFenceResult()
+  property StateForge.Replication.StateForgePrimaryLease Lease { get;set; }
+  property System.Boolean Acquired { get;set; }
+  property System.Boolean ExistingPrimaryStale { get;set; }
+  property System.Collections.Generic.List<System.String> Reasons { get; }
+
+public sealed class StateForge.Replication.StateForgePromotionFenceService
+  constructor StateForgePromotionFenceService()
+  method StateForge.Replication.StateForgePromotionFenceResult Acquire(StateForge.Replication.StateForgePromotionFenceOptions options)
+  method StateForge.Replication.StateForgePromotionFenceResult Renew(System.String leaseRootPath, System.String clusterName, System.String primaryName, System.String leaseId, System.TimeSpan leaseDuration, System.Nullable<System.DateTimeOffset> renewalUtc)
+  static method System.Boolean IsStale(StateForge.Replication.StateForgePrimaryLease lease, System.DateTimeOffset evaluationUtc)
+
+public static class StateForge.Replication.StateForgeQuorumEvaluator
+  static method StateForge.Replication.StateForgeQuorumResult Evaluate(System.Collections.Generic.IEnumerable<StateForge.Replication.StateForgeClusterMember> members, StateForge.Replication.StateForgeQuorumPolicy policy, System.String candidateName)
+
+public sealed class StateForge.Replication.StateForgeQuorumPolicy
+  constructor StateForgeQuorumPolicy()
+  property System.Boolean RequireCandidateAvailable { get;set; }
+  property System.Boolean RequireCandidateVote { get;set; }
+  property System.Int32 MinimumVotes { get;set; }
+
+public sealed class StateForge.Replication.StateForgeQuorumResult
+  constructor StateForgeQuorumResult()
+  property System.Boolean CandidateEligible { get;set; }
+  property System.Boolean CandidateFound { get;set; }
+  property System.Boolean HasQuorum { get;set; }
+  property System.Collections.Generic.List<System.String> Reasons { get; }
+  property System.Int32 AvailableVotes { get;set; }
+  property System.Int32 RequiredVotes { get;set; }
+  property System.Int32 TotalVotingMembers { get;set; }
+  property System.String CandidateName { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicaCatchUpEntry
+  constructor StateForgeReplicaCatchUpEntry()
+  property System.Int64 PrimaryLength { get;set; }
+  property System.Int64 ReplicaLength { get;set; }
+  property System.String Action { get;set; }
+  property System.String RelativePath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicaCatchUpOptions
+  constructor StateForgeReplicaCatchUpOptions()
+  property System.Boolean DeleteExtraReplicaFiles { get;set; }
+  property System.Boolean DryRun { get;set; }
+  property System.String PrimaryRootPath { get;set; }
+  property System.String ReplicaName { get;set; }
+  property System.String ReplicaRootPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicaCatchUpResult
+  constructor StateForgeReplicaCatchUpResult()
+  property System.Boolean DryRun { get;set; }
+  property System.Boolean Success { get;set; }
+  property System.Collections.Generic.List<StateForge.Replication.StateForgeReplicaCatchUpEntry> Entries { get; }
+  property System.Int32 ChangedFiles { get;set; }
+  property System.Int32 CopiedFiles { get;set; }
+  property System.Int32 DeletedFiles { get;set; }
+  property System.Int32 Errors { get;set; }
+  property System.Int32 ExtraFiles { get;set; }
+  property System.Int32 MissingFiles { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicaCatchUpService
+  constructor StateForgeReplicaCatchUpService()
+  method StateForge.Replication.StateForgeReplicaCatchUpResult Apply(StateForge.Replication.StateForgeReplicaCatchUpOptions options)
+  method StateForge.Replication.StateForgeReplicaCatchUpResult Plan(StateForge.Replication.StateForgeReplicaCatchUpOptions options)
+
+public static class StateForge.Replication.StateForgeReplicaConfiguration
+  static method System.Collections.Generic.List<StateForge.Replication.StateForgeReplicaNode> Parse(System.String value)
+
+public static class StateForge.Replication.StateForgeReplicaMonitor
+  static method StateForge.Replication.StateForgeReplicaMonitorSnapshot Capture(System.Collections.Generic.IEnumerable<StateForge.Replication.StateForgeReplicaNode> replicas, System.TimeSpan staleThreshold)
+  static method StateForge.Replication.StateForgeReplicaMonitorSnapshot Capture(System.Collections.Generic.IEnumerable<StateForge.Replication.StateForgeReplicaNode> replicas, System.TimeSpan staleThreshold, System.DateTimeOffset capturedUtc)
+
+public sealed class StateForge.Replication.StateForgeReplicaMonitorEntry
+  constructor StateForgeReplicaMonitorEntry()
+  property System.Boolean Healthy { get;set; }
+  property System.Boolean Stale { get;set; }
+  property System.Double LagSeconds { get;set; }
+  property System.Int64 CatchUpOperations { get;set; }
+  property System.Int64 FailedSyncs { get;set; }
+  property System.Nullable<System.DateTimeOffset> LastAttemptUtc { get;set; }
+  property System.Nullable<System.DateTimeOffset> LastSuccessfulSyncUtc { get;set; }
+  property System.String LastError { get;set; }
+  property System.String ReplicaName { get;set; }
+  property System.String ReplicaRootPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicaMonitorSnapshot
+  constructor StateForgeReplicaMonitorSnapshot()
+  property System.Collections.Generic.List<StateForge.Replication.StateForgeReplicaMonitorEntry> Replicas { get; }
+  property System.DateTimeOffset CapturedUtc { get;set; }
+  property System.TimeSpan StaleThreshold { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicaNode
+  constructor StateForgeReplicaNode()
+  property System.Boolean Enabled { get;set; }
+  property System.String Name { get;set; }
+  property System.String Region { get;set; }
+  property System.String RootPath { get;set; }
+  property System.String SiteName { get;set; }
+
+public static class StateForge.Replication.StateForgeReplicaStateStore
+  const System.String FileName = "stateforge-replica-state.json"
+  static method StateForge.Replication.StateForgeReplicaSyncState Read(System.String replicaRootPath)
+  static method System.String GetPath(System.String replicaRootPath)
+  static method System.Void RecordCatchUp(System.String replicaRootPath, System.String replicaName, System.Boolean success, System.String error, System.DateTimeOffset attemptedUtc)
+  static method System.Void RecordReplication(System.String replicaRootPath, System.String replicaName, System.Boolean success, System.String error, System.DateTimeOffset attemptedUtc)
+
+public sealed class StateForge.Replication.StateForgeReplicaSyncState
+  constructor StateForgeReplicaSyncState()
+  property System.Int64 CatchUpOperations { get;set; }
+  property System.Int64 FailedSyncs { get;set; }
+  property System.Nullable<System.DateTimeOffset> LastAttemptUtc { get;set; }
+  property System.Nullable<System.DateTimeOffset> LastSuccessfulSyncUtc { get;set; }
+  property System.String LastError { get;set; }
+  property System.String ReplicaName { get;set; }
+  property System.String ReplicaRootPath { get;set; }
+  property System.String Version { get;set; }
+
+public static class StateForge.Replication.StateForgeReplicationHealth
+  static method StateForge.Replication.StateForgeReplicationResult Check(StateForge.Replication.StateForgeReplicationOptions options)
+
+public sealed class StateForge.Replication.StateForgeReplicationManifest
+  constructor StateForgeReplicationManifest()
+  property System.Collections.Generic.List<StateForge.Replication.StateForgeReplicationManifestEntry> Entries { get; }
+  property System.String CapturedUtc { get;set; }
+  property System.String PrimaryRootPath { get;set; }
+  property System.String PrimarySessionsPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicationManifestEntry
+  constructor StateForgeReplicationManifestEntry()
+  property System.Int64 SourceLength { get;set; }
+  property System.String Action { get;set; }
+  property System.String DestinationPath { get;set; }
+  property System.String Reason { get;set; }
+  property System.String Region { get;set; }
+  property System.String RelativePath { get;set; }
+  property System.String ReplicaName { get;set; }
+  property System.String SiteName { get;set; }
+  property System.String SourceLastWriteUtc { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicationOptions
+  constructor StateForgeReplicationOptions()
+  property System.Boolean DetectConflicts { get;set; }
+  property System.Boolean DryRun { get;set; }
+  property System.Boolean OverwriteExisting { get;set; }
+  property System.Collections.Generic.List<StateForge.Replication.StateForgeReplicaNode> Replicas { get; }
+  property System.String ManifestPath { get;set; }
+  property System.String PrimaryRootPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicationPlan
+  constructor StateForgeReplicationPlan()
+  property System.Collections.Generic.List<StateForge.Replication.StateForgeReplicationTarget> Targets { get; }
+  property System.String PrimaryRootPath { get;set; }
+  property System.String PrimarySessionsPath { get;set; }
+
+public static class StateForge.Replication.StateForgeReplicationPlanner
+  static method StateForge.Replication.StateForgeReplicationPlan CreatePlan(StateForge.Replication.StateForgeReplicationOptions options)
+
+public sealed class StateForge.Replication.StateForgeReplicationResult
+  constructor StateForgeReplicationResult()
+  property StateForge.Replication.StateForgeReplicationManifest Manifest { get;set; }
+  property System.Boolean DryRun { get;set; }
+  property System.Boolean Success { get; }
+  property System.Collections.Generic.List<System.String> Messages { get; }
+  property System.Int32 Conflicts { get;set; }
+  property System.Int32 Errors { get;set; }
+  property System.Int32 FilesCopied { get;set; }
+  property System.Int32 FilesSkipped { get;set; }
+  property System.Int32 ReplicasVisited { get;set; }
+  property System.Int32 SourceFilesScanned { get;set; }
+  property System.String ManifestPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeReplicationTarget
+  constructor StateForgeReplicationTarget()
+  property System.String Name { get;set; }
+  property System.String Region { get;set; }
+  property System.String RootPath { get;set; }
+  property System.String SessionsPath { get;set; }
+  property System.String SiteName { get;set; }
+
+public enum StateForge.Replication.StateForgeSiteRole : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  const StateForge.Replication.StateForgeSiteRole Primary = 0
+  const StateForge.Replication.StateForgeSiteRole Recovery = 1
+  field System.Int32 value__
+
+public sealed class StateForge.Replication.StateForgeSiteState
+  constructor StateForgeSiteState()
+  property StateForge.Replication.StateForgeSiteRole Role { get;set; }
+  property System.Boolean Enabled { get;set; }
+  property System.Boolean Healthy { get;set; }
+  property System.Boolean PromotionEligible { get;set; }
+  property System.DateTimeOffset LastHeartbeatUtc { get;set; }
+  property System.DateTimeOffset LastRecoveryPointUtc { get;set; }
+  property System.String LastError { get;set; }
+  property System.String Region { get;set; }
+  property System.String RootPath { get;set; }
+  property System.String SiteName { get;set; }
+  property System.String Version { get;set; }
+
+public static class StateForge.Replication.StateForgeSiteStateStore
+  const System.String FileName = "stateforge-site-state.json"
+  static method StateForge.Replication.StateForgeSiteState Read(System.String siteRootPath)
+  static method System.String GetPath(System.String siteRootPath)
+  static method System.Void Write(System.String siteRootPath, StateForge.Replication.StateForgeSiteState state)
+
+public static class StateForge.Replication.StateForgeWitnessEvaluator
+  static method StateForge.Replication.StateForgeClusterMember ToClusterMember(StateForge.Replication.StateForgeWitnessNode witness, StateForge.Replication.StateForgeWitnessHealthEntry health)
+  static method StateForge.Replication.StateForgeWitnessHealthEntry Evaluate(StateForge.Replication.StateForgeWitnessNode witness, System.String candidateName, System.TimeSpan staleThreshold)
+  static method StateForge.Replication.StateForgeWitnessHealthEntry Evaluate(StateForge.Replication.StateForgeWitnessNode witness, System.String candidateName, System.TimeSpan staleThreshold, System.DateTimeOffset capturedUtc)
+
+public sealed class StateForge.Replication.StateForgeWitnessHealthEntry
+  constructor StateForgeWitnessHealthEntry()
+  property System.Boolean Healthy { get;set; }
+  property System.Boolean VoteCounted { get;set; }
+  property System.Boolean VoteGranted { get;set; }
+  property System.Collections.Generic.List<System.String> Reasons { get; }
+  property System.Double AgeSeconds { get;set; }
+  property System.Nullable<System.DateTimeOffset> LastHeartbeatUtc { get;set; }
+  property System.String CandidateName { get;set; }
+  property System.String WitnessName { get;set; }
+  property System.String WitnessRootPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeWitnessNode
+  constructor StateForgeWitnessNode()
+  property System.Boolean Enabled { get;set; }
+  property System.Boolean Voting { get;set; }
+  property System.String Name { get;set; }
+  property System.String RootPath { get;set; }
+
+public sealed class StateForge.Replication.StateForgeWitnessState
+  constructor StateForgeWitnessState()
+  property System.Boolean VoteGranted { get;set; }
+  property System.DateTimeOffset LastHeartbeatUtc { get;set; }
+  property System.String CandidateName { get;set; }
+  property System.String LastError { get;set; }
+  property System.String Version { get;set; }
+  property System.String WitnessName { get;set; }
+  property System.String WitnessRootPath { get;set; }
+
+public static class StateForge.Replication.StateForgeWitnessStateStore
+  const System.String FileName = "stateforge-witness-state.json"
+  static method StateForge.Replication.StateForgeWitnessState Read(System.String witnessRootPath)
+  static method System.String GetPath(System.String witnessRootPath)
+  static method System.Void Write(System.String witnessRootPath, StateForge.Replication.StateForgeWitnessState state)

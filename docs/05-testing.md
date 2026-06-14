@@ -67,6 +67,7 @@ StateForge uses a single suite-based validation runner:
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Docs
 .\scripts\Test-StateForge.ps1 -Suite Version
+.\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Format
 .\scripts\Test-StateForge.ps1 -Suite Migration
 .\scripts\Test-StateForge.ps1 -Suite Observability
@@ -87,6 +88,22 @@ StateForge uses a single suite-based validation runner:
 ```
 
 Feature-specific scripts remain available for compatibility.
+
+## Public API Compatibility
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
+```
+
+This compiles the runtime API smoke test and compares all twelve package assemblies with the reviewed
+files under `api-baselines`. Additions, removals, and signature changes fail until the change is reviewed
+and explicitly approved:
+
+```powershell
+.\scripts\Test-StateForgeApiCompatibility.ps1 -UpdateBaseline
+```
+
+An approved public API change must also update `docs\08-api-reference.md` and `CHANGELOG.md`.
 
 ## Package Readiness
 

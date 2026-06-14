@@ -39,6 +39,7 @@ try {
     .\scripts\Test-StateForgeMaintenanceTask.ps1
     .\scripts\Test-StateForgeObservability.ps1
     .\scripts\Test-StateForgeApiValidation.ps1
+    .\scripts\Test-StateForgeApiCompatibility.ps1
     .\scripts\Test-StateForgeScale.ps1
     .\scripts\Test-StateForgePerformance.ps1
     .\scripts\Test-StateForgeSnapshotMetrics.ps1

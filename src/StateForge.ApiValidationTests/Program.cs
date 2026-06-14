@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using StateForge.Core;
 using StateForge.FileStore;
@@ -34,7 +33,7 @@ namespace StateForge.ApiValidationTests
                 StateForgeEntry entry = store.Get("api-key");
                 Require(entry != null, "StateForgeEntry was null.");
 
-                byte[] entryBytes = ReadEntryBytes(entry);
+                byte[] entryBytes = entry.Value;
                 Require(entryBytes != null, "StateForgeEntry byte payload was null.");
                 Require(entryBytes.Length == payload.Length, "Payload length mismatch.");
 
@@ -58,35 +57,6 @@ namespace StateForge.ApiValidationTests
                 Console.Error.WriteLine("FAIL: {0}: {1}", ex.GetType().Name, ex.Message);
                 return 1;
             }
-        }
-
-        private static byte[] ReadEntryBytes(StateForgeEntry entry)
-        {
-            if (entry == null)
-            {
-                return null;
-            }
-
-            string[] propertyNames = new string[] { "Value", "Data", "Value", "Bytes", "Content", "Body", "Buffer" };
-
-            for (int i = 0; i < propertyNames.Length; i++)
-            {
-                PropertyInfo property = entry.GetType().GetProperty(propertyNames[i]);
-
-                if (property == null)
-                {
-                    continue;
-                }
-
-                object value = property.GetValue(entry, null);
-
-                if (value is byte[])
-                {
-                    return (byte[])value;
-                }
-            }
-
-            return null;
         }
 
         private static void Require(bool condition, string message)

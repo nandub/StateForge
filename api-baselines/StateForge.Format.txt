@@ -1,0 +1,27 @@
+# StateForge.Format
+
+public enum StateForge.Format.StateForgeFormatFlags : System.IComparable, System.IConvertible, System.IFormattable, System.ISpanFormattable
+  const StateForge.Format.StateForgeFormatFlags Aes = 4
+  const StateForge.Format.StateForgeFormatFlags Compressed = 1
+  const StateForge.Format.StateForgeFormatFlags Dpapi = 8
+  const StateForge.Format.StateForgeFormatFlags Encrypted = 2
+  const StateForge.Format.StateForgeFormatFlags None = 0
+  field System.Int32 value__
+
+public static class StateForge.Format.StateForgeStfg2
+  const System.Byte Version2 = 2
+  const System.Int32 Sha256Length = 32
+  const System.String Magic = "STFG"
+  static method StateForge.Format.StateForgeStfg2ReadResult Read(System.Byte[] bytes)
+  static method System.Boolean IsStfg2(System.Byte[] bytes)
+  static method System.Byte[] Write(System.Byte[] payload, StateForge.Format.StateForgeFormatFlags flags, System.String keyId)
+  static method System.String ToHex(System.Byte[] bytes)
+
+public sealed class StateForge.Format.StateForgeStfg2ReadResult
+  constructor StateForgeStfg2ReadResult()
+  property StateForge.Format.StateForgeFormatFlags Flags { get;set; }
+  property System.Boolean ChecksumValid { get;set; }
+  property System.Byte Version { get;set; }
+  property System.Byte[] Checksum { get;set; }
+  property System.Byte[] Payload { get;set; }
+  property System.String KeyId { get;set; }

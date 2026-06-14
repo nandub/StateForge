@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added reviewed public API baselines for all twelve NuGet packages.
+- Added exact exported-type, member, enum, constant, inheritance, and signature drift validation.
+- Added explicit `-UpdateBaseline` approval for intentional public API changes.
+- Replaced reflection-based API fallback checks with the exact `StateForgeEntry.Value` contract.
+- Added the `ApiCompatibility` suite to Production and Release validation.
 - Added deterministic portable PDB and SourceLink settings for all twelve NuGet packages.
 - Corrected package repository metadata to `https://github.com/nandub/StateForge`.
 - Bound package repository metadata to the exact 40-character Git commit.

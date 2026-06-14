@@ -1,0 +1,37 @@
+# StateForge.Performance
+
+public sealed class StateForge.Performance.StateForgeShardAnalysisResult
+  constructor StateForgeShardAnalysisResult()
+  property System.Boolean AppearsSharded { get;set; }
+  property System.Collections.Generic.List<System.String> Warnings { get; }
+  property System.Double AverageFilesPerDirectory { get;set; }
+  property System.Int32 DirectoryCount { get;set; }
+  property System.Int32 FileCount { get;set; }
+  property System.Int32 MaxFilesPerDirectory { get;set; }
+  property System.Int32 MinFilesPerDirectory { get;set; }
+  property System.String RootPath { get;set; }
+  property System.String SessionsPath { get;set; }
+
+public static class StateForge.Performance.StateForgeShardAnalyzer
+  static method StateForge.Performance.StateForgeShardAnalysisResult Analyze(System.String rootPath)
+
+public sealed class StateForge.Performance.StateForgeStoreSnapshot
+  constructor StateForgeStoreSnapshot()
+  property System.Int32 AesEncryptedSessions { get;set; }
+  property System.Int32 CompressedSessions { get;set; }
+  property System.Int32 EncryptedSessions { get;set; }
+  property System.Int32 ExpiredSessions { get;set; }
+  property System.Int32 LockedSessions { get;set; }
+  property System.Int32 TotalSessions { get;set; }
+  property System.Int64 AveragePayloadBytes { get;set; }
+  property System.Int64 CaptureElapsedMs { get;set; }
+  property System.Int64 TotalPayloadBytes { get;set; }
+  property System.String CapturedUtc { get;set; }
+  property System.String RootPath { get;set; }
+
+public static class StateForge.Performance.StateForgeStoreSnapshotCache
+  static method StateForge.Performance.StateForgeStoreSnapshot Capture(System.String rootPath)
+  static method StateForge.Performance.StateForgeStoreSnapshot CaptureAndWrite(System.String rootPath, System.String snapshotPath)
+  static method StateForge.Performance.StateForgeStoreSnapshot Read(System.String snapshotPath)
+  static method System.String ToJson(StateForge.Performance.StateForgeStoreSnapshot snapshot)
+  static method System.Void Write(System.String snapshotPath, StateForge.Performance.StateForgeStoreSnapshot snapshot)

@@ -55,6 +55,7 @@ It validates:
 - package metadata
 - package symbols and SourceLink mappings
 - package installation on `net8.0` and `net481`
+- reviewed public API compatibility baselines
 
 ## Completed v1 Readiness Gates
 
@@ -62,12 +63,13 @@ It validates:
 - deterministic portable PDB generation
 - SourceLink mapping and repository commit validation
 - isolated local-feed package installation checks
+- deterministic public API inventory for all twelve packages
+- exact API drift validation across `net8.0` and `net481`
 
 ## v1.0.0 — Production Release
 
 Required before v1.0:
 
-- public API review
 - long-duration soak tests
 - rolling upgrade checks
 - DR drill documentation

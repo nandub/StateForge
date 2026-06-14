@@ -50,6 +50,8 @@ try {
         'src\StateForge.SnapshotTests\StateForge.SnapshotTests.csproj',
         'src\StateForge.Performance\StateForge.Performance.csproj',
         'src\StateForge.ApiValidationTests\StateForge.ApiValidationTests.csproj',
+        'src\StateForge.ApiCompatibilityTests\StateForge.ApiCompatibilityTests.csproj',
+        'src\StateForge.ApiCompatibilityTests\Program.cs',
         'src\StateForge.PackageValidationTests\StateForge.PackageValidationTests.csproj',
         'src\StateForge.PackageValidationTests\Program.cs',
         'src\StateForge.Prometheus\StateForge.Prometheus.csproj',
@@ -87,6 +89,7 @@ try {
         'scripts\Test-StateForgeSnapshotMetrics.ps1',
         'scripts\Update-StateForgeStoreSnapshot.ps1',
         'scripts\Test-StateForgeApiValidation.ps1',
+        'scripts\Test-StateForgeApiCompatibility.ps1',
         'scripts\Invoke-StateForgeScaleTest.ps1',
         'scripts\Test-StateForgePrometheus.ps1',
         'scripts\Test-StateForgeReplicaMonitoring.ps1',
@@ -152,7 +155,19 @@ try {
     'src\StateForge.ReplicaCatchUpTests\StateForge.ReplicaCatchUpTests.csproj',
     'scripts\Test-StateForgeReplicaCatchUp.ps1',
     'docs\14-replica-catch-up.md'
-    'AGENTS.md'
+        'AGENTS.md'
+        'api-baselines\StateForge.Core.txt'
+        'api-baselines\StateForge.FileStore.txt'
+        'api-baselines\StateForge.AspNet.txt'
+        'api-baselines\StateForge.AspNetCore.txt'
+        'api-baselines\StateForge.Security.txt'
+        'api-baselines\StateForge.Telemetry.txt'
+        'api-baselines\StateForge.CloudNative.txt'
+        'api-baselines\StateForge.Format.txt'
+        'api-baselines\StateForge.Prometheus.txt'
+        'api-baselines\StateForge.Performance.txt'
+        'api-baselines\StateForge.Replication.txt'
+        'api-baselines\StateForge.Snapshots.txt'
 
 
 

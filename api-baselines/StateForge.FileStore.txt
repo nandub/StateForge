@@ -1,0 +1,72 @@
+# StateForge.FileStore
+
+public sealed class StateForge.FileStore.StateForgeFileStore : StateForge.Core.IStateForgeAdminStore, StateForge.Core.IStateForgeStore
+  constructor StateForgeFileStore(StateForge.FileStore.StateForgeFileStoreOptions options)
+  method StateForge.Core.StateForgeCleanupResult CleanupExpired(System.Boolean quarantineInvalid)
+  method StateForge.Core.StateForgeEntry Get(System.String key)
+  method StateForge.Core.StateForgeHealthResult CheckHealth()
+  method StateForge.Core.StateForgeLockResult GetAndLock(System.String key, System.TimeSpan lockTimeout)
+  method StateForge.Core.StateForgeStoreDiagnostics GetDiagnostics()
+  method StateForge.Core.StateForgeStoreStats GetStats()
+  method StateForge.Core.StateForgeValidationResult ValidateConfiguration()
+  method System.Boolean ForceRemove(System.String key)
+  method System.Boolean Refresh(System.String key, System.TimeSpan timeout)
+  method System.Boolean Remove(System.String key)
+  method System.Boolean SetAndUnlock(System.String key, System.Byte[] value, System.TimeSpan timeout, System.Int64 lockId)
+  method System.Boolean Unlock(System.String key, System.Int64 lockId)
+  method System.Collections.Generic.IEnumerable<StateForge.Core.StateForgeEntryInfo> Enumerate()
+  method System.Void Set(System.String key, System.Byte[] value, System.TimeSpan timeout)
+
+public class StateForge.FileStore.StateForgeFileStoreOptions : StateForge.Core.StateForgeOptions
+  constructor StateForgeFileStoreOptions()
+  property StateForge.Core.StateForgeProtectionMode ProtectionMode { get;set; }
+  property System.Boolean KeepBackups { get;set; }
+  property System.Boolean UseWindowsDpapi { get;set; }
+  property System.Int32 MaxPayloadBytes { get;set; }
+  property System.Int32 MutexTimeoutMilliseconds { get;set; }
+  property System.String AesKeyBase64 { get;set; }
+
+public static class StateForge.FileStore.StateForgeStfg2Envelope
+  static method StateForge.FileStore.StateForgeStfg2EnvelopeResult Unwrap(System.Byte[] fileBytes)
+  static method System.Byte[] Wrap(System.Byte[] payload, System.Boolean compressed, System.Boolean encrypted, System.Boolean aes, System.Boolean dpapi, System.String keyId)
+
+public sealed class StateForge.FileStore.StateForgeStfg2EnvelopeOptions
+  constructor StateForgeStfg2EnvelopeOptions()
+  property System.Boolean UseStfg2Envelope { get;set; }
+  property System.String KeyId { get;set; }
+
+public sealed class StateForge.FileStore.StateForgeStfg2EnvelopeResult
+  constructor StateForgeStfg2EnvelopeResult()
+  property System.Boolean ChecksumValid { get;set; }
+  property System.Boolean IsStfg2 { get;set; }
+  property System.Byte[] Payload { get;set; }
+  property System.String Flags { get;set; }
+  property System.String KeyId { get;set; }
+
+public sealed class StateForge.FileStore.StateForgeStfg2MigrationResult
+  constructor StateForgeStfg2MigrationResult()
+  property System.Boolean Migrated { get;set; }
+  property System.Boolean SourceWasStfg2 { get;set; }
+  property System.Int64 NewLength { get;set; }
+  property System.Int64 OriginalLength { get;set; }
+  property System.String DestinationPath { get;set; }
+  property System.String KeyId { get;set; }
+  property System.String SourcePath { get;set; }
+
+public static class StateForge.FileStore.StateForgeStfg2Migrator
+  static method StateForge.FileStore.StateForgeStfg2MigrationResult MigrateFile(System.String sourcePath, System.String destinationPath, System.String keyId, System.Boolean overwrite)
+
+public sealed class StateForge.FileStore.StateForgeStfg2StoreMigrationResult
+  constructor StateForgeStfg2StoreMigrationResult()
+  property System.Boolean Applied { get;set; }
+  property System.Boolean DryRun { get;set; }
+  property System.Collections.Generic.List<System.String> Errors { get; }
+  property System.Int32 FailedFiles { get;set; }
+  property System.Int32 FilesScanned { get;set; }
+  property System.Int32 LegacyFilesFound { get;set; }
+  property System.Int32 MigratedFiles { get;set; }
+  property System.Int32 Stfg2FilesSkipped { get;set; }
+  property System.String RootPath { get;set; }
+
+public static class StateForge.FileStore.StateForgeStfg2StoreMigrator
+  static method StateForge.FileStore.StateForgeStfg2StoreMigrationResult MigrateStore(System.String rootPath, System.String keyId, System.Boolean dryRun, System.Boolean apply, System.String searchPattern)

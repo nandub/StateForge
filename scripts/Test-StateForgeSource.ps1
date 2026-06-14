@@ -977,6 +977,53 @@ if ($monitoringRunnerText -notmatch "'Packages'") {
     throw 'Test-StateForge.ps1 must expose the Packages suite.'
 }
 
+# Validate v1.0 public API compatibility baselines.
+$apiCompatibilityProjectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ApiCompatibilityTests\StateForge.ApiCompatibilityTests.csproj'
+$apiCompatibilitySourcePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ApiCompatibilityTests\Program.cs'
+$apiCompatibilityScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeApiCompatibility.ps1'
+$apiBaselineRoot = Join-Path -Path $repoRoot -ChildPath 'api-baselines'
+
+foreach ($apiCompatibilityPath in @(
+    $apiCompatibilityProjectPath,
+    $apiCompatibilitySourcePath,
+    $apiCompatibilityScriptPath,
+    $apiBaselineRoot
+)) {
+    if (-not (Test-Path -LiteralPath $apiCompatibilityPath)) {
+        throw "Missing API compatibility asset: $apiCompatibilityPath"
+    }
+}
+
+$apiCompatibilityProjectText = Get-Content -LiteralPath $apiCompatibilityProjectPath -Raw
+$apiCompatibilitySourceText = Get-Content -LiteralPath $apiCompatibilitySourcePath -Raw
+$apiCompatibilityScriptText = Get-Content -LiteralPath $apiCompatibilityScriptPath -Raw
+$apiValidationSourceText = Get-Content -LiteralPath (Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ApiValidationTests\Program.cs') -Raw
+
+if ($apiCompatibilityProjectText -notmatch 'net8\.0;net481') {
+    throw 'API compatibility validation must cover both net8.0 and net481 loading.'
+}
+
+if ($apiCompatibilitySourceText -notmatch 'GetExportedTypes' -or
+    $apiCompatibilitySourceText -notmatch 'Public API changed' -or
+    $apiCompatibilitySourceText -notmatch 'ReportDifference') {
+    throw 'API compatibility validation must compare exported signatures and report drift.'
+}
+
+if ($apiCompatibilityScriptText -notmatch 'UpdateBaseline' -or
+    $apiCompatibilityScriptText -notmatch 'Unexpected API baseline file' -or
+    $apiCompatibilityScriptText -notmatch 'StateForge\.AspNet') {
+    throw 'API baseline updates must be explicit and cover all package runtime families.'
+}
+
+if ($apiValidationSourceText -match 'System\.Reflection' -or
+    $apiValidationSourceText -notmatch 'entry\.Value') {
+    throw 'Runtime API validation must compile against the exact StateForgeEntry.Value contract.'
+}
+
+if ($monitoringRunnerText -notmatch "'ApiCompatibility'") {
+    throw 'Test-StateForge.ps1 must expose the ApiCompatibility suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {

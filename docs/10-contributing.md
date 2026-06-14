@@ -16,8 +16,12 @@
 .\scripts\Test-StateForgeDocs.ps1
 .\scripts\Test-StateForgeVersionConsistency.ps1
 .\scripts\Test-StateForgeIncrementalSnapshots.ps1
+.\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Packages
 ```
+
+Public API changes must update `docs\08-api-reference.md` and `CHANGELOG.md`, then explicitly regenerate
+and review the affected files with `Test-StateForgeApiCompatibility.ps1 -UpdateBaseline`.
 
 Package changes must preserve the centralized SourceLink settings in `Directory.Build.targets` and
 pass artifact plus local-feed install validation for both supported consumer target families.

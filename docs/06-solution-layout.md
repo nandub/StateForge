@@ -52,6 +52,7 @@ The repository uses executable harness projects for validation. Examples include
 - `StateForge.WitnessTests`
 - `StateForge.SplitBrainTests`
 - `StateForge.MultiSiteTests`
+- `StateForge.ApiCompatibilityTests`
 - `StateForge.PackageValidationTests`
 - `StateForge.SnapshotServiceTests`
 - `StateForge.IncrementalSnapshotTests`
@@ -68,7 +69,10 @@ Top-level script entry points:
 | `Test-StateForge.ps1` | Consolidated validation suite runner |
 | `Invoke-StateForge.ps1` | Consolidated operational command runner |
 | `Build-StateForgePackages.ps1` | Package creation |
+| `Test-StateForgeApiCompatibility.ps1` | Reviewed public API baseline validation |
 | `Test-StateForgePackages.ps1` | Package metadata, SourceLink, artifact, and install validation |
+
+Reviewed package API signatures are stored as one text file per package under `api-baselines`.
 
 
 ## Operational Script Dispatcher
