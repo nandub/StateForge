@@ -171,6 +171,8 @@ try {
     'docs\09-release-history.md',
     'docs\10-contributing.md'
     'docs\toc.yml'
+    'docs\api\index.md'
+    'docs\api\toc.yml'
     'scripts\Invoke-StateForge.ps1'
     'docs\11-script-reference.md'
     'docs\12-production-readiness.md',

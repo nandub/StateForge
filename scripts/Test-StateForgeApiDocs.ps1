@@ -25,6 +25,7 @@ try {
     $repositoryRoot = Split-Path -Path $PSScriptRoot -Parent
     $buildScript = Join-Path -Path $PSScriptRoot -ChildPath 'Build-StateForgeApiDocs.ps1'
     $metadataRoot = Join-Path -Path $repositoryRoot -ChildPath 'artifacts\docfx\api'
+    $siteRoot = Join-Path -Path $repositoryRoot -ChildPath 'artifacts\docfx\site'
     $targetsPath = Join-Path -Path $repositoryRoot -ChildPath 'Directory.Build.targets'
 
     & $buildScript
@@ -67,6 +68,29 @@ try {
     if ($targetsText -notmatch 'GenerateDocumentationFile' -or
         $targetsText -notmatch 'WarningsAsErrors') {
         throw 'Package XML documentation generation or foundational coverage enforcement is missing.'
+    }
+
+    $apiIndexPath = Join-Path -Path $siteRoot -ChildPath 'api\index.html'
+    $rootTocPath = Join-Path -Path $siteRoot -ChildPath 'toc.html'
+    $apiTocPath = Join-Path -Path $siteRoot -ChildPath 'api\toc.html'
+
+    foreach ($navigationPath in @($apiIndexPath, $rootTocPath, $apiTocPath)) {
+        if (-not (Test-Path -LiteralPath $navigationPath)) {
+            throw "Generated API navigation file is missing: $navigationPath"
+        }
+    }
+
+    $rootTocText = Get-Content -LiteralPath $rootTocPath -Raw
+    $apiTocText = Get-Content -LiteralPath $apiTocPath -Raw
+
+    if ($rootTocText -notmatch 'href="api/index\.html"') {
+        throw 'The main documentation navigation does not link to the generated API reference.'
+    }
+
+    foreach ($requiredNamespace in $requiredNamespaces) {
+        if ($apiTocText -notmatch [regex]::Escape($requiredNamespace + '.html')) {
+            throw "Generated API navigation is missing namespace link: $requiredNamespace"
+        }
     }
 
     [PSCustomObject]@{

@@ -1,0 +1,26 @@
+- name: API home
+  href: index.md
+- name: StateForge.Core
+  href: xref:StateForge.Core
+- name: StateForge.FileStore
+  href: xref:StateForge.FileStore
+- name: StateForge.AspNet
+  href: xref:StateForge.AspNet
+- name: StateForge.AspNetCore
+  href: xref:StateForge.AspNetCore
+- name: StateForge.Security
+  href: xref:StateForge.Security
+- name: StateForge.Telemetry
+  href: xref:StateForge.Telemetry
+- name: StateForge.CloudNative
+  href: xref:StateForge.CloudNative
+- name: StateForge.Format
+  href: xref:StateForge.Format
+- name: StateForge.Prometheus
+  href: xref:StateForge.Prometheus
+- name: StateForge.Performance
+  href: xref:StateForge.Performance
+- name: StateForge.Replication
+  href: xref:StateForge.Replication
+- name: StateForge.Snapshots
+  href: xref:StateForge.Snapshots

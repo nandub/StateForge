@@ -41,6 +41,8 @@ try {
         'docs\14-replica-catch-up.md',
         'docs\12-production-readiness.md',
         'docs\toc.yml',
+        'docs\api\index.md',
+        'docs\api\toc.yml',
         'docfx.json'
     )
 

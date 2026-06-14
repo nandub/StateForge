@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added a visible generated API landing page and package navigation tree to the DocFX sidebar.
 - Added a repository-pinned DocFX site for conceptual documentation and all twelve shipped package APIs.
 - Enabled compiler XML documentation output for every package.
 - Added complete, compiler-enforced public API comments for StateForge.Core, StateForge.Format, and StateForge.Security.

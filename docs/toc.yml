@@ -17,7 +17,7 @@
 - name: API guide
   href: 08-api-reference.md
 - name: Generated .NET API
-  xref: StateForge.Core
+  href: api/index.md
 - name: Release history
   href: 09-release-history.md
 - name: Contributing

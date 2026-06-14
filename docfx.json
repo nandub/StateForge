@@ -27,14 +27,17 @@
     "content": [
       {
         "files": [
-          "*.md",
-          "toc.yml"
+          "**/*.md",
+          "**/toc.yml"
         ],
         "src": "docs"
       },
       {
         "files": [
           "**/*.yml"
+        ],
+        "exclude": [
+          "toc.yml"
         ],
         "src": "artifacts/docfx/api",
         "dest": "api"
