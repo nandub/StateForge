@@ -1024,6 +1024,41 @@ if ($monitoringRunnerText -notmatch "'ApiCompatibility'") {
     throw 'Test-StateForge.ps1 must expose the ApiCompatibility suite.'
 }
 
+# Validate v1.0 rolling-upgrade compatibility coverage.
+$upgradeCompatibilityProjectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.UpgradeCompatibilityTests\StateForge.UpgradeCompatibilityTests.csproj'
+$upgradeCompatibilitySourcePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.UpgradeCompatibilityTests\Program.cs'
+$upgradeCompatibilityScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeUpgradeCompatibility.ps1'
+
+foreach ($upgradeCompatibilityPath in @(
+    $upgradeCompatibilityProjectPath,
+    $upgradeCompatibilitySourcePath,
+    $upgradeCompatibilityScriptPath
+)) {
+    if (-not (Test-Path -LiteralPath $upgradeCompatibilityPath)) {
+        throw "Missing upgrade compatibility asset: $upgradeCompatibilityPath"
+    }
+}
+
+$upgradeCompatibilitySourceText = Get-Content -LiteralPath $upgradeCompatibilitySourcePath -Raw
+
+foreach ($requiredUpgradePattern in @(
+    'LegacyStoreV1',
+    'TestSameLayoutMixedVersion',
+    'TestShardTransition',
+    'TestLegacyReplication',
+    'TestLegacySnapshotRestore',
+    'TestUnsupportedDowngradeBoundaries',
+    'STFG2 offline migration boundary'
+)) {
+    if ($upgradeCompatibilitySourceText -notmatch [regex]::Escape($requiredUpgradePattern)) {
+        throw "Upgrade compatibility tests are missing required coverage: $requiredUpgradePattern"
+    }
+}
+
+if ($monitoringRunnerText -notmatch "'UpgradeCompatibility'") {
+    throw 'Test-StateForge.ps1 must expose the UpgradeCompatibility suite.'
+}
+
 if ($monitoringRunnerText -notmatch 'StateForgeRepositoryRoot' -or
     $monitoringRunnerText -notmatch 'Missing required validation script' -or
     $monitoringRunnerText -notmatch 'Push-Location') {

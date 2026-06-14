@@ -56,6 +56,7 @@ It validates:
 - package symbols and SourceLink mappings
 - package installation on `net8.0` and `net481`
 - reviewed public API compatibility baselines
+- rolling-upgrade and migration compatibility
 
 ## Completed v1 Readiness Gates
 
@@ -65,14 +66,15 @@ It validates:
 - isolated local-feed package installation checks
 - deterministic public API inventory for all twelve packages
 - exact API drift validation across `net8.0` and `net481`
+- same-layout mixed-version STFG1 read/write compatibility
+- shard transition, replication, and snapshot upgrade checks
+- documented AES and STFG2 downgrade boundaries
 
 ## v1.0.0 — Production Release
 
 Required before v1.0:
 
 - long-duration soak tests
-- rolling upgrade checks
 - DR drill documentation
-- migration guide
 - security review
 - performance baseline

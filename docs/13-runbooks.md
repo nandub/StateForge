@@ -30,19 +30,75 @@ Validation:
 .\scripts\Test-StateForgeRecoveryFlow.ps1
 ```
 
-## Rolling Upgrade Check
+## Rolling Upgrade and Migration Guide
 
-1. Confirm package versions:
+### Supported Mixed-Version Path
+
+Rolling upgrades are supported when old and current nodes:
+
+- use the STFG1 live-store record layout
+- use the same `ShardDepth`
+- use protection modes understood by every node
+- share compatible store and encryption configuration
+
+Validate before rollout:
 
 ```powershell
-.\scripts\Test-StateForgeVersionConsistency.ps1
+.\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
+.\scripts\Test-StateForge.ps1 -Suite Production
 ```
 
-2. Run smoke validation.
-3. Run production suite.
-4. Upgrade one app node.
-5. Verify read/write compatibility.
-6. Continue rollout.
+Upgrade procedure:
+
+1. Record the current package version, `ShardDepth`, compression, and protection settings.
+2. Confirm snapshots and replicas are healthy.
+3. Upgrade one node without changing store-format, sharding, or encryption settings.
+4. Verify reads, writes, refreshes, removes, metrics, and health checks.
+5. Continue one node at a time.
+6. Run Production validation after the final node.
+
+### Shard-Depth Migration
+
+Current nodes can read and remove records at shard depths 0, 1, and 2. Mixed writers at different shard
+depths are not supported because two physical copies of one key can diverge.
+
+1. Complete the package rollout with the original `ShardDepth`.
+2. Drain all older writers.
+3. Back up or snapshot the store.
+4. Run the sharding migration workflow:
+
+```powershell
+.\scripts\Invoke-StateForgeShardingMigration.ps1
+```
+
+5. Change `ShardDepth` consistently on all nodes.
+6. Run `UpgradeCompatibility`, smoke, and Production validation.
+
+### Encryption Downgrade Boundary
+
+Do not enable AES until every node can read AES records and has the same key material. Older readers that
+do not understand `FlagAesEncrypted` cannot read those records. Rolling back after AES writes requires
+restoring a pre-AES snapshot or using a reviewed conversion process.
+
+### STFG2 Boundary
+
+STFG2 utilities currently provide an offline envelope and migration format. `StateForgeFileStore` live
+session records remain STFG1. Do not apply `StateForgeStfg2StoreMigrator` to an active FileStore root:
+current and older live-store readers do not read STFG2-wrapped session records.
+
+Use STFG2 conversion only for offline artifacts or an explicitly designed future cutover. Preserve the
+`.stfg1.bak` files until the converted artifacts have been independently verified.
+
+### Rollback
+
+Rollback is supported while the rollout retains the same STFG1 layout, shard depth, and mutually
+supported protection mode. Stop the rollout and restore the previous packages one node at a time.
+
+Rollback is not supported after:
+
+- writes at a new shard depth before older writers are drained
+- AES records are written for readers without AES support
+- live records are wrapped in STFG2
 
 ## Replica Loss Simulation
 

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Added deterministic mixed-version STFG1 upgrade compatibility fixtures.
+- Added old-writer/current-reader and current-writer/old-reader checks for the supported same-layout path.
+- Added shard fallback, post-drain migration, replication, and snapshot restore compatibility checks.
+- Documented and validated AES and STFG2 live-store downgrade boundaries.
+- Added the `UpgradeCompatibility` suite to Production and Release validation.
 - Added reviewed public API baselines for all twelve NuGet packages.
 - Added exact exported-type, member, enum, constant, inheritance, and signature drift validation.
 - Added explicit `-UpdateBaseline` approval for intentional public API changes.

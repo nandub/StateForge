@@ -67,6 +67,7 @@ Core docs:
 ```powershell
 .\scripts\Build-StateForge.ps1
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
+.\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
 .\scripts\Test-StateForge.ps1 -Suite Packages
 .\scripts\Test-StateForgeHardening.ps1
 .\scripts\Test-StateForgeRelease.ps1

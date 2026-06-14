@@ -22,6 +22,7 @@ This suite validates:
 - Docker and Kubernetes deployment invariants
 - NuGet metadata, symbols, SourceLink, and install compatibility
 - reviewed public API compatibility
+- rolling-upgrade and migration compatibility
 - repository layout
 - source guards
 - health checks
@@ -162,3 +163,14 @@ metadata, validates portable PDB SourceLink mappings, and restores plus builds i
 The suite runs exact API smoke compilation and compares all shipped package surfaces with reviewed
 baselines. Any addition, removal, enum-value change, inheritance change, or member signature change
 blocks Production and Release validation until explicitly reviewed and approved.
+
+## Rolling Upgrade Compatibility
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite UpgradeCompatibility
+```
+
+The supported mixed-version path keeps all nodes on the same shard depth and STFG1 live-store layout.
+The suite validates bidirectional reads and writes on that path, along with refresh, remove, replication,
+and snapshot restore. Shard-depth migration occurs only after older writers are drained. AES records and
+STFG2 envelopes are explicit downgrade boundaries.
