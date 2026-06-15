@@ -82,6 +82,22 @@ This keeps PowerShell parameter binding, prompts, validation, and help text visi
 
 See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 
+## Performance Baselines
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Performance
+.\scripts\Invoke-StateForgePerformanceBaseline.ps1 -Profile All
+.\scripts\Invoke-StateForgePerformanceBaseline.ps1 -Profile All -UpdateBaseline
+```
+
+The runner writes candidates to `artifacts\performance` by default. `-UpdateBaseline` is the explicit
+review action that writes small, medium, and large CSV/JSON references to the tracked
+`performance-baselines` directory. `Compare-StateForgeBenchmark.ps1` fails when a scenario is missing,
+throughput falls below 40 percent of reference, or P95 exceeds four times reference plus 5 ms.
+
+`Test-StateForgeArtifactDependencies.ps1` guards this split so ignored `artifacts` content cannot become
+a required clean-clone input.
+
 
 ## Replica Catch-Up
 

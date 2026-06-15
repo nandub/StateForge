@@ -11,5 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\StateForge.FileStore\StateForge.FileStore.csproj" />
     <ProjectReference Include="..\StateForge.Prometheus\StateForge.Prometheus.csproj" />
+    <ProjectReference Include="..\StateForge.Replication\StateForge.Replication.csproj" />
+    <ProjectReference Include="..\StateForge.Snapshots\StateForge.Snapshots.csproj" />
   </ItemGroup>
 </Project>

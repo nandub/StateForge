@@ -25,6 +25,7 @@ This suite validates:
 - rolling-upgrade and migration compatibility
 - authenticated AES record and key-ring security validation
 - maintained sample build and behavior validation
+- reviewed performance baseline and substantial-regression checks
 - repository layout
 - source guards
 - health checks
@@ -155,6 +156,37 @@ Encryption is disabled in the generic ConfigMap. To enable AES, populate `statef
 The package suite builds all twelve `.nupkg` and `.snupkg` artifacts, checks repository URL and commit
 metadata, validates portable PDB SourceLink mappings, and restores plus builds isolated `net8.0` and
 `net481` consumer projects from the local package feed.
+
+## Performance Baseline
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Performance
+.\scripts\Invoke-StateForgePerformanceBaseline.ps1 -Profile All
+```
+
+The tracked references cover:
+
+| Profile | Sessions | Payload | Threads | Intended use |
+|---|---:|---:|---:|---|
+| small | 250 | 512 bytes | 2 | Fast Production and CI regression gate |
+| medium | 1,000 | 1,024 bytes | 4 | Routine release comparison |
+| large | 3,000 | 4,096 bytes | 8 | Pre-release capacity review |
+
+Each profile measures concurrent create, read, lock/update, and refresh operations plus statistics,
+Prometheus collection, cleanup, full replication, and full snapshot creation. Reports include latency
+percentiles, throughput, store bytes, and managed-memory growth.
+
+The automated small-profile gate intentionally uses broad relative limits: at least 40 percent of
+reviewed throughput and P95 no greater than four times reference plus 5 ms. This catches major
+regressions while tolerating workstation and CI variability. It is not an application SLA.
+
+For deployment sizing, rerun all profiles on the intended storage class, operating system, encryption
+mode, compression setting, shard depth, and backup policy. Use measured P95/P99 latency, filesystem
+capacity, replication duration, and snapshot duration to set limits. Validate the expected peak
+concurrency and session payload distribution with a longer soak test before production promotion.
+
+Reviewed inputs are committed under `performance-baselines`. Generated candidates remain under ignored
+`artifacts\performance`, so clean-clone validation never depends on local build output.
 
 ## Public API Compatibility
 

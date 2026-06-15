@@ -1,0 +1,93 @@
+{
+  "version": "1",
+  "capturedUtc": "2026-06-15T02:40:04.3656704+00:00",
+  "rootPath": "StateForgeScaleTests",
+  "sessions": 250,
+  "payloadBytes": 512,
+  "threads": 2,
+  "storeBytes": 288500,
+  "managedMemoryBytes": 69336,
+  "scenarios": [
+    {
+      "name": "create concurrent",
+      "operations": 250,
+      "elapsedMs": 775,
+      "opsPerSecond": 322.581,
+      "p50Ms": 3.178,
+      "p95Ms": 27.105,
+      "p99Ms": 39.302
+    },
+    {
+      "name": "read concurrent",
+      "operations": 250,
+      "elapsedMs": 293,
+      "opsPerSecond": 853.242,
+      "p50Ms": 0.807,
+      "p95Ms": 5.85,
+      "p99Ms": 10.09
+    },
+    {
+      "name": "lock-update concurrent",
+      "operations": 250,
+      "elapsedMs": 4549,
+      "opsPerSecond": 54.957,
+      "p50Ms": 35.886,
+      "p95Ms": 43.455,
+      "p99Ms": 53.101
+    },
+    {
+      "name": "refresh concurrent",
+      "operations": 250,
+      "elapsedMs": 2264,
+      "opsPerSecond": 110.424,
+      "p50Ms": 17.945,
+      "p95Ms": 21.338,
+      "p99Ms": 36.703
+    },
+    {
+      "name": "stats",
+      "operations": 250,
+      "elapsedMs": 78,
+      "opsPerSecond": 3205.128,
+      "p50Ms": 77.823,
+      "p95Ms": 77.823,
+      "p99Ms": 77.823
+    },
+    {
+      "name": "prometheus",
+      "operations": 250,
+      "elapsedMs": 79,
+      "opsPerSecond": 3164.557,
+      "p50Ms": 79.297,
+      "p95Ms": 79.297,
+      "p99Ms": 79.297
+    },
+    {
+      "name": "cleanup no-expired",
+      "operations": 250,
+      "elapsedMs": 75,
+      "opsPerSecond": 3333.333,
+      "p50Ms": 75.024,
+      "p95Ms": 75.024,
+      "p99Ms": 75.024
+    },
+    {
+      "name": "replication full",
+      "operations": 250,
+      "elapsedMs": 517,
+      "opsPerSecond": 483.559,
+      "p50Ms": 515.08,
+      "p95Ms": 515.08,
+      "p99Ms": 515.08
+    },
+    {
+      "name": "snapshot full",
+      "operations": 250,
+      "elapsedMs": 501,
+      "opsPerSecond": 499.002,
+      "p50Ms": 500.197,
+      "p95Ms": 500.197,
+      "p99Ms": 500.197
+    }
+  ]
+}

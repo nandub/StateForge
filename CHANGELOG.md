@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Added tracked small, medium, and large performance baselines with ignored candidate output.
+- Expanded scale measurements to cover lock/update, refresh, replication, snapshots, store size, and managed memory.
+- Added broad-threshold performance regression validation to Production and Release suites.
+- Added clean-clone guards preventing validation inputs from depending on ignored `artifacts`.
 - Completed compiler-enforced XML documentation coverage across all twelve shipped packages.
 - Corrected package XML documentation generation so `CS1591` enforcement is effective during compilation.
 - Added ASP.NET Framework, CloudNative, Telemetry, and Performance API examples to the generated reference.

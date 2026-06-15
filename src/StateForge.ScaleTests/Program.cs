@@ -9,6 +9,8 @@ using System.Threading;
 using StateForge.Core;
 using StateForge.FileStore;
 using StateForge.Prometheus;
+using StateForge.Replication;
+using StateForge.Snapshots;
 
 namespace StateForge.ScaleTests
 {
@@ -44,6 +46,7 @@ namespace StateForge.ScaleTests
                 StateForgeFileStore store = new StateForgeFileStore(options);
                 byte[] payload = CreatePayload(payloadBytes);
                 List<BenchmarkScenarioResult> results = new List<BenchmarkScenarioResult>();
+                long managedMemoryBefore = GC.GetTotalMemory(true);
 
                 Console.WriteLine("StateForge Scale Tests");
                 Console.WriteLine("----------------------");
@@ -96,6 +99,41 @@ namespace StateForge.ScaleTests
                     });
                 }));
 
+                results.Add(RunScenario("lock-update concurrent", sessions, delegate(BenchmarkScenarioResult result)
+                {
+                    ParallelRange(sessions, threads, delegate(int i)
+                    {
+                        long elapsed = MeasureOne(delegate()
+                        {
+                            string key = "scale-" + i.ToString("D8");
+                            StateForgeLockResult lockResult = store.GetAndLock(key, TimeSpan.FromSeconds(30));
+                            if (!lockResult.Found || lockResult.LockedByOtherRequest ||
+                                !store.SetAndUnlock(key, payload, TimeSpan.FromHours(1), lockResult.LockId))
+                            {
+                                throw new InvalidOperationException("Lock-update failed.");
+                            }
+                        });
+
+                        result.RecordLatency(elapsed);
+                    });
+                }));
+
+                results.Add(RunScenario("refresh concurrent", sessions, delegate(BenchmarkScenarioResult result)
+                {
+                    ParallelRange(sessions, threads, delegate(int i)
+                    {
+                        long elapsed = MeasureOne(delegate()
+                        {
+                            if (!store.Refresh("scale-" + i.ToString("D8"), TimeSpan.FromHours(1)))
+                            {
+                                throw new InvalidOperationException("Refresh failed.");
+                            }
+                        });
+
+                        result.RecordLatency(elapsed);
+                    });
+                }));
+
                 results.Add(RunScenario("stats", sessions, delegate(BenchmarkScenarioResult result)
                 {
                     long elapsed = MeasureOne(delegate()
@@ -134,6 +172,65 @@ namespace StateForge.ScaleTests
                     result.RecordLatency(elapsed);
                 }));
 
+                string replicaRoot = rootPath + "-replica";
+                results.Add(RunScenario("replication full", sessions, delegate(BenchmarkScenarioResult result)
+                {
+                    if (Directory.Exists(replicaRoot))
+                    {
+                        Directory.Delete(replicaRoot, true);
+                    }
+
+                    StateForgeReplicationOptions replicationOptions = new StateForgeReplicationOptions();
+                    replicationOptions.PrimaryRootPath = rootPath;
+                    replicationOptions.Replicas.Add(new StateForgeReplicaNode
+                    {
+                        Name = "benchmark-replica",
+                        RootPath = replicaRoot
+                    });
+
+                    long elapsed = MeasureOne(delegate()
+                    {
+                        StateForgeReplicationResult replication =
+                            new StateForgeFileReplicator().Replicate(replicationOptions);
+                        if (!replication.Success || replication.FilesCopied < sessions)
+                        {
+                            throw new InvalidOperationException("Replication benchmark failed.");
+                        }
+                    });
+
+                    result.RecordLatency(elapsed);
+                }));
+
+                string snapshotRepository = rootPath + "-snapshots";
+                results.Add(RunScenario("snapshot full", sessions, delegate(BenchmarkScenarioResult result)
+                {
+                    if (Directory.Exists(snapshotRepository))
+                    {
+                        Directory.Delete(snapshotRepository, true);
+                    }
+
+                    StateForgeSnapshotOptions snapshotOptions = new StateForgeSnapshotOptions();
+                    snapshotOptions.SourceRootPath = rootPath;
+                    snapshotOptions.SnapshotRepositoryPath = snapshotRepository;
+                    snapshotOptions.SnapshotName = "baseline";
+                    snapshotOptions.OverwriteExisting = true;
+
+                    long elapsed = MeasureOne(delegate()
+                    {
+                        StateForgeSnapshotResult snapshot =
+                            new StateForgeSnapshotService().Create(snapshotOptions);
+                        if (!snapshot.Success || snapshot.FilesCopied < sessions)
+                        {
+                            throw new InvalidOperationException("Snapshot benchmark failed.");
+                        }
+                    });
+
+                    result.RecordLatency(elapsed);
+                }));
+
+                long storeBytes = GetDirectoryBytes(rootPath);
+                long managedMemoryBytes = Math.Max(0, GC.GetTotalMemory(true) - managedMemoryBefore);
+
                 Console.WriteLine("Scenario                 Operations      ElapsedMs      OpsPerSec       P50ms       P95ms       P99ms");
                 for (int i = 0; i < results.Count; i++)
                 {
@@ -144,26 +241,38 @@ namespace StateForge.ScaleTests
 
                 if (!string.IsNullOrWhiteSpace(exportJson))
                 {
-                    WriteJson(exportJson, rootPath, sessions, payloadBytes, threads, results);
+                    WriteJson(exportJson, rootPath, sessions, payloadBytes, threads, storeBytes, managedMemoryBytes, results);
                     Console.WriteLine("JSON export: {0}", exportJson);
                 }
 
                 if (!string.IsNullOrWhiteSpace(exportCsv))
                 {
-                    WriteCsv(exportCsv, results);
+                    WriteCsv(exportCsv, storeBytes, managedMemoryBytes, results);
                     Console.WriteLine("CSV export : {0}", exportCsv);
                 }
 
                 Console.WriteLine("PASS: scale create");
                 Console.WriteLine("PASS: scale read");
+                Console.WriteLine("PASS: scale lock-update");
+                Console.WriteLine("PASS: scale refresh");
                 Console.WriteLine("PASS: scale stats");
                 Console.WriteLine("PASS: scale prometheus");
                 Console.WriteLine("PASS: scale cleanup");
+                Console.WriteLine("PASS: scale replication");
+                Console.WriteLine("PASS: scale snapshot");
                 Console.WriteLine("PASS: benchmark latency percentiles");
 
                 if (!keep && Directory.Exists(rootPath))
                 {
                     Directory.Delete(rootPath, true);
+                }
+                if (!keep && Directory.Exists(replicaRoot))
+                {
+                    Directory.Delete(replicaRoot, true);
+                }
+                if (!keep && Directory.Exists(snapshotRepository))
+                {
+                    Directory.Delete(snapshotRepository, true);
                 }
 
                 return 0;
@@ -358,7 +467,24 @@ namespace StateForge.ScaleTests
             return Convert.ToInt32(value);
         }
 
-        private static void WriteJson(string path, string rootPath, int sessions, int payloadBytes, int threads, List<BenchmarkScenarioResult> results)
+        private static long GetDirectoryBytes(string path)
+        {
+            long total = 0;
+            if (!Directory.Exists(path))
+            {
+                return total;
+            }
+
+            string[] files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; i++)
+            {
+                total += new FileInfo(files[i]).Length;
+            }
+
+            return total;
+        }
+
+        private static void WriteJson(string path, string rootPath, int sessions, int payloadBytes, int threads, long storeBytes, long managedMemoryBytes, List<BenchmarkScenarioResult> results)
         {
             string fullPath = Path.GetFullPath(path);
             string directory = Path.GetDirectoryName(fullPath);
@@ -370,12 +496,14 @@ namespace StateForge.ScaleTests
 
             StringBuilder builder = new StringBuilder();
             builder.AppendLine("{");
-            builder.AppendLine("  \"version\": \"0.18.0\",");
+            builder.AppendLine("  \"version\": \"1\",");
             builder.AppendLine("  \"capturedUtc\": \"" + DateTimeOffset.UtcNow.ToString("o") + "\",");
-            builder.AppendLine("  \"rootPath\": \"" + Escape(rootPath) + "\",");
+            builder.AppendLine("  \"rootPath\": \"" + Escape(new DirectoryInfo(rootPath).Name) + "\",");
             builder.AppendLine("  \"sessions\": " + sessions.ToString(CultureInfo.InvariantCulture) + ",");
             builder.AppendLine("  \"payloadBytes\": " + payloadBytes.ToString(CultureInfo.InvariantCulture) + ",");
             builder.AppendLine("  \"threads\": " + threads.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"storeBytes\": " + storeBytes.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"managedMemoryBytes\": " + managedMemoryBytes.ToString(CultureInfo.InvariantCulture) + ",");
             builder.AppendLine("  \"scenarios\": [");
 
             for (int i = 0; i < results.Count; i++)
@@ -402,10 +530,13 @@ namespace StateForge.ScaleTests
             builder.AppendLine("  ]");
             builder.AppendLine("}");
 
-            File.WriteAllText(fullPath, builder.ToString(), Encoding.UTF8);
+            File.WriteAllText(
+                fullPath,
+                builder.ToString().Replace("\r\n", "\n"),
+                new UTF8Encoding(false));
         }
 
-        private static void WriteCsv(string path, List<BenchmarkScenarioResult> results)
+        private static void WriteCsv(string path, long storeBytes, long managedMemoryBytes, List<BenchmarkScenarioResult> results)
         {
             string fullPath = Path.GetFullPath(path);
             string directory = Path.GetDirectoryName(fullPath);
@@ -416,7 +547,7 @@ namespace StateForge.ScaleTests
             }
 
             StringBuilder builder = new StringBuilder();
-            builder.AppendLine("name,operations,elapsedMs,opsPerSecond,p50Ms,p95Ms,p99Ms");
+            builder.AppendLine("name,operations,elapsedMs,opsPerSecond,p50Ms,p95Ms,p99Ms,storeBytes,managedMemoryBytes");
 
             for (int i = 0; i < results.Count; i++)
             {
@@ -427,10 +558,15 @@ namespace StateForge.ScaleTests
                 builder.Append(result.OpsPerSecond.ToString("0.###", CultureInfo.InvariantCulture)).Append(",");
                 builder.Append(result.P50Ms.ToString("0.###", CultureInfo.InvariantCulture)).Append(",");
                 builder.Append(result.P95Ms.ToString("0.###", CultureInfo.InvariantCulture)).Append(",");
-                builder.Append(result.P99Ms.ToString("0.###", CultureInfo.InvariantCulture)).AppendLine();
+                builder.Append(result.P99Ms.ToString("0.###", CultureInfo.InvariantCulture)).Append(",");
+                builder.Append(storeBytes.ToString(CultureInfo.InvariantCulture)).Append(",");
+                builder.Append(managedMemoryBytes.ToString(CultureInfo.InvariantCulture)).AppendLine();
             }
 
-            File.WriteAllText(fullPath, builder.ToString(), Encoding.UTF8);
+            File.WriteAllText(
+                fullPath,
+                builder.ToString().Replace("\r\n", "\n"),
+                new UTF8Encoding(false));
         }
 
         private static string Escape(string value)

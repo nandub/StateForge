@@ -1,0 +1,93 @@
+{
+  "version": "1",
+  "capturedUtc": "2026-06-15T02:40:31.8071663+00:00",
+  "rootPath": "StateForgeScaleTests",
+  "sessions": 1000,
+  "payloadBytes": 1024,
+  "threads": 4,
+  "storeBytes": 2178000,
+  "managedMemoryBytes": 93976,
+  "scenarios": [
+    {
+      "name": "create concurrent",
+      "operations": 1000,
+      "elapsedMs": 2595,
+      "opsPerSecond": 385.356,
+      "p50Ms": 3.676,
+      "p95Ms": 39.845,
+      "p99Ms": 93.031
+    },
+    {
+      "name": "read concurrent",
+      "operations": 1000,
+      "elapsedMs": 445,
+      "opsPerSecond": 2247.191,
+      "p50Ms": 0.755,
+      "p95Ms": 2.485,
+      "p99Ms": 7.788
+    },
+    {
+      "name": "lock-update concurrent",
+      "operations": 1000,
+      "elapsedMs": 9940,
+      "opsPerSecond": 100.604,
+      "p50Ms": 37.987,
+      "p95Ms": 58.523,
+      "p99Ms": 70.419
+    },
+    {
+      "name": "refresh concurrent",
+      "operations": 1000,
+      "elapsedMs": 4952,
+      "opsPerSecond": 201.939,
+      "p50Ms": 19.027,
+      "p95Ms": 24.759,
+      "p99Ms": 43.925
+    },
+    {
+      "name": "stats",
+      "operations": 1000,
+      "elapsedMs": 275,
+      "opsPerSecond": 3636.364,
+      "p50Ms": 274.949,
+      "p95Ms": 274.949,
+      "p99Ms": 274.949
+    },
+    {
+      "name": "prometheus",
+      "operations": 1000,
+      "elapsedMs": 253,
+      "opsPerSecond": 3952.569,
+      "p50Ms": 253.011,
+      "p95Ms": 253.011,
+      "p99Ms": 253.011
+    },
+    {
+      "name": "cleanup no-expired",
+      "operations": 1000,
+      "elapsedMs": 243,
+      "opsPerSecond": 4115.226,
+      "p50Ms": 243.072,
+      "p95Ms": 243.072,
+      "p99Ms": 243.072
+    },
+    {
+      "name": "replication full",
+      "operations": 1000,
+      "elapsedMs": 1887,
+      "opsPerSecond": 529.942,
+      "p50Ms": 1884.945,
+      "p95Ms": 1884.945,
+      "p99Ms": 1884.945
+    },
+    {
+      "name": "snapshot full",
+      "operations": 1000,
+      "elapsedMs": 1886,
+      "opsPerSecond": 530.223,
+      "p50Ms": 1885.28,
+      "p95Ms": 1885.28,
+      "p99Ms": 1885.28
+    }
+  ]
+}

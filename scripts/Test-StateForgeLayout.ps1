@@ -101,6 +101,9 @@ try {
         'scripts\Test-StateForgeObservability.ps1',
         'scripts\Test-StateForgeLargeScale.ps1',
         'scripts\Compare-StateForgeBenchmark.ps1',
+        'scripts\Invoke-StateForgePerformanceBaseline.ps1',
+        'scripts\Test-StateForgePerformanceBaseline.ps1',
+        'scripts\Test-StateForgeArtifactDependencies.ps1',
         'scripts\Test-StateForgeScale.ps1',
         'scripts\Test-StateForgeSharding.ps1',
         'scripts\Test-StateForgePerformance.ps1',
@@ -197,6 +200,13 @@ try {
         'api-baselines\StateForge.Performance.txt'
         'api-baselines\StateForge.Replication.txt'
         'api-baselines\StateForge.Snapshots.txt'
+        'performance-baselines\README.md'
+        'performance-baselines\small.csv'
+        'performance-baselines\small.json'
+        'performance-baselines\medium.csv'
+        'performance-baselines\medium.json'
+        'performance-baselines\large.csv'
+        'performance-baselines\large.json'
 
 
 

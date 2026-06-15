@@ -152,6 +152,23 @@ This builds all twelve package and symbol artifacts, validates NuGet repository 
 inspects portable PDB SourceLink mappings, and builds isolated `net8.0` and `net481` consumers from the
 local package feed.
 
+## Performance Baseline
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Performance
+.\scripts\Invoke-StateForgePerformanceBaseline.ps1 -Profile All
+```
+
+The suite checks durable artifact dependencies, runs focused performance tests, and compares a fresh
+small-profile candidate with the reviewed baseline in `performance-baselines`. Candidate reports are
+generated under ignored `artifacts\performance`; they are never required inputs.
+
+To intentionally replace reviewed references after evaluating the machine and results:
+
+```powershell
+.\scripts\Invoke-StateForgePerformanceBaseline.ps1 -Profile All -UpdateBaseline
+```
+
 
 ## Operational Script Dispatcher
 

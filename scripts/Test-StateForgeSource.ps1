@@ -1205,3 +1205,53 @@ if ($directoryTargetsText -notmatch 'GenerateDocumentationFile' -or
 if ($monitoringRunnerText -notmatch "'ApiDocs'") {
     throw 'Test-StateForge.ps1 must expose the ApiDocs suite.'
 }
+
+# Validate v1 performance baselines and ignored-artifact boundaries.
+$performanceBaselineScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForgePerformanceBaseline.ps1'
+$performanceValidationScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgePerformanceBaseline.ps1'
+$artifactDependencyScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeArtifactDependencies.ps1'
+$performanceBaselineRoot = Join-Path -Path $repoRoot -ChildPath 'performance-baselines'
+$gitIgnorePath = Join-Path -Path $repoRoot -ChildPath '.gitignore'
+
+foreach ($performancePath in @(
+    $performanceBaselineScriptPath,
+    $performanceValidationScriptPath,
+    $artifactDependencyScriptPath,
+    $performanceBaselineRoot
+)) {
+    if (-not (Test-Path -LiteralPath $performancePath)) {
+        throw "Missing performance baseline asset: $performancePath"
+    }
+}
+
+$performanceBaselineScriptText = Get-Content -LiteralPath $performanceBaselineScriptPath -Raw
+$performanceValidationScriptText = Get-Content -LiteralPath $performanceValidationScriptPath -Raw
+$artifactDependencyScriptText = Get-Content -LiteralPath $artifactDependencyScriptPath -Raw
+$scaleBaselineText = Get-Content -LiteralPath $scaleTestPath -Raw
+$gitIgnoreText = Get-Content -LiteralPath $gitIgnorePath -Raw
+
+if ($gitIgnoreText -notmatch '(?m)^artifacts[\\/]?\r?$' -or
+    $performanceBaselineScriptText -notmatch 'performance-baselines' -or
+    $performanceBaselineScriptText -notmatch 'artifacts\\performance' -or
+    $artifactDependencyScriptText -notmatch 'TrackedInputPath') {
+    throw 'Generated artifacts and tracked performance inputs must remain separate.'
+}
+
+foreach ($requiredPerformancePattern in @(
+    'lock-update concurrent',
+    'refresh concurrent',
+    'replication full',
+    'snapshot full',
+    'storeBytes',
+    'managedMemoryBytes'
+)) {
+    if ($scaleBaselineText -notmatch [regex]::Escape($requiredPerformancePattern)) {
+        throw "Scale baseline is missing required coverage: $requiredPerformancePattern"
+    }
+}
+
+if ($performanceValidationScriptText -notmatch 'Compare-StateForgeBenchmark.ps1' -or
+    $monitoringRunnerText -notmatch "'Performance'" -or
+    $monitoringRunnerText -notmatch 'Invoke-PerformanceSuite') {
+    throw 'Test-StateForge.ps1 must expose and run the Performance suite.'
+}

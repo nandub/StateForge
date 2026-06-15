@@ -87,8 +87,14 @@ Top-level script entry points:
 | `Test-StateForgeSecurity.ps1` | AES record integrity and key-ring persistence validation |
 | `Test-StateForgeSamples.ps1` | Sample build, persistence, documentation, and configuration validation |
 | `Test-StateForgePackages.ps1` | Package metadata, SourceLink, artifact, and install validation |
+| `Invoke-StateForgePerformanceBaseline.ps1` | Small, medium, and large performance profile runner |
+| `Test-StateForgePerformanceBaseline.ps1` | Reviewed performance regression gate |
+| `Test-StateForgeArtifactDependencies.ps1` | Ignored-output and tracked-input boundary validation |
 
 Reviewed package API signatures are stored as one text file per package under `api-baselines`.
+Reviewed performance reports are stored under `performance-baselines`. Generated DocFX, package,
+snapshot, and performance candidates remain under ignored `artifacts`; no clean-clone validation input
+may depend on that directory.
 
 
 ## Operational Script Dispatcher

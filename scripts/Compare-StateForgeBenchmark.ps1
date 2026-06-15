@@ -11,6 +11,15 @@ Baseline benchmark CSV.
 .PARAMETER CandidateCsv
 Candidate benchmark CSV.
 
+.PARAMETER MinimumThroughputPercent
+Minimum candidate throughput as a percentage of the baseline. Defaults to 40.
+
+.PARAMETER MaximumLatencyMultiplier
+Maximum candidate P95 latency relative to the baseline. Defaults to 4.
+
+.PARAMETER LatencyAllowanceMs
+Fixed P95 allowance for short operations. Defaults to 5 milliseconds.
+
 .EXAMPLE
 .\scripts\Compare-StateForgeBenchmark.ps1 -BaselineCsv .\old.csv -CandidateCsv .\new.csv
 
@@ -29,7 +38,19 @@ param(
     [string]$BaselineCsv,
 
     [Parameter(Mandatory = $true)]
-    [string]$CandidateCsv
+    [string]$CandidateCsv,
+
+    [Parameter()]
+    [ValidateRange(1, 100)]
+    [double]$MinimumThroughputPercent = 40,
+
+    [Parameter()]
+    [ValidateRange(1, 100)]
+    [double]$MaximumLatencyMultiplier = 4,
+
+    [Parameter()]
+    [ValidateRange(0, 60000)]
+    [double]$LatencyAllowanceMs = 5
 )
 
 Set-StrictMode -Version 2.0
@@ -41,29 +62,49 @@ try {
 
     $baseline = Import-Csv -LiteralPath $baselinePath
     $candidate = Import-Csv -LiteralPath $candidatePath
+    $comparisons = @()
 
     foreach ($baseRow in $baseline) {
         $match = $candidate | Where-Object { $_.name -eq $baseRow.name } | Select-Object -First 1
 
-        if ($null -ne $match) {
-            $baseOps = [double]$baseRow.opsPerSecond
-            $candidateOps = [double]$match.opsPerSecond
-            $deltaPercent = 0
+        if ($null -eq $match) {
+            throw "Candidate benchmark is missing scenario: $($baseRow.name)"
+        }
 
-            if ($baseOps -gt 0) {
-                $deltaPercent = (($candidateOps - $baseOps) / $baseOps) * 100
-            }
+        $baseOps = [double]$baseRow.opsPerSecond
+        $candidateOps = [double]$match.opsPerSecond
+        $baseP95 = [double]$baseRow.p95Ms
+        $candidateP95 = [double]$match.p95Ms
+        $deltaPercent = 0
 
-            [PSCustomObject]@{
-                Scenario            = $baseRow.name
-                BaselineOpsPerSec   = $baseOps
-                CandidateOpsPerSec  = $candidateOps
-                DeltaPercent        = [Math]::Round($deltaPercent, 2)
-                BaselineP95Ms       = [double]$baseRow.p95Ms
-                CandidateP95Ms      = [double]$match.p95Ms
-            }
+        if ($baseOps -gt 0) {
+            $deltaPercent = (($candidateOps - $baseOps) / $baseOps) * 100
+        }
+
+        $minimumOps = $baseOps * ($MinimumThroughputPercent / 100)
+        $maximumP95 = ($baseP95 * $MaximumLatencyMultiplier) + $LatencyAllowanceMs
+        $success = $candidateOps -ge $minimumOps -and $candidateP95 -le $maximumP95
+
+        $comparisons += [PSCustomObject]@{
+            Scenario            = $baseRow.name
+            BaselineOpsPerSec   = $baseOps
+            CandidateOpsPerSec  = $candidateOps
+            DeltaPercent        = [Math]::Round($deltaPercent, 2)
+            BaselineP95Ms       = $baseP95
+            CandidateP95Ms      = $candidateP95
+            MinimumOpsPerSec    = [Math]::Round($minimumOps, 3)
+            MaximumP95Ms        = [Math]::Round($maximumP95, 3)
+            Success             = $success
         }
     }
+
+    $comparisons | Format-Table -AutoSize | Out-Host
+    $failures = @($comparisons | Where-Object { -not $_.Success })
+    if ($failures.Count -gt 0) {
+        throw "Performance regression threshold exceeded for: $($failures.Scenario -join ', ')"
+    }
+
+    $comparisons
 }
 catch {
     Write-Error -ErrorRecord $_

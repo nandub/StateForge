@@ -46,6 +46,8 @@ try {
     .\scripts\Test-StateForgeSamples.ps1
     .\scripts\Test-StateForgeScale.ps1
     .\scripts\Test-StateForgePerformance.ps1
+    .\scripts\Test-StateForgeArtifactDependencies.ps1
+    .\scripts\Test-StateForgePerformanceBaseline.ps1
     .\scripts\Test-StateForgeSnapshotMetrics.ps1
     .\scripts\Test-StateForgeReplication.ps1
     .\scripts\Test-StateForgeReplicationService.ps1

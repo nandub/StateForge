@@ -123,6 +123,9 @@ Use direct scripts for parameter-rich operations:
 .\scripts\Test-StateForge.ps1 -Suite Production
 ```
 
+Production validation includes a clean-clone performance regression gate. Reviewed references are
+tracked under `performance-baselines`; generated candidates remain under ignored `artifacts`.
+
 See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 
 

@@ -53,6 +53,7 @@ param(
         'MultiSite',
         'Deployment',
         'Packages',
+        'Performance',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -214,6 +215,12 @@ function Invoke-PackagesSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePackages.ps1'
 }
 
+function Invoke-PerformanceSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeArtifactDependencies.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePerformance.ps1'
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePerformanceBaseline.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -259,6 +266,7 @@ function Invoke-ProductionSuite {
     Invoke-MultiSiteSuite
     Invoke-DeploymentSuite
     Invoke-PackagesSuite
+    Invoke-PerformanceSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -286,6 +294,7 @@ function Invoke-ReleaseSuite {
     Invoke-MultiSiteSuite
     Invoke-DeploymentSuite
     Invoke-PackagesSuite
+    Invoke-PerformanceSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -314,6 +323,7 @@ try {
         'MultiSite' { Invoke-MultiSiteSuite }
         'Deployment' { Invoke-DeploymentSuite }
         'Packages' { Invoke-PackagesSuite }
+        'Performance' { Invoke-PerformanceSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

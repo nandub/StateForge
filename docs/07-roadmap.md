@@ -72,6 +72,8 @@ It validates:
 - documented AES and STFG2 downgrade boundaries
 - record-level HMAC authentication and tamper rejection for new AES records
 - bounded compressed-payload expansion and atomic validated key-ring saves
+- reviewed small, medium, and large performance baselines
+- automated broad-threshold performance regression validation
 
 ## v1.0.0 — Production Release
 
@@ -79,4 +81,3 @@ Required before v1.0:
 
 - long-duration soak tests
 - DR drill documentation
-- performance baseline
