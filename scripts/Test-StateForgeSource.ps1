@@ -1255,3 +1255,53 @@ if ($performanceValidationScriptText -notmatch 'Compare-StateForgeBenchmark.ps1'
     $monitoringRunnerText -notmatch 'Invoke-PerformanceSuite') {
     throw 'Test-StateForge.ps1 must expose and run the Performance suite.'
 }
+
+# Validate v1 soak test harness.
+$soakScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Invoke-StateForgeSoakTest.ps1'
+$soakValidationScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeSoak.ps1'
+
+foreach ($soakPath in @($soakScriptPath, $soakValidationScriptPath)) {
+    if (-not (Test-Path -LiteralPath $soakPath)) {
+        throw "Missing soak validation asset: $soakPath"
+    }
+}
+
+$soakScriptText = Get-Content -LiteralPath $soakScriptPath -Raw
+$soakValidationScriptText = Get-Content -LiteralPath $soakValidationScriptPath -Raw
+
+foreach ($requiredSoakPattern in @(
+    '--mode',
+    'soak',
+    'DurationSeconds',
+    'MaxOperations',
+    'CleanupInterval',
+    'ReplicationInterval',
+    'SnapshotInterval',
+    'FinalReplication',
+    'FinalSnapshot',
+    'artifacts\soak'
+)) {
+    if ($soakScriptText -notmatch [regex]::Escape($requiredSoakPattern)) {
+        throw "Soak runner is missing required support: $requiredSoakPattern"
+    }
+}
+
+foreach ($requiredScaleSoakPattern in @(
+    'RunSoak',
+    'PASS: soak workload',
+    'PASS: soak final verification',
+    'WriteSoakJson',
+    'StateForgeFileReplicator',
+    'StateForgeSnapshotService'
+)) {
+    if ($scaleBaselineText -notmatch [regex]::Escape($requiredScaleSoakPattern)) {
+        throw "Scale harness is missing soak coverage: $requiredScaleSoakPattern"
+    }
+}
+
+if ($soakValidationScriptText -notmatch 'errorCount' -or
+    $monitoringRunnerText -notmatch "'Soak'" -or
+    $monitoringRunnerText -notmatch 'Invoke-SoakSuite' -or
+    $monitoringRunnerText -notmatch 'function\s+Invoke-ReleaseSuite\s*\{[\s\S]*Invoke-PerformanceSuite\s+Invoke-SoakSuite\s+Invoke-SnapshotsSuite') {
+    throw 'Test-StateForge.ps1 must expose the Soak suite and validate soak reports.'
+}

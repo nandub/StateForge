@@ -104,6 +104,8 @@ try {
         'scripts\Invoke-StateForgePerformanceBaseline.ps1',
         'scripts\Test-StateForgePerformanceBaseline.ps1',
         'scripts\Test-StateForgeArtifactDependencies.ps1',
+        'scripts\Invoke-StateForgeSoakTest.ps1',
+        'scripts\Test-StateForgeSoak.ps1',
         'scripts\Test-StateForgeScale.ps1',
         'scripts\Test-StateForgeSharding.ps1',
         'scripts\Test-StateForgePerformance.ps1',

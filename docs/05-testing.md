@@ -169,6 +169,22 @@ To intentionally replace reviewed references after evaluating the machine and re
 .\scripts\Invoke-StateForgePerformanceBaseline.ps1 -Profile All -UpdateBaseline
 ```
 
+## Soak Testing
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Soak
+.\scripts\Invoke-StateForgeSoakTest.ps1 -DurationSeconds 3600 -MaxOperations 100000 -FinalReplication -FinalSnapshot
+```
+
+The short `Soak` suite validates the harness and report shape. Release validation includes this short
+gate, but Production validation does not run long-duration work by default.
+
+For v1.0 release readiness, run the soak harness against production-like storage and settings for the
+planned duration. The workload cycles create/update, read, refresh, lock/update, cleanup, and optional
+replication and snapshot operations. Use final replication/snapshot for a stable release evidence run,
+or interval replication/snapshot to stress maintenance during active writes. Reports are written to
+ignored `artifacts\soak` as JSON and CSV.
+
 
 ## Operational Script Dispatcher
 

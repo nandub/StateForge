@@ -26,7 +26,18 @@ namespace StateForge.ScaleTests
                 int threads = ReadInt(args, "--threads", 8);
                 string exportJson = ReadOption(args, "--export-json");
                 string exportCsv = ReadOption(args, "--export-csv");
+                string mode = ReadOption(args, "--mode");
                 bool keep = HasSwitch(args, "--keep");
+
+                if (string.Equals(mode, "soak", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(rootPath))
+                    {
+                        rootPath = Path.Combine(Path.GetTempPath(), "StateForgeSoakTests");
+                    }
+
+                    return RunSoak(args, rootPath, sessions, payloadBytes, threads, exportJson, exportCsv, keep);
+                }
 
                 if (string.IsNullOrWhiteSpace(rootPath))
                 {
@@ -284,6 +295,277 @@ namespace StateForge.ScaleTests
             }
         }
 
+        private static int RunSoak(string[] args, string rootPath, int sessions, int payloadBytes, int threads, string exportJson, string exportCsv, bool keep)
+        {
+            int durationSeconds = ReadInt(args, "--duration-seconds", 60);
+            int maxOperations = ReadInt(args, "--max-operations", 5000);
+            int cleanupInterval = ReadInt(args, "--cleanup-interval", 250);
+            int replicationInterval = ReadInt(args, "--replication-interval", 0);
+            int snapshotInterval = ReadInt(args, "--snapshot-interval", 0);
+            int maxErrors = ReadInt(args, "--max-errors", 0);
+            bool finalReplication = HasSwitch(args, "--final-replication");
+            bool finalSnapshot = HasSwitch(args, "--final-snapshot");
+
+            if (Directory.Exists(rootPath) && !keep)
+            {
+                Directory.Delete(rootPath, true);
+            }
+
+            Directory.CreateDirectory(rootPath);
+
+            StateForgeFileStoreOptions options = new StateForgeFileStoreOptions();
+            options.RootPath = rootPath;
+
+            StateForgeFileStore store = new StateForgeFileStore(options);
+            byte[] payload = CreatePayload(payloadBytes);
+            List<string> errors = new List<string>();
+            object errorLock = new object();
+            Dictionary<string, BenchmarkScenarioResult> results = new Dictionary<string, BenchmarkScenarioResult>(StringComparer.OrdinalIgnoreCase);
+            results["create/update"] = new BenchmarkScenarioResult { Name = "create/update" };
+            results["read"] = new BenchmarkScenarioResult { Name = "read" };
+            results["refresh"] = new BenchmarkScenarioResult { Name = "refresh" };
+            results["lock-update"] = new BenchmarkScenarioResult { Name = "lock-update" };
+            results["cleanup"] = new BenchmarkScenarioResult { Name = "cleanup" };
+            results["replication"] = new BenchmarkScenarioResult { Name = "replication" };
+            results["snapshot"] = new BenchmarkScenarioResult { Name = "snapshot" };
+
+            Console.WriteLine("StateForge Soak Test");
+            Console.WriteLine("--------------------");
+            Console.WriteLine("RootPath            : {0}", rootPath);
+            Console.WriteLine("Sessions            : {0}", sessions);
+            Console.WriteLine("PayloadBytes        : {0}", payloadBytes);
+            Console.WriteLine("Threads             : {0}", threads);
+            Console.WriteLine("DurationSeconds     : {0}", durationSeconds);
+            Console.WriteLine("MaxOperations       : {0}", maxOperations);
+            Console.WriteLine("CleanupInterval     : {0}", cleanupInterval);
+            Console.WriteLine("ReplicationInterval : {0}", replicationInterval);
+            Console.WriteLine("SnapshotInterval    : {0}", snapshotInterval);
+            Console.WriteLine();
+
+            for (int i = 0; i < sessions; i++)
+            {
+                store.Set(SoakKey(i), payload, TimeSpan.FromHours(1));
+            }
+
+            Stopwatch soakWatch = Stopwatch.StartNew();
+            ParallelRange(maxOperations, threads, delegate(int i)
+            {
+                if (soakWatch.Elapsed.TotalSeconds > durationSeconds)
+                {
+                    return;
+                }
+
+                try
+                {
+                    int keyIndex = i % sessions;
+                    int operation = i % 4;
+
+                    if (operation == 0)
+                    {
+                        RecordOperation(results["create/update"], MeasureOne(delegate()
+                        {
+                            store.Set(SoakKey(keyIndex), payload, TimeSpan.FromHours(1));
+                        }));
+                    }
+                    else if (operation == 1)
+                    {
+                        RecordOperation(results["read"], MeasureOne(delegate()
+                        {
+                            StateForgeEntry entry = store.Get(SoakKey(keyIndex));
+                            byte[] value = ReadEntryBytes(entry);
+                            if (value == null || value.Length != payloadBytes)
+                            {
+                                throw new InvalidOperationException("Soak read payload mismatch.");
+                            }
+                        }));
+                    }
+                    else if (operation == 2)
+                    {
+                        RecordOperation(results["refresh"], MeasureOne(delegate()
+                        {
+                            if (!store.Refresh(SoakKey(keyIndex), TimeSpan.FromHours(1)))
+                            {
+                                throw new InvalidOperationException("Soak refresh failed.");
+                            }
+                        }));
+                    }
+                    else
+                    {
+                        RecordOperation(results["lock-update"], MeasureOne(delegate()
+                        {
+                            StateForgeLockResult lockResult = store.GetAndLock(SoakKey(keyIndex), TimeSpan.FromSeconds(30));
+                            if (lockResult.Found && !lockResult.LockedByOtherRequest)
+                            {
+                                if (!store.SetAndUnlock(SoakKey(keyIndex), payload, TimeSpan.FromHours(1), lockResult.LockId))
+                                {
+                                    throw new InvalidOperationException("Soak lock-update failed.");
+                                }
+                            }
+                        }));
+                    }
+
+                    if (cleanupInterval > 0 && i > 0 && (i % cleanupInterval) == 0)
+                    {
+                        RecordOperation(results["cleanup"], MeasureOne(delegate()
+                        {
+                            store.CleanupExpired(true);
+                        }));
+                    }
+
+                    if (replicationInterval > 0 && i > 0 && (i % replicationInterval) == 0)
+                    {
+                        string replicaRoot = rootPath + "-soak-replica";
+                        RecordOperation(results["replication"], MeasureOne(delegate()
+                        {
+                            StateForgeReplicationOptions replicationOptions = new StateForgeReplicationOptions();
+                            replicationOptions.PrimaryRootPath = rootPath;
+                            replicationOptions.Replicas.Add(new StateForgeReplicaNode
+                            {
+                                Name = "soak-replica",
+                                RootPath = replicaRoot
+                            });
+
+                            StateForgeReplicationResult replication = new StateForgeFileReplicator().Replicate(replicationOptions);
+                            if (!replication.Success)
+                            {
+                                throw new InvalidOperationException("Soak replication failed.");
+                            }
+                        }));
+                    }
+
+                    if (snapshotInterval > 0 && i > 0 && (i % snapshotInterval) == 0)
+                    {
+                        string snapshotRoot = rootPath + "-soak-snapshots";
+                        RecordOperation(results["snapshot"], MeasureOne(delegate()
+                        {
+                            StateForgeSnapshotOptions snapshotOptions = new StateForgeSnapshotOptions();
+                            snapshotOptions.SourceRootPath = rootPath;
+                            snapshotOptions.SnapshotRepositoryPath = snapshotRoot;
+                            snapshotOptions.SnapshotName = "soak";
+                            snapshotOptions.OverwriteExisting = true;
+
+                            StateForgeSnapshotResult snapshot = new StateForgeSnapshotService().Create(snapshotOptions);
+                            if (!snapshot.Success)
+                            {
+                                throw new InvalidOperationException("Soak snapshot failed.");
+                            }
+                        }));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lock (errorLock)
+                    {
+                        errors.Add(ex.GetType().Name + ": " + ex.Message);
+                    }
+                }
+            });
+            soakWatch.Stop();
+
+            if (finalReplication)
+            {
+                string replicaRoot = rootPath + "-soak-replica";
+                RecordOperation(results["replication"], MeasureOne(delegate()
+                {
+                    StateForgeReplicationOptions replicationOptions = new StateForgeReplicationOptions();
+                    replicationOptions.PrimaryRootPath = rootPath;
+                    replicationOptions.Replicas.Add(new StateForgeReplicaNode
+                    {
+                        Name = "soak-replica",
+                        RootPath = replicaRoot
+                    });
+
+                    StateForgeReplicationResult replication = new StateForgeFileReplicator().Replicate(replicationOptions);
+                    if (!replication.Success)
+                    {
+                        throw new InvalidOperationException("Final soak replication failed.");
+                    }
+                }));
+            }
+
+            if (finalSnapshot)
+            {
+                string snapshotRoot = rootPath + "-soak-snapshots";
+                RecordOperation(results["snapshot"], MeasureOne(delegate()
+                {
+                    StateForgeSnapshotOptions snapshotOptions = new StateForgeSnapshotOptions();
+                    snapshotOptions.SourceRootPath = rootPath;
+                    snapshotOptions.SnapshotRepositoryPath = snapshotRoot;
+                    snapshotOptions.SnapshotName = "soak";
+                    snapshotOptions.OverwriteExisting = true;
+
+                    StateForgeSnapshotResult snapshot = new StateForgeSnapshotService().Create(snapshotOptions);
+                    if (!snapshot.Success)
+                    {
+                        throw new InvalidOperationException("Final soak snapshot failed.");
+                    }
+                }));
+            }
+
+            for (int i = 0; i < sessions; i++)
+            {
+                StateForgeEntry entry = store.Get(SoakKey(i));
+                byte[] value = ReadEntryBytes(entry);
+                if (value == null || value.Length != payloadBytes)
+                {
+                    errors.Add("Final verification failed for " + SoakKey(i));
+                }
+            }
+
+            List<BenchmarkScenarioResult> resultList = new List<BenchmarkScenarioResult>(results.Values);
+            for (int i = 0; i < resultList.Count; i++)
+            {
+                resultList[i].ElapsedMs = soakWatch.ElapsedMilliseconds;
+                resultList[i].Calculate();
+            }
+
+            long storeBytes = GetDirectoryBytes(rootPath);
+            long managedMemoryBytes = GC.GetTotalMemory(true);
+
+            Console.WriteLine("Scenario                 Operations      ElapsedMs      OpsPerSec       P50ms       P95ms       P99ms");
+            for (int i = 0; i < resultList.Count; i++)
+            {
+                Print(resultList[i]);
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Errors: {0}", errors.Count);
+            for (int i = 0; i < errors.Count && i < 10; i++)
+            {
+                Console.WriteLine("Error {0}: {1}", i + 1, errors[i]);
+            }
+
+            if (!string.IsNullOrWhiteSpace(exportJson))
+            {
+                WriteSoakJson(exportJson, rootPath, sessions, payloadBytes, threads, durationSeconds, maxOperations, soakWatch.ElapsedMilliseconds, storeBytes, managedMemoryBytes, errors, resultList);
+                Console.WriteLine("JSON export: {0}", exportJson);
+            }
+
+            if (!string.IsNullOrWhiteSpace(exportCsv))
+            {
+                WriteCsv(exportCsv, storeBytes, managedMemoryBytes, resultList);
+                Console.WriteLine("CSV export : {0}", exportCsv);
+            }
+
+            if (!keep)
+            {
+                DeleteIfExists(rootPath);
+                DeleteIfExists(rootPath + "-soak-replica");
+                DeleteIfExists(rootPath + "-soak-snapshots");
+            }
+
+            if (errors.Count > maxErrors)
+            {
+                throw new InvalidOperationException("Soak test exceeded error threshold: " + errors.Count.ToString(CultureInfo.InvariantCulture));
+            }
+
+            Console.WriteLine("PASS: soak workload");
+            Console.WriteLine("PASS: soak final verification");
+            Console.WriteLine("PASS: soak exports");
+
+            return 0;
+        }
+
         private static BenchmarkScenarioResult RunScenario(string name, int operations, Action<BenchmarkScenarioResult> action)
         {
             BenchmarkScenarioResult result = new BenchmarkScenarioResult();
@@ -297,6 +579,16 @@ namespace StateForge.ScaleTests
             result.ElapsedMs = stopwatch.ElapsedMilliseconds;
             result.Calculate();
             return result;
+        }
+
+        private static string SoakKey(int index)
+        {
+            return "soak-" + index.ToString("D8", CultureInfo.InvariantCulture);
+        }
+
+        private static void RecordOperation(BenchmarkScenarioResult result, long elapsedTicks)
+        {
+            result.RecordOperation(elapsedTicks);
         }
 
         private static byte[] CreatePayload(int size)
@@ -569,6 +861,71 @@ namespace StateForge.ScaleTests
                 new UTF8Encoding(false));
         }
 
+        private static void WriteSoakJson(string path, string rootPath, int sessions, int payloadBytes, int threads, int durationSeconds, int maxOperations, long elapsedMs, long storeBytes, long managedMemoryBytes, List<string> errors, List<BenchmarkScenarioResult> results)
+        {
+            string fullPath = Path.GetFullPath(path);
+            string directory = Path.GetDirectoryName(fullPath);
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("{");
+            builder.AppendLine("  \"version\": \"1\",");
+            builder.AppendLine("  \"mode\": \"soak\",");
+            builder.AppendLine("  \"capturedUtc\": \"" + DateTimeOffset.UtcNow.ToString("o") + "\",");
+            builder.AppendLine("  \"rootPath\": \"" + Escape(new DirectoryInfo(rootPath).Name) + "\",");
+            builder.AppendLine("  \"sessions\": " + sessions.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"payloadBytes\": " + payloadBytes.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"threads\": " + threads.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"durationSeconds\": " + durationSeconds.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"maxOperations\": " + maxOperations.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"elapsedMs\": " + elapsedMs.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"storeBytes\": " + storeBytes.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"managedMemoryBytes\": " + managedMemoryBytes.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"errorCount\": " + errors.Count.ToString(CultureInfo.InvariantCulture) + ",");
+            builder.AppendLine("  \"scenarios\": [");
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                BenchmarkScenarioResult result = results[i];
+                builder.AppendLine("    {");
+                builder.AppendLine("      \"name\": \"" + Escape(result.Name) + "\",");
+                builder.AppendLine("      \"operations\": " + result.Operations.ToString(CultureInfo.InvariantCulture) + ",");
+                builder.AppendLine("      \"elapsedMs\": " + result.ElapsedMs.ToString(CultureInfo.InvariantCulture) + ",");
+                builder.AppendLine("      \"opsPerSecond\": " + result.OpsPerSecond.ToString("0.###", CultureInfo.InvariantCulture) + ",");
+                builder.AppendLine("      \"p50Ms\": " + result.P50Ms.ToString("0.###", CultureInfo.InvariantCulture) + ",");
+                builder.AppendLine("      \"p95Ms\": " + result.P95Ms.ToString("0.###", CultureInfo.InvariantCulture) + ",");
+                builder.AppendLine("      \"p99Ms\": " + result.P99Ms.ToString("0.###", CultureInfo.InvariantCulture));
+                builder.Append("    }");
+
+                if (i < results.Count - 1)
+                {
+                    builder.Append(",");
+                }
+
+                builder.AppendLine();
+            }
+
+            builder.AppendLine("  ]");
+            builder.AppendLine("}");
+
+            File.WriteAllText(
+                fullPath,
+                builder.ToString().Replace("\r\n", "\n"),
+                new UTF8Encoding(false));
+        }
+
+        private static void DeleteIfExists(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, true);
+            }
+        }
+
         private static string Escape(string value)
         {
             if (value == null)
@@ -623,6 +980,15 @@ namespace StateForge.ScaleTests
             lock (latencyTicks)
             {
                 latencyTicks.Add(elapsedTicks);
+            }
+        }
+
+        public void RecordOperation(long elapsedTicks)
+        {
+            lock (latencyTicks)
+            {
+                latencyTicks.Add(elapsedTicks);
+                Operations++;
             }
         }
 

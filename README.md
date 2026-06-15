@@ -126,6 +126,12 @@ Use direct scripts for parameter-rich operations:
 Production validation includes a clean-clone performance regression gate. Reviewed references are
 tracked under `performance-baselines`; generated candidates remain under ignored `artifacts`.
 
+Long-duration release soak runs use:
+
+```powershell
+.\scripts\Invoke-StateForgeSoakTest.ps1 -DurationSeconds 21600 -MaxOperations 1000000 -FinalReplication -FinalSnapshot
+```
+
 See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 
 

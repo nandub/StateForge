@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added a configurable soak-test harness with JSON/CSV reports for long-duration v1 release validation.
+- Added a short `Soak` validation suite covering cleanup, replication, snapshots, and final data verification.
 - Added tracked small, medium, and large performance baselines with ignored candidate output.
 - Expanded scale measurements to cover lock/update, refresh, replication, snapshots, store size, and managed memory.
 - Added broad-threshold performance regression validation to Production and Release suites.

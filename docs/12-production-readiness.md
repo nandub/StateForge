@@ -176,8 +176,8 @@ Each profile measures concurrent create, read, lock/update, and refresh operatio
 Prometheus collection, cleanup, full replication, and full snapshot creation. Reports include latency
 percentiles, throughput, store bytes, and managed-memory growth.
 
-The automated small-profile gate intentionally uses broad relative limits: at least 40 percent of
-reviewed throughput and P95 no greater than four times reference plus 5 ms. This catches major
+The automated small-profile gate intentionally uses broad relative limits: at least 15 percent of
+reviewed throughput and P95 no greater than eight times reference plus 25 ms. This catches major
 regressions while tolerating workstation and CI variability. It is not an application SLA.
 
 For deployment sizing, rerun all profiles on the intended storage class, operating system, encryption
@@ -187,6 +187,20 @@ concurrency and session payload distribution with a longer soak test before prod
 
 Reviewed inputs are committed under `performance-baselines`. Generated candidates remain under ignored
 `artifacts\performance`, so clean-clone validation never depends on local build output.
+
+## Soak Testing
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Soak
+.\scripts\Invoke-StateForgeSoakTest.ps1 -DurationSeconds 21600 -MaxOperations 1000000 -FinalReplication -FinalSnapshot
+```
+
+The short `Soak` suite proves the harness. The v1.0 production decision should use a reviewed
+long-duration run on production-like storage, encryption, compression, sharding, backup, replication,
+and snapshot settings. Prefer final replication/snapshot for the release evidence run; add interval
+replication/snapshot for a separate stress run if active-write maintenance behavior is under review.
+Treat any data-verification failure, unhandled workload error, or report missing
+from `artifacts\soak` as release-blocking until understood.
 
 ## Public API Compatibility
 

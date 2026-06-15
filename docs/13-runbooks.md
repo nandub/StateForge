@@ -1,5 +1,28 @@
 # Production Runbooks
 
+## Long-Duration Soak Run
+
+Use this before the v1.0 production release decision and after material storage, encryption,
+compression, sharding, replication, or snapshot-policy changes.
+
+1. Select storage and configuration that match the intended deployment.
+2. Run a short harness check:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Soak
+```
+
+3. Run the long soak with production-like settings:
+
+```powershell
+.\scripts\Invoke-StateForgeSoakTest.ps1 -DurationSeconds 21600 -MaxOperations 1000000 -FinalReplication -FinalSnapshot
+```
+
+4. Review `artifacts\soak\soak.json` and `artifacts\soak\soak.csv`.
+5. Block release on any nonzero `errorCount`, missing scenario, failed final verification, or latency
+   profile that is outside the deployment target.
+6. Archive the reviewed reports with the release evidence.
+
 This document provides concise operator runbooks for StateForge production-like operations.
 
 ## Failover Drill

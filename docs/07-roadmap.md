@@ -74,10 +74,11 @@ It validates:
 - bounded compressed-payload expansion and atomic validated key-ring saves
 - reviewed small, medium, and large performance baselines
 - automated broad-threshold performance regression validation
+- configurable soak-test harness with cleanup, replication, snapshot, and final-verification coverage
 
 ## v1.0.0 — Production Release
 
 Required before v1.0:
 
-- long-duration soak tests
+- reviewed long-duration soak-test run on production-like storage
 - DR drill documentation

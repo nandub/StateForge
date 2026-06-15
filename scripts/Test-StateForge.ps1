@@ -54,6 +54,7 @@ param(
         'Deployment',
         'Packages',
         'Performance',
+        'Soak',
         'Snapshots',
         'Recovery',
         'Hardening',
@@ -221,6 +222,10 @@ function Invoke-PerformanceSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgePerformanceBaseline.ps1'
 }
 
+function Invoke-SoakSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSoak.ps1'
+}
+
 function Invoke-SnapshotsSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotServices.ps1'
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeSnapshotScheduling.ps1'
@@ -295,6 +300,7 @@ function Invoke-ReleaseSuite {
     Invoke-DeploymentSuite
     Invoke-PackagesSuite
     Invoke-PerformanceSuite
+    Invoke-SoakSuite
     Invoke-SnapshotsSuite
     Invoke-RecoverySuite
 }
@@ -324,6 +330,7 @@ try {
         'Deployment' { Invoke-DeploymentSuite }
         'Packages' { Invoke-PackagesSuite }
         'Performance' { Invoke-PerformanceSuite }
+        'Soak' { Invoke-SoakSuite }
         'Snapshots' { Invoke-SnapshotsSuite }
         'Recovery' { Invoke-RecoverySuite }
         'Hardening' { Invoke-HardeningSuite }

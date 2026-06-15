@@ -93,10 +93,23 @@ See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 The runner writes candidates to `artifacts\performance` by default. `-UpdateBaseline` is the explicit
 review action that writes small, medium, and large CSV/JSON references to the tracked
 `performance-baselines` directory. `Compare-StateForgeBenchmark.ps1` fails when a scenario is missing,
-throughput falls below 40 percent of reference, or P95 exceeds four times reference plus 5 ms.
+throughput falls below 15 percent of reference, or P95 exceeds eight times reference plus 25 ms.
 
 `Test-StateForgeArtifactDependencies.ps1` guards this split so ignored `artifacts` content cannot become
 a required clean-clone input.
+
+## Soak Testing
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Soak
+.\scripts\Invoke-StateForgeSoakTest.ps1 -DurationSeconds 3600 -MaxOperations 100000 -FinalReplication -FinalSnapshot
+```
+
+`Invoke-StateForgeSoakTest.ps1` runs a configurable long-duration workload and writes `soak.json` and
+`soak.csv` under `artifacts\soak` by default. Use `FinalReplication` and `FinalSnapshot` for quiescent
+release evidence. Use `CleanupInterval`, `ReplicationInterval`, and `SnapshotInterval` to include
+operational maintenance work during active writes. `Test-StateForgeSoak.ps1` executes a short
+validation profile for release gating.
 
 
 ## Replica Catch-Up

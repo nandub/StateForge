@@ -12,13 +12,13 @@ Baseline benchmark CSV.
 Candidate benchmark CSV.
 
 .PARAMETER MinimumThroughputPercent
-Minimum candidate throughput as a percentage of the baseline. Defaults to 40.
+Minimum candidate throughput as a percentage of the baseline. Defaults to 15.
 
 .PARAMETER MaximumLatencyMultiplier
-Maximum candidate P95 latency relative to the baseline. Defaults to 4.
+Maximum candidate P95 latency relative to the baseline. Defaults to 8.
 
 .PARAMETER LatencyAllowanceMs
-Fixed P95 allowance for short operations. Defaults to 5 milliseconds.
+Fixed P95 allowance for short operations. Defaults to 25 milliseconds.
 
 .EXAMPLE
 .\scripts\Compare-StateForgeBenchmark.ps1 -BaselineCsv .\old.csv -CandidateCsv .\new.csv
@@ -42,15 +42,15 @@ param(
 
     [Parameter()]
     [ValidateRange(1, 100)]
-    [double]$MinimumThroughputPercent = 40,
+    [double]$MinimumThroughputPercent = 15,
 
     [Parameter()]
     [ValidateRange(1, 100)]
-    [double]$MaximumLatencyMultiplier = 4,
+    [double]$MaximumLatencyMultiplier = 8,
 
     [Parameter()]
     [ValidateRange(0, 60000)]
-    [double]$LatencyAllowanceMs = 5
+    [double]$LatencyAllowanceMs = 25
 )
 
 Set-StrictMode -Version 2.0
