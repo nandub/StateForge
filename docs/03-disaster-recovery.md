@@ -36,6 +36,115 @@ and continue to require promotion fencing for cross-site failover.
 
 StateForge disaster recovery is built from snapshots, incremental deltas, promotion, and failover.
 
+## v1 Release DR Drill
+
+Run this drill before approving a v1.0 production release and after material changes to replication,
+snapshot, promotion, failover, fencing, site-state, encryption, sharding, or storage layout.
+
+The drill is release evidence, not just a unit-test pass. Execute it against production-like storage and
+archive the generated reports, manifests, marker files, and validation command output.
+
+### Preconditions
+
+- The primary store is writable and contains representative session data.
+- At least one named replica is configured with stable site and region metadata.
+- A snapshot repository is available outside the live session root.
+- The shared promotion lease root is visible to every promotion coordinator.
+- The recovery site has a current `stateforge-site-state.json` with a fresh recovery point.
+- Operators know the exact replica candidate and do not rely on automatic site election.
+- Store root, snapshot repository, key-ring, and lease-root ACLs have been reviewed.
+
+### Drill Phases
+
+1. Record baseline state:
+   - package version and commit
+   - primary root
+   - replica root and name
+   - site names and regions
+   - encryption, compression, shard depth, and key-ring location
+2. Run production validation:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+3. Confirm replica health and catch-up:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+```
+
+4. Create or verify the recovery snapshot chain:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Snapshots
+```
+
+5. Restore the selected snapshot chain into an isolated drill root and verify session counts and
+   application-readable state.
+6. Evaluate quorum, witness vote, and promotion fencing for the exact replica candidate:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Quorum
+.\scripts\Test-StateForge.ps1 -Suite Witness
+.\scripts\Test-StateForge.ps1 -Suite SplitBrain
+```
+
+7. Evaluate the cross-site policy for the exact recovery site and replica root:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite MultiSite
+```
+
+8. Simulate primary loss, promote the selected replica or restored snapshot, and require:
+   - `RequirePromotionFence = true`
+   - a matching quorum result
+   - a matching cross-site policy result for cross-site recovery
+   - no active rival primary lease
+9. Validate the promoted root:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Recovery
+.\scripts\Invoke-StateForgeSmokeTest.ps1
+```
+
+10. Run the post-recovery production gate:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+### Required Evidence
+
+Archive the following with the release record:
+
+- command transcript for every validation command
+- `stateforge-site-state.json` from primary and recovery sites
+- `stateforge-replica-state.json` for each replica considered for promotion
+- replication manifest with target site and region metadata
+- full and incremental snapshot manifests used in the drill
+- restored drill-root session count and application-read result
+- quorum evaluation result and witness vote result
+- promotion fence result with lease ID, owner, and epoch
+- `promotion-marker.json` or `failover-marker.json` from the promoted root
+- cross-site policy result when the drill crosses regions
+- post-recovery health, smoke, and Production validation output
+- start time, end time, recovery-point age, and recovery duration
+
+### Release-Blocking Conditions
+
+Block v1.0 release approval until reviewed if any of these occur:
+
+- replica catch-up reports content drift that is not explained by expected writes
+- snapshot restore loses sessions or restores outside the configured destination
+- quorum, witness, or cross-site policy does not target the exact selected candidate
+- promotion fencing is bypassed, unavailable, or returns a rival active lease
+- failed promotion or failover writes a marker
+- promoted root fails health, smoke, or Production validation
+- recovery-point age exceeds the deployment target
+- any required evidence artifact is missing
+
 ## Full Snapshots
 
 A full snapshot copies the complete `sessions` directory and writes a manifest.
@@ -86,4 +195,13 @@ Validation:
 
 ```powershell
 .\scripts\Test-StateForgeRecoveryFlow.ps1
+```
+
+Release evidence drill:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+.\scripts\Test-StateForge.ps1 -Suite MultiSite
+.\scripts\Test-StateForge.ps1 -Suite Recovery
 ```

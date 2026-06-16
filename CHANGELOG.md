@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added v1 release disaster-recovery drill documentation with required evidence and release blockers.
 - Added a configurable soak-test harness with JSON/CSV reports for long-duration v1 release validation.
 - Added a short `Soak` validation suite covering cleanup, replication, snapshots, and final data verification.
 - Added tracked small, medium, and large performance baselines with ignored candidate output.

@@ -132,6 +132,9 @@ Long-duration release soak runs use:
 .\scripts\Invoke-StateForgeSoakTest.ps1 -DurationSeconds 21600 -MaxOperations 1000000 -FinalReplication -FinalSnapshot
 ```
 
+The v1.0 release decision also requires executing and archiving the DR evidence drill documented in
+`docs\03-disaster-recovery.md` and `docs\13-runbooks.md`.
+
 See `docs\12-production-readiness.md` and `docs\13-runbooks.md`.
 
 

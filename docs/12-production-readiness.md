@@ -129,6 +129,11 @@ The suite validates atomic strict site state, site-tagged replication manifests,
 heartbeat and recovery-point freshness, exact quorum candidate binding, snapshot restore drills, fenced
 cross-site failover, and rejection when policy evidence targets a different replica root.
 
+The v1.0 release decision also requires a reviewed disaster-recovery drill execution record. Follow the
+release evidence checklist in `docs\03-disaster-recovery.md` and `docs\13-runbooks.md`, then archive the
+command transcript, manifests, site state, policy results, lease ID and epoch, marker files, recovery
+duration, recovery-point age, and post-recovery validation output.
+
 ## Docker and Kubernetes
 
 ```powershell

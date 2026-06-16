@@ -75,10 +75,11 @@ It validates:
 - reviewed small, medium, and large performance baselines
 - automated broad-threshold performance regression validation
 - configurable soak-test harness with cleanup, replication, snapshot, and final-verification coverage
+- release-evidence disaster-recovery drill documentation
 
 ## v1.0.0 — Production Release
 
 Required before v1.0:
 
 - reviewed long-duration soak-test run on production-like storage
-- DR drill documentation
+- reviewed disaster-recovery drill execution evidence

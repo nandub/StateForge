@@ -1305,3 +1305,51 @@ if ($soakValidationScriptText -notmatch 'errorCount' -or
     $monitoringRunnerText -notmatch 'function\s+Invoke-ReleaseSuite\s*\{[\s\S]*Invoke-PerformanceSuite\s+Invoke-SoakSuite\s+Invoke-SnapshotsSuite') {
     throw 'Test-StateForge.ps1 must expose the Soak suite and validate soak reports.'
 }
+
+# Validate v1 disaster-recovery drill documentation.
+$disasterRecoveryDocPath = Join-Path -Path $repoRoot -ChildPath 'docs\03-disaster-recovery.md'
+$runbookDocPath = Join-Path -Path $repoRoot -ChildPath 'docs\13-runbooks.md'
+
+foreach ($drDocPath in @($disasterRecoveryDocPath, $runbookDocPath)) {
+    if (-not (Test-Path -LiteralPath $drDocPath)) {
+        throw "Missing disaster recovery documentation asset: $drDocPath"
+    }
+}
+
+$disasterRecoveryDocText = Get-Content -LiteralPath $disasterRecoveryDocPath -Raw
+$runbookDocText = Get-Content -LiteralPath $runbookDocPath -Raw
+
+foreach ($requiredDrPattern in @(
+    'v1 Release DR Drill',
+    'Required Evidence',
+    'Release-Blocking Conditions',
+    'stateforge-site-state.json',
+    'stateforge-replica-state.json',
+    'replication manifest',
+    'snapshot manifests',
+    'promotion fence result',
+    'lease ID',
+    'recovery-point age',
+    'Test-StateForge.ps1 -Suite ReplicaCatchUp',
+    'Test-StateForge.ps1 -Suite MultiSite',
+    'Test-StateForge.ps1 -Suite Recovery',
+    'Test-StateForge.ps1 -Suite Production'
+)) {
+    if ($disasterRecoveryDocText -notmatch [regex]::Escape($requiredDrPattern)) {
+        throw "Disaster recovery drill documentation is missing required content: $requiredDrPattern"
+    }
+}
+
+foreach ($requiredRunbookPattern in @(
+    'Release Disaster Recovery Evidence Drill',
+    'command transcript',
+    'quorum/witness/cross-site policy results',
+    'lease ID and epoch',
+    'Block release',
+    'Test-StateForge.ps1 -Suite ReplicaMonitoring',
+    'Test-StateForge.ps1 -Suite SplitBrain'
+)) {
+    if ($runbookDocText -notmatch [regex]::Escape($requiredRunbookPattern)) {
+        throw "Disaster recovery runbook is missing required content: $requiredRunbookPattern"
+    }
+}

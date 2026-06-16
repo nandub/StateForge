@@ -237,6 +237,56 @@ epoch. A blocked operation must not produce promotion or failover markers.
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 ```
 
+## Release Disaster Recovery Evidence Drill
+
+Use this as the operator checklist for the v1.0 release evidence drill. The detailed rationale and
+release-blocking criteria are in `docs\03-disaster-recovery.md`.
+
+1. Record package version, commit, primary root, replica root, site names, regions, protection mode,
+   shard depth, snapshot repository, key-ring path, and lease root.
+2. Run the baseline production gate:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Production
+```
+
+3. Confirm replica monitoring and catch-up:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite ReplicaMonitoring
+.\scripts\Test-StateForge.ps1 -Suite ReplicaCatchUp
+```
+
+4. Verify snapshot and recovery mechanics:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Snapshots
+.\scripts\Test-StateForge.ps1 -Suite Recovery
+```
+
+5. Verify promotion policy:
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Quorum
+.\scripts\Test-StateForge.ps1 -Suite Witness
+.\scripts\Test-StateForge.ps1 -Suite SplitBrain
+.\scripts\Test-StateForge.ps1 -Suite MultiSite
+```
+
+6. Restore the selected snapshot chain into an isolated drill root and verify application-readable
+   session state.
+7. Simulate primary loss and promote the exact selected replica or restored snapshot with promotion
+   fencing required.
+8. For cross-site recovery, require the cross-site policy result to match the selected replica root.
+9. Validate the promoted root with smoke and Production validation.
+10. Archive the command transcript, site state, replica state, replication manifest, snapshot manifests,
+    quorum/witness/cross-site policy results, lease ID and epoch, promotion or failover marker, recovery
+    duration, recovery-point age, and post-recovery validation output.
+
+Block release on missing evidence, stale recovery points, failed catch-up, failed restore, mismatched
+candidate policy, missing fencing, rival active lease, marker creation on failed promotion, or failed
+post-recovery validation.
+
 ## Multi-Site Disaster Recovery Drill
 
 1. Persist `stateforge-site-state.json` for the primary and recovery sites.
