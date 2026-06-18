@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using StateForge.Core;
 
 namespace StateForge.FileStore
@@ -541,16 +542,14 @@ namespace StateForge.FileStore
             try
             {
                 long maximumRecordBytes = (long)_options.MaxPayloadBytes + 1048576L;
-                FileInfo fileInfo = new FileInfo(path);
+                byte[] fileBytes = ReadAllBytesShared(path);
+                int recordLength = fileBytes.Length;
 
-                if (fileInfo.Length < 12 || fileInfo.Length > maximumRecordBytes)
+                if (fileBytes.Length < 12 || fileBytes.LongLength > maximumRecordBytes)
                 {
                     invalid = true;
                     return null;
                 }
-
-                byte[] fileBytes = File.ReadAllBytes(path);
-                int recordLength = fileBytes.Length;
 
                 if (fileBytes.Length < 12 || fileBytes.LongLength > maximumRecordBytes)
                 {
@@ -772,26 +771,85 @@ namespace StateForge.FileStore
 
             try
             {
-                if (File.Exists(path))
-                {
-                    if (_options.KeepBackups)
-                    {
-                        File.Replace(tempPath, path, backupPath, true);
-                    }
-                    else
-                    {
-                        File.Delete(path);
-                        File.Move(tempPath, path);
-                    }
-                }
-                else
-                {
-                    File.Move(tempPath, path);
-                }
+                CommitTempFile(tempPath, path, backupPath);
             }
             finally
             {
                 TryDelete(tempPath);
+            }
+        }
+
+        private void CommitTempFile(string tempPath, string path, string backupPath)
+        {
+            const int maxAttempts = 20;
+
+            for (int attempt = 1; attempt <= maxAttempts; attempt++)
+            {
+                try
+                {
+                    if (File.Exists(path))
+                    {
+                        if (_options.KeepBackups)
+                        {
+                            File.Replace(tempPath, path, backupPath, true);
+                        }
+                        else
+                        {
+                            File.Delete(path);
+                            File.Move(tempPath, path);
+                        }
+                    }
+                    else
+                    {
+                        File.Move(tempPath, path);
+                    }
+
+                    return;
+                }
+                catch (IOException)
+                {
+                    if (attempt == maxAttempts) { throw; }
+                    Thread.Sleep(GetRetryDelayMilliseconds(attempt));
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    if (attempt == maxAttempts) { throw; }
+                    Thread.Sleep(GetRetryDelayMilliseconds(attempt));
+                }
+            }
+        }
+
+        private static int GetRetryDelayMilliseconds(int attempt)
+        {
+            int delay = attempt * 10;
+            if (delay > 100) { return 100; }
+            return delay;
+        }
+
+        private static byte[] ReadAllBytesShared(string path)
+        {
+            using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete))
+            {
+                if (stream.Length > int.MaxValue)
+                {
+                    throw new InvalidDataException("StateForge record is too large.");
+                }
+
+                byte[] buffer = new byte[(int)stream.Length];
+                int offset = 0;
+
+                while (offset < buffer.Length)
+                {
+                    int read = stream.Read(buffer, offset, buffer.Length - offset);
+                    if (read == 0)
+                    {
+                        throw new EndOfStreamException("StateForge record ended before the expected length.");
+                    }
+
+                    offset += read;
+                }
+
+                return buffer;
             }
         }
 

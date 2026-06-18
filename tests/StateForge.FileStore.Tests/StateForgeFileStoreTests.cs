@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StateForge.Core;
 using StateForge.FileStore;
@@ -112,6 +113,36 @@ namespace StateForge.FileStore.Tests
             StateForgeEntry entry = store.Get("active");
             Assert.IsNotNull(entry);
             CollectionAssert.AreEqual(new byte[] { 1, 2, 3 }, entry.Value);
+        }
+
+        [TestMethod]
+        public void Set_Retries_Transient_File_Sharing_Conflict()
+        {
+            StateForgeFileStore store = CreateStore(false);
+            store.Set("active", new byte[] { 1, 2, 3 }, TimeSpan.FromMinutes(20));
+            string path = store.Enumerate().Single().PhysicalPath;
+            FileStream stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            Thread releaser = new Thread(delegate()
+            {
+                Thread.Sleep(100);
+                stream.Dispose();
+            });
+
+            releaser.Start();
+
+            try
+            {
+                store.Set("active", new byte[] { 4, 5, 6 }, TimeSpan.FromMinutes(20));
+            }
+            finally
+            {
+                releaser.Join();
+                stream.Dispose();
+            }
+
+            StateForgeEntry entry = store.Get("active");
+            Assert.IsNotNull(entry);
+            CollectionAssert.AreEqual(new byte[] { 4, 5, 6 }, entry.Value);
         }
 
         [TestMethod]
