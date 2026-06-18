@@ -2,7 +2,7 @@
 
 | Version | Summary |
 |---|---|
-| v0.35.0 | Site metadata, cross-site recovery policy, restore drills, and fenced site failover |
+| v0.35.0 | Site metadata, cross-site recovery policy, restore drills, fenced site failover, and soak cleanup hardening |
 | v0.34.0 | Primary leases, quorum-gated promotion fencing, and stale-primary takeover |
 | v0.33.0 | Witness persistence, health, and candidate-specific quorum votes |
 | v0.32.0 | Quorum membership, vote policy, and promotion eligibility foundations |

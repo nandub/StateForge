@@ -93,6 +93,28 @@ namespace StateForge.FileStore.Tests
         }
 
         [TestMethod]
+        public void CleanupExpired_Does_Not_Quarantine_Transiently_Locked_Record()
+        {
+            StateForgeFileStore store = CreateStore(false);
+            store.Set("active", new byte[] { 1, 2, 3 }, TimeSpan.FromMinutes(20));
+            string path = store.Enumerate().Single().PhysicalPath;
+
+            using (FileStream stream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                StateForgeCleanupResult result = store.CleanupExpired(true);
+
+                Assert.AreEqual(0, result.InvalidQuarantined);
+                Assert.AreEqual(0, result.InvalidDeleted);
+                Assert.AreEqual(0, result.Failed);
+                Assert.IsTrue(File.Exists(path));
+            }
+
+            StateForgeEntry entry = store.Get("active");
+            Assert.IsNotNull(entry);
+            CollectionAssert.AreEqual(new byte[] { 1, 2, 3 }, entry.Value);
+        }
+
+        [TestMethod]
         public void Diagnostics_Returns_Counts()
         {
             StateForgeFileStore store = CreateStore(false);

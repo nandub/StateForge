@@ -274,7 +274,14 @@ namespace StateForge.FileStore
             foreach (string file in Directory.GetFiles(_sessionsPath, "*.stfg", SearchOption.AllDirectories))
             {
                 bool invalid;
-                StateForgeEntry entry = ReadEntryFromPath(file, out invalid);
+                bool transient;
+                int flags;
+                StateForgeEntry entry = ReadEntryFromPath(file, out invalid, out flags, out transient);
+
+                if (transient)
+                {
+                    continue;
+                }
 
                 if (invalid)
                 {
@@ -519,8 +526,15 @@ namespace StateForge.FileStore
 
         private StateForgeEntry ReadEntryFromPath(string path, out bool invalid, out int flags)
         {
+            bool transient;
+            return ReadEntryFromPath(path, out invalid, out flags, out transient);
+        }
+
+        private StateForgeEntry ReadEntryFromPath(string path, out bool invalid, out int flags, out bool transient)
+        {
             invalid = false;
             flags = 0;
+            transient = false;
 
             if (!File.Exists(path)) { return null; }
 
@@ -660,6 +674,16 @@ namespace StateForge.FileStore
                     entry.Value = payload;
                     return entry;
                 }
+            }
+            catch (IOException)
+            {
+                transient = true;
+                return null;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                transient = true;
+                return null;
             }
             catch
             {

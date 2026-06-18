@@ -204,6 +204,8 @@ The short `Soak` suite proves the harness. The v1.0 production decision should u
 long-duration run on production-like storage, encryption, compression, sharding, backup, replication,
 and snapshot settings. Prefer final replication/snapshot for the release evidence run; add interval
 replication/snapshot for a separate stress run if active-write maintenance behavior is under review.
+Cleanup is expected to skip transient file-read races during active writes rather than quarantine or
+delete a record that is temporarily locked by a writer.
 Treat any data-verification failure, unhandled workload error, or report missing
 from `artifacts\soak` as release-blocking until understood.
 

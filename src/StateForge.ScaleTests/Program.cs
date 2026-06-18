@@ -357,7 +357,7 @@ namespace StateForge.ScaleTests
 
                 try
                 {
-                    int keyIndex = i % sessions;
+                    int keyIndex = (i / 4) % sessions;
                     int operation = i % 4;
 
                     if (operation == 0)

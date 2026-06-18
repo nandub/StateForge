@@ -21,7 +21,9 @@ compression, sharding, replication, or snapshot-policy changes.
 4. Review `artifacts\soak\soak.json` and `artifacts\soak\soak.csv`.
 5. Block release on any nonzero `errorCount`, missing scenario, failed final verification, or latency
    profile that is outside the deployment target.
-6. Archive the reviewed reports with the release evidence.
+6. If cleanup runs during active writes, verify it skipped transient file-read races instead of
+   quarantining or deleting currently written records.
+7. Archive the reviewed reports with the release evidence.
 
 This document provides concise operator runbooks for StateForge production-like operations.
 
