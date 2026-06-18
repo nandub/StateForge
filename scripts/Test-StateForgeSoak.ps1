@@ -45,6 +45,7 @@ try {
         '"name": "read"',
         '"name": "refresh"',
         '"name": "lock-update"',
+        '"name": "lock-contention"',
         '"name": "cleanup"',
         '"name": "replication"',
         '"name": "snapshot"'

@@ -206,6 +206,8 @@ and snapshot settings. Prefer final replication/snapshot for the release evidenc
 replication/snapshot for a separate stress run if active-write maintenance behavior is under review.
 Cleanup is expected to skip transient file-read races during active writes rather than quarantine or
 delete a record that is temporarily locked by a writer.
+The soak report can include `lock-contention` when an unlocked write wins a race against a fenced
+`SetAndUnlock`; review the count, but block only when the contention leaves the record unreadable.
 Treat any data-verification failure, unhandled workload error, or report missing
 from `artifacts\soak` as release-blocking until understood.
 

@@ -325,6 +325,7 @@ namespace StateForge.ScaleTests
             results["read"] = new BenchmarkScenarioResult { Name = "read" };
             results["refresh"] = new BenchmarkScenarioResult { Name = "refresh" };
             results["lock-update"] = new BenchmarkScenarioResult { Name = "lock-update" };
+            results["lock-contention"] = new BenchmarkScenarioResult { Name = "lock-contention" };
             results["cleanup"] = new BenchmarkScenarioResult { Name = "cleanup" };
             results["replication"] = new BenchmarkScenarioResult { Name = "replication" };
             results["snapshot"] = new BenchmarkScenarioResult { Name = "snapshot" };
@@ -391,17 +392,26 @@ namespace StateForge.ScaleTests
                     }
                     else
                     {
-                        RecordOperation(results["lock-update"], MeasureOne(delegate()
+                        bool lockContention = false;
+                        long elapsedTicks = MeasureOne(delegate()
                         {
-                            StateForgeLockResult lockResult = store.GetAndLock(SoakKey(keyIndex), TimeSpan.FromSeconds(30));
+                            string key = SoakKey(keyIndex);
+                            StateForgeLockResult lockResult = store.GetAndLock(key, TimeSpan.FromSeconds(30));
                             if (lockResult.Found && !lockResult.LockedByOtherRequest)
                             {
-                                if (!store.SetAndUnlock(SoakKey(keyIndex), payload, TimeSpan.FromHours(1), lockResult.LockId))
+                                if (!store.SetAndUnlock(key, payload, TimeSpan.FromHours(1), lockResult.LockId))
                                 {
-                                    throw new InvalidOperationException("Soak lock-update failed.");
+                                    VerifySoakEntryReadable(store, key, payloadBytes, "Soak lock contention verification failed.");
+                                    lockContention = true;
                                 }
                             }
-                        }));
+                        });
+
+                        RecordOperation(results["lock-update"], elapsedTicks);
+                        if (lockContention)
+                        {
+                            RecordOperation(results["lock-contention"], elapsedTicks);
+                        }
                     }
 
                     if (cleanupInterval > 0 && i > 0 && (i % cleanupInterval) == 0)
@@ -707,6 +717,16 @@ namespace StateForge.ScaleTests
             }
 
             return null;
+        }
+
+        private static void VerifySoakEntryReadable(StateForgeFileStore store, string key, int payloadBytes, string message)
+        {
+            StateForgeEntry entry = store.Get(key);
+            byte[] value = ReadEntryBytes(entry);
+            if (value == null || value.Length != payloadBytes)
+            {
+                throw new InvalidOperationException(message);
+            }
         }
 
         private static string ReadOption(string[] args, string name)
