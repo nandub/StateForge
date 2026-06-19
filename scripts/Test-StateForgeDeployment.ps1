@@ -82,14 +82,23 @@ try {
 
     $kubectl = Get-Command kubectl -ErrorAction SilentlyContinue
     if ($null -ne $kubectl) {
-        $kustomizeOutput = & $kubectl.Source kustomize (Join-Path $repoRoot 'deploy\k8s') 2>&1
-        if ($LASTEXITCODE -ne 0) {
+        $previousErrorActionPreference = $ErrorActionPreference
+        $ErrorActionPreference = 'Continue'
+        try {
+            $kustomizeOutput = & $kubectl.Source kustomize (Join-Path $repoRoot 'deploy\k8s') 2>&1
+            $kustomizeExitCode = $LASTEXITCODE
+        }
+        finally {
+            $ErrorActionPreference = $previousErrorActionPreference
+        }
+
+        if ($kustomizeExitCode -ne 0) {
             $kustomizeText = ($kustomizeOutput | Out-String)
             if ($kustomizeText -match 'evalsymlink failure' -or $kustomizeText -match 'Access is denied') {
                 Write-Warning 'kubectl kustomize could not access the local repository path; manifest file and content checks passed, so kustomize validation was skipped for this environment.'
             }
             else {
-                throw "kubectl kustomize failed with exit code $LASTEXITCODE."
+                throw "kubectl kustomize failed with exit code $kustomizeExitCode."
             }
         }
     }
