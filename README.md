@@ -2,7 +2,7 @@
 
 StateForge is a resilient, file-backed session and state platform for .NET applications.
 
-Current version: **0.35.0**
+Current version: **1.0.0**
 
 ## Features
 
@@ -38,7 +38,7 @@ Current version: **0.35.0**
 ## Containers
 
 ```powershell
-docker build --tag stateforge-kestrel:0.35.0 .
+docker build --tag stateforge-kestrel:1.0.0 .
 .\scripts\Test-StateForge.ps1 -Suite Deployment
 ```
 

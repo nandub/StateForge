@@ -842,7 +842,7 @@ if ($monitoringRunnerText -notmatch "'SplitBrain'") {
     throw 'Test-StateForge.ps1 must expose the SplitBrain suite.'
 }
 
-# Validate v0.35.0 multi-site disaster recovery.
+# Validate v1.0.0 multi-site disaster recovery.
 $siteStateStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeSiteStateStore.cs'
 $crossSiteEvaluatorPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeCrossSiteEvaluator.cs'
 $replicationManifestEntryPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Replication\StateForgeReplicationManifestEntry.cs'
@@ -919,7 +919,7 @@ if ($dockerfileText -notmatch 'USER app' -or
     throw 'Docker image must run non-root and disable harness demo endpoints.'
 }
 
-if ($deploymentText -notmatch 'stateforge-kestrel:0\.35\.0' -or
+if ($deploymentText -notmatch 'stateforge-kestrel:1\.0\.0' -or
     $deploymentText -notmatch 'runAsNonRoot:\s*true' -or
     $deploymentText -notmatch 'readinessProbe:' -or
     $deploymentText -notmatch 'resources:') {

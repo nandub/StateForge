@@ -7,7 +7,7 @@ name.
 StateForge stores session, cache, and state records as files on disk instead of keeping them only in
 memory or requiring Redis, SQL Server, or another external cache service.
 
-Current repository version: **0.35.0**
+Current repository version: **1.0.0**
 
 ## Choose an Integration
 
@@ -425,7 +425,7 @@ operations, and share Data Protection keys separately when session cookies must 
 Build the container:
 
 ```powershell
-docker build --tag stateforge-kestrel:0.35.0 .
+docker build --tag stateforge-kestrel:1.0.0 .
 ```
 
 Run deployment validation:

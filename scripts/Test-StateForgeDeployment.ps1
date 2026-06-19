@@ -58,13 +58,13 @@ try {
         throw 'Dockerfile must run non-root, use the persistent root, and disable demo endpoints.'
     }
 
-    if ($deployment -notmatch 'image:\s*stateforge-kestrel:0\.35\.0' -or
+    if ($deployment -notmatch 'image:\s*stateforge-kestrel:1\.0\.0' -or
         $deployment -notmatch 'runAsNonRoot:\s*true' -or
         $deployment -notmatch 'fsGroup:\s*1654' -or
         $deployment -notmatch 'startupProbe:' -or
         $deployment -notmatch 'readinessProbe:' -or
         $deployment -notmatch 'resources:') {
-        throw 'Kubernetes deployment must use v0.35.0, non-root storage access, probes, and resources.'
+        throw 'Kubernetes deployment must use v1.0.0, non-root storage access, probes, and resources.'
     }
 
     if ($configMap -notmatch 'STATEFORGE_ROOT_PATH:\s*"/data/stateforge"' -or
@@ -104,7 +104,7 @@ try {
     }
 
     [PSCustomObject]@{
-        Version       = '0.35.0'
+        Version       = '1.0.0'
         RequiredFiles = $requiredFiles.Count
         Success       = $true
     }

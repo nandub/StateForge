@@ -24,7 +24,7 @@ param(
     [string]$PackagePath,
 
     [Parameter()]
-    [string]$Version = '0.35.0',
+    [string]$Version = '1.0.0',
 
     [Parameter()]
     [string]$RepositoryCommit

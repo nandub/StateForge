@@ -27,7 +27,7 @@ Implemented areas include:
 
 ## Current Version
 
-Current repository version target: **0.35.0**
+Current repository version target: **1.0.0**
 
 When making release changes, keep project versions and validation defaults aligned.
 

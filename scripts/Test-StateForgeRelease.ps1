@@ -69,9 +69,9 @@ try {
     .\scripts\Test-StateForgeDeployment.ps1
     .\scripts\Test-StateForgeSnapshotScheduling.ps1
     .\scripts\Test-StateForgeSnapshotServices.ps1
-    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '0.35.0'
-    .\scripts\Test-StateForgePackageArtifacts.ps1 -PackagePath $PackageOutputPath -Version '0.35.0'
-    .\scripts\Test-StateForgePackageInstall.ps1 -PackagePath $PackageOutputPath -Version '0.35.0'
+    .\scripts\Build-StateForgePackages.ps1 -OutputPath $PackageOutputPath -Version '1.0.0'
+    .\scripts\Test-StateForgePackageArtifacts.ps1 -PackagePath $PackageOutputPath -Version '1.0.0'
+    .\scripts\Test-StateForgePackageInstall.ps1 -PackagePath $PackageOutputPath -Version '1.0.0'
 
     [PSCustomObject]@{
         PackageOutputPath = $PackageOutputPath

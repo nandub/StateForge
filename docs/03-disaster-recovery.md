@@ -26,7 +26,8 @@ lease ID to reacquire or renew an active lease. Expired leases cannot be renewed
 
 ## Multi-Site Recovery
 
-Version 0.35.0 persists `stateforge-site-state.json` in each site root. It records site identity, region,
+Version 0.35.0 introduced `stateforge-site-state.json` in each site root, and version 1.0.0 retains it
+as part of the production release surface. It records site identity, region,
 primary or recovery role, health, heartbeat, promotion eligibility, recovery-point time, and errors.
 
 `StateForgeCrossSiteEvaluator` requires an enabled primary source, an enabled recovery target, distinct

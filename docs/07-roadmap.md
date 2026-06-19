@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after v0.35.0 multi-site disaster recovery.
+This roadmap reflects the current StateForge direction after the v1.0.0 production release.
 
 ## Completed
 
@@ -24,10 +24,11 @@ This roadmap reflects the current StateForge direction after v0.35.0 multi-site 
 | v0.33.0 | Witness state, health, and quorum vote validation |
 | v0.34.0 | Primary leases, promotion fencing, and stale-primary takeover |
 | v0.35.0 | Site metadata, cross-site recovery policy, restore drills, and fenced site failover |
+| v1.0.0 | Production release: soak evidence, package validation, deployment validation, performance gate, and recovery flow |
 
-## Current Stable Candidate
+## Current Stable Release
 
-`v0.35.0` is the current stable production-candidate baseline.
+`v1.0.0` is the current stable production release baseline.
 
 It validates:
 
@@ -58,6 +59,7 @@ It validates:
 - reviewed public API compatibility baselines
 - rolling-upgrade and migration compatibility
 - authenticated AES record and key-ring security validation
+- long-duration soak evidence with final replication and snapshot
 
 ## Completed v1 Readiness Gates
 
@@ -76,10 +78,17 @@ It validates:
 - automated broad-threshold performance regression validation
 - configurable soak-test harness with cleanup, replication, snapshot, and final-verification coverage
 - release-evidence disaster-recovery drill documentation
+- reviewed 6-hour soak run with 1,000,000 operations, zero errors, final replication, and final snapshot
+- Production suite validation through package, deployment, performance, snapshot, and recovery-flow checks
 
 ## v1.0.0 — Production Release
 
-Required before v1.0:
+Completed release gates:
 
 - reviewed long-duration soak-test run on production-like storage
-- reviewed disaster-recovery drill execution evidence
+- documented disaster-recovery drill evidence checklist
+- package, deployment, performance, snapshot, and recovery-flow validation
+
+## Post-1.0 Roadmap
+
+Define post-1.0 roadmap items after the production release is tagged and published.

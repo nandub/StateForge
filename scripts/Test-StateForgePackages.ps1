@@ -15,7 +15,7 @@ Compatible with Windows PowerShell 5.1.
 [CmdletBinding()]
 param(
     [Parameter()]
-    [string]$Version = '0.35.0'
+    [string]$Version = '1.0.0'
 )
 
 Set-StrictMode -Version 2.0

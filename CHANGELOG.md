@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+No unreleased changes.
+
+## 1.0.0
+
+- Promoted the production release surface to v1.0.0 after long-duration soak and Production suite validation.
+- Passed the 6-hour soak run with 1,000,000 operations, zero errors, final replication, final snapshot, and JSON/CSV evidence exports.
+- Passed the Production suite through package, deployment, performance, snapshot, and recovery-flow validation.
+- Expanded the getting-started guide into a full install, configuration, sample, deployment, and troubleshooting walkthrough.
 - Added v1 release disaster-recovery drill documentation with required evidence and release blockers.
 - Added a configurable soak-test harness with JSON/CSV reports for long-duration v1 release validation.
 - Added a short `Soak` validation suite covering cleanup, replication, snapshots, and final data verification.
@@ -47,7 +55,7 @@
 - Added package artifact validation for NuGet metadata, assemblies, symbols, and SourceLink mappings.
 - Added isolated `net8.0` and `net481` local-feed package installation smoke tests.
 - Added the `Packages` suite to Production and Release validation.
-- Updated Docker and Kubernetes assets from the original v0.9.0 baseline to v0.35.0.
+- Updated Docker and Kubernetes assets from the original v0.9.0 baseline to v1.0.0.
 - Aligned cache, Prometheus, and snapshot paths on `STATEFORGE_ROOT_PATH`.
 - Disabled Kestrel harness demo session endpoints by default in containers.
 - Added non-root image execution and Kubernetes security contexts.
