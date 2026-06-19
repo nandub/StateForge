@@ -26,10 +26,11 @@ $ErrorActionPreference = 'Stop'
 try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
+    . (Join-Path -Path $scriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     $storePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.FileStore\StateForgeFileStore.cs'
 
     if (-not (Test-Path -LiteralPath $storePath)) {
-        throw "StateForgeFileStore.cs not found: $storePath"
+        throw "StateForgeFileStore.cs not found: $(ConvertTo-StateForgeDisplayPath -Path $storePath -RepositoryRoot $repoRoot)"
     }
 
     $source = Get-Content -LiteralPath $storePath -Raw
@@ -55,7 +56,7 @@ try {
     }
 
     [PSCustomObject]@{
-        SourceFile = $storePath
+        SourceFile = ConvertTo-StateForgeDisplayPath -Path $storePath -RepositoryRoot $repoRoot
         Success    = $true
     }
 }

@@ -43,6 +43,7 @@ $ErrorActionPreference = 'Stop'
 
 try {
     $repoRoot = Split-Path -Path $PSScriptRoot -Parent
+    . (Join-Path -Path $PSScriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     if ($UpdateBaseline.IsPresent) {
         $outputRoot = Join-Path -Path $repoRoot -ChildPath 'performance-baselines'
     }
@@ -85,8 +86,8 @@ try {
             Sessions     = $item.Sessions
             PayloadBytes = $item.PayloadBytes
             Threads      = $item.Threads
-            CsvPath      = $csvPath
-            JsonPath     = $jsonPath
+            CsvPath      = ConvertTo-StateForgeDisplayPath -Path $csvPath -RepositoryRoot $repoRoot
+            JsonPath     = ConvertTo-StateForgeDisplayPath -Path $jsonPath -RepositoryRoot $repoRoot
             Updated      = [bool]$UpdateBaseline
         }
     }

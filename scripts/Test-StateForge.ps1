@@ -72,6 +72,9 @@ param(
 Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 $script:StateForgeRepositoryRoot = Split-Path -Path $PSScriptRoot -Parent
+. (Join-Path -Path $PSScriptRoot -ChildPath 'StateForgePathDisplay.ps1')
+$script:StateForgeDisplayRoot = Get-StateForgeDisplayRoot -RepositoryRoot $script:StateForgeRepositoryRoot
+$env:STATEFORGE_DISPLAY_ROOT = $script:StateForgeDisplayRoot
 
 function Invoke-StateForgeScript {
     [CmdletBinding()]
@@ -89,10 +92,10 @@ function Invoke-StateForgeScript {
     }
 
     if (-not (Test-Path -LiteralPath $resolvedPath)) {
-        throw "Missing required validation script: $resolvedPath"
+        throw "Missing required validation script: $(ConvertTo-StateForgeDisplayPath -Path $resolvedPath -RepositoryRoot $script:StateForgeRepositoryRoot)"
     }
 
-    Write-Host "==> $resolvedPath"
+    Write-Host "==> $(ConvertTo-StateForgeDisplayPath -Path $resolvedPath -RepositoryRoot $script:StateForgeRepositoryRoot)"
 
     Push-Location -LiteralPath $script:StateForgeRepositoryRoot
     try {

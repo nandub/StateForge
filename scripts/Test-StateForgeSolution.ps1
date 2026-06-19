@@ -26,10 +26,11 @@ $ErrorActionPreference = 'Stop'
 try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
+    . (Join-Path -Path $scriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     $solutionPath = Join-Path -Path $repoRoot -ChildPath 'StateForge.sln'
 
     if (-not (Test-Path -LiteralPath $solutionPath)) {
-        throw "Solution file not found: $solutionPath"
+        throw "Solution file not found: $(ConvertTo-StateForgeDisplayPath -Path $solutionPath -RepositoryRoot $repoRoot)"
     }
 
     $projectNames = New-Object System.Collections.Generic.List[string]
@@ -61,7 +62,7 @@ try {
     }
 
     [PSCustomObject]@{
-        Solution     = $solutionPath
+        Solution     = ConvertTo-StateForgeDisplayPath -Path $solutionPath -RepositoryRoot $repoRoot
         ProjectCount = $projectNames.Count
         Success      = $true
     }

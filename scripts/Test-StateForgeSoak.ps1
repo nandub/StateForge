@@ -18,6 +18,7 @@ $ErrorActionPreference = 'Stop'
 
 try {
     $repoRoot = Split-Path -Path $PSScriptRoot -Parent
+    . (Join-Path -Path $PSScriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     $outputPath = Join-Path -Path $repoRoot -ChildPath 'artifacts\soak-validation'
 
     & (Join-Path -Path $PSScriptRoot -ChildPath 'Invoke-StateForgeSoakTest.ps1') `
@@ -60,8 +61,8 @@ try {
     }
 
     [PSCustomObject]@{
-        JsonPath = $jsonPath
-        CsvPath  = $csvPath
+        JsonPath = ConvertTo-StateForgeDisplayPath -Path $jsonPath -RepositoryRoot $repoRoot
+        CsvPath  = ConvertTo-StateForgeDisplayPath -Path $csvPath -RepositoryRoot $repoRoot
         Success  = $true
     }
 }

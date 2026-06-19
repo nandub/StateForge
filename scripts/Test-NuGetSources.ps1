@@ -26,13 +26,14 @@ $ErrorActionPreference = 'Stop'
 try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
+    . (Join-Path -Path $scriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     $nugetConfig = Join-Path -Path $repoRoot -ChildPath 'NuGet.config'
 
     if (-not (Test-Path -LiteralPath $nugetConfig)) {
-        throw "NuGet.config not found: $nugetConfig"
+        throw "NuGet.config not found: $(ConvertTo-StateForgeDisplayPath -Path $nugetConfig -RepositoryRoot $repoRoot)"
     }
 
-    Write-Verbose "Using NuGet.config: $nugetConfig"
+    Write-Verbose "Using NuGet.config: $(ConvertTo-StateForgeDisplayPath -Path $nugetConfig -RepositoryRoot $repoRoot)"
 
     & dotnet nuget list source --configfile $nugetConfig
     if ($LASTEXITCODE -ne 0) {
@@ -40,8 +41,8 @@ try {
     }
 
     [PSCustomObject]@{
-        RepositoryRoot = $repoRoot
-        NuGetConfig    = $nugetConfig
+        RepositoryRoot = ConvertTo-StateForgeDisplayPath -Path $repoRoot -RepositoryRoot $repoRoot
+        NuGetConfig    = ConvertTo-StateForgeDisplayPath -Path $nugetConfig -RepositoryRoot $repoRoot
         Success        = $true
     }
 }

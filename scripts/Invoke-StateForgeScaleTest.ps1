@@ -60,7 +60,9 @@ Set-StrictMode -Version 2.0
 $ErrorActionPreference = 'Stop'
 
 try {
-    $projectPath = Join-Path -Path (Get-Location) -ChildPath 'src\StateForge.ScaleTests\StateForge.ScaleTests.csproj'
+    $repoRoot = (Get-Location).Path
+    . (Join-Path -Path (Join-Path -Path $repoRoot -ChildPath 'scripts') -ChildPath 'StateForgePathDisplay.ps1')
+    $projectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ScaleTests\StateForge.ScaleTests.csproj'
     $arguments = @('run', '--project', $projectPath, '--configuration', 'Release', '--')
 
     if (-not [string]::IsNullOrWhiteSpace($RootPath)) {
@@ -96,7 +98,7 @@ try {
     }
 
     [PSCustomObject]@{
-        Project      = $projectPath
+        Project      = ConvertTo-StateForgeDisplayPath -Path $projectPath -RepositoryRoot $repoRoot
         Sessions     = $Sessions
         PayloadBytes = $PayloadBytes
         Threads      = $Threads

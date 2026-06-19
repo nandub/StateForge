@@ -27,6 +27,7 @@ $ErrorActionPreference = 'Stop'
 try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
+    . (Join-Path -Path $scriptRoot -ChildPath 'StateForgePathDisplay.ps1')
 
     $requiredFiles = @(
         'README.md',
@@ -98,6 +99,7 @@ try {
 
         'scripts\Build-StateForge.ps1',
         'scripts\Test-StateForgeRelease.ps1',
+        'scripts\StateForgePathDisplay.ps1',
         'scripts\Test-StateForgeObservability.ps1',
         'scripts\Test-StateForgeLargeScale.ps1',
         'scripts\Compare-StateForgeBenchmark.ps1',
@@ -256,7 +258,7 @@ try {
     }
 
     [PSCustomObject]@{
-        RepositoryRoot = $repoRoot
+        RepositoryRoot = ConvertTo-StateForgeDisplayPath -Path $repoRoot -RepositoryRoot $repoRoot
         RequiredFiles  = $requiredFiles.Count
         MissingFiles   = $missing.Count
         Success        = ($missing.Count -eq 0)

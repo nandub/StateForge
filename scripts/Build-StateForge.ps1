@@ -36,6 +36,7 @@ $ErrorActionPreference = 'Stop'
 try {
     $scriptRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
     $repoRoot = Split-Path -Parent $scriptRoot
+    . (Join-Path -Path $scriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     $solutionPath = Join-Path -Path $repoRoot -ChildPath 'StateForge.sln'
     $nugetConfig = Join-Path -Path $repoRoot -ChildPath 'NuGet.config'
     $layoutScript = Join-Path -Path $scriptRoot -ChildPath 'Test-StateForgeLayout.ps1'
@@ -45,7 +46,7 @@ try {
     $nugetSourceScript = Join-Path -Path $scriptRoot -ChildPath 'Test-NuGetSources.ps1'
 
     if (-not (Test-Path -LiteralPath $solutionPath)) {
-        throw "Solution file not found: $solutionPath"
+        throw "Solution file not found: $(ConvertTo-StateForgeDisplayPath -Path $solutionPath -RepositoryRoot $repoRoot)"
     }
 
     & $layoutScript | Out-Host
@@ -54,7 +55,8 @@ try {
     & $docsValidationScript | Out-Host
     & $nugetSourceScript | Out-Host
 
-    if ($PSCmdlet.ShouldProcess($solutionPath, "Restore and build StateForge solution")) {
+    $displaySolutionPath = ConvertTo-StateForgeDisplayPath -Path $solutionPath -RepositoryRoot $repoRoot
+    if ($PSCmdlet.ShouldProcess($displaySolutionPath, "Restore and build StateForge solution")) {
         & dotnet restore $solutionPath --configfile $nugetConfig
         if ($LASTEXITCODE -ne 0) {
             throw "dotnet restore failed with exit code $LASTEXITCODE."
@@ -67,7 +69,7 @@ try {
     }
 
     [PSCustomObject]@{
-        Solution      = $solutionPath
+        Solution      = ConvertTo-StateForgeDisplayPath -Path $solutionPath -RepositoryRoot $repoRoot
         Configuration = $Configuration
         Success       = $true
     }

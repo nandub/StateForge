@@ -114,6 +114,7 @@ $ErrorActionPreference = 'Stop'
 
 try {
     $repoRoot = Split-Path -Path $PSScriptRoot -Parent
+    . (Join-Path -Path $PSScriptRoot -ChildPath 'StateForgePathDisplay.ps1')
     $projectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.ScaleTests\StateForge.ScaleTests.csproj'
     $outputRoot = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputPath)
 
@@ -191,14 +192,14 @@ try {
     }
 
     [PSCustomObject]@{
-        Project         = $projectPath
+        Project         = ConvertTo-StateForgeDisplayPath -Path $projectPath -RepositoryRoot $repoRoot
         Sessions        = $Sessions
         PayloadBytes    = $PayloadBytes
         Threads         = $Threads
         DurationSeconds = $DurationSeconds
         MaxOperations   = $MaxOperations
-        JsonPath        = $jsonPath
-        CsvPath         = $csvPath
+        JsonPath        = ConvertTo-StateForgeDisplayPath -Path $jsonPath -RepositoryRoot $repoRoot
+        CsvPath         = ConvertTo-StateForgeDisplayPath -Path $csvPath -RepositoryRoot $repoRoot
         Success         = $true
     }
 }
