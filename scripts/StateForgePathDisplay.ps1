@@ -4,9 +4,8 @@ Formats local StateForge paths for user-facing script output.
 
 .DESCRIPTION
 Keeps script execution on the resolved repository path while allowing output to
-prefer a stable display path. This is useful when C:\Users\ferna\development is
-a junction to S:\Users\ferna\development but command output should remain in
-the C: path form.
+prefer a stable display path. Set STATEFORGE_DISPLAY_ROOT to force a specific
+display prefix, or let the helper prefer an equivalent C: path when one exists.
 
 .NOTES
 Compatible with Windows PowerShell 5.1.
@@ -23,13 +22,39 @@ function Get-StateForgeDisplayRoot {
         return $env:STATEFORGE_DISPLAY_ROOT.TrimEnd('\')
     }
 
-    $normalizedRoot = $RepositoryRoot.TrimEnd('\')
-    $mappedPrefix = 'S:\Users\ferna\development'
-    if ($normalizedRoot.StartsWith($mappedPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
-        return 'C:\Users\ferna\development' + $normalizedRoot.Substring($mappedPrefix.Length)
+    $normalizedRoot = [System.IO.Path]::GetFullPath($RepositoryRoot).TrimEnd('\')
+    $rootPath = [System.IO.Path]::GetPathRoot($normalizedRoot)
+
+    if (-not [string]::IsNullOrWhiteSpace($rootPath) -and
+        $rootPath.Length -ge 2 -and
+        -not $rootPath.StartsWith('C:', [System.StringComparison]::OrdinalIgnoreCase)) {
+        $candidateRoot = 'C:' + $normalizedRoot.Substring(2)
+        if (Test-StateForgeDisplayRootCandidate -CandidateRoot $candidateRoot) {
+            return $candidateRoot.TrimEnd('\')
+        }
     }
 
     return $normalizedRoot
+}
+
+function Test-StateForgeDisplayRootCandidate {
+    [CmdletBinding()]
+    param(
+        [Parameter()]
+        [string]$CandidateRoot
+    )
+
+    if ([string]::IsNullOrWhiteSpace($CandidateRoot)) {
+        return $false
+    }
+
+    try {
+        return (Test-Path -LiteralPath (Join-Path -Path $CandidateRoot -ChildPath 'StateForge.sln')) -and
+            (Test-Path -LiteralPath (Join-Path -Path $CandidateRoot -ChildPath 'scripts\Test-StateForge.ps1'))
+    }
+    catch {
+        return $false
+    }
 }
 
 function ConvertTo-StateForgeDisplayPath {
@@ -51,11 +76,6 @@ function ConvertTo-StateForgeDisplayPath {
 
     if ($Path.StartsWith($actualRoot, [System.StringComparison]::OrdinalIgnoreCase)) {
         return $displayRoot + $Path.Substring($actualRoot.Length)
-    }
-
-    $mappedPrefix = 'S:\Users\ferna\development'
-    if ($Path.StartsWith($mappedPrefix, [System.StringComparison]::OrdinalIgnoreCase)) {
-        return 'C:\Users\ferna\development' + $Path.Substring($mappedPrefix.Length)
     }
 
     return $Path
