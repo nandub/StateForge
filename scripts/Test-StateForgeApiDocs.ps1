@@ -49,7 +49,8 @@ try {
         'StateForge.Prometheus',
         'StateForge.Performance',
         'StateForge.Replication',
-        'StateForge.Snapshots'
+        'StateForge.Snapshots',
+        'StateForge.Remote'
     )
 
     foreach ($requiredNamespace in $requiredNamespaces) {
@@ -71,7 +72,8 @@ try {
         'StateForge.Replication',
         'StateForge.Security',
         'StateForge.Snapshots',
-        'StateForge.Telemetry'
+        'StateForge.Telemetry',
+        'StateForge.Remote'
     )
 
     foreach ($documentedProject in $documentedProjects) {
@@ -176,6 +178,10 @@ try {
         @{
             Page = 'api\StateForge.Snapshots.StateForgeSnapshotService.html'
             Text = 'Create a named snapshot and check its result'
+        },
+        @{
+            Page = 'api\StateForge.Remote.RemoteStateForgeStore.html'
+            Text = 'Use a StateForge remote endpoint alias to reach a TLS-backed gRPC store'
         },
         @{
             Page = 'api\StateForge.Telemetry.StateForgeMetrics.html'

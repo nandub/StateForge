@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+option csharp_namespace = "StateForge.Remote.Protocol";
+
+package stateforge.remote.v1;
+
+service StateForgeStoreRpc {
+  rpc Get(GetRequest) returns (GetResponse);
+  rpc GetAndLock(GetAndLockRequest) returns (GetAndLockResponse);
+  rpc Set(SetRequest) returns (SetResponse);
+  rpc SetAndUnlock(SetAndUnlockRequest) returns (SetAndUnlockResponse);
+  rpc Unlock(UnlockRequest) returns (UnlockResponse);
+  rpc Remove(RemoveRequest) returns (RemoveResponse);
+  rpc Refresh(RefreshRequest) returns (RefreshResponse);
+  rpc Enumerate(EnumerateRequest) returns (EnumerateResponse);
+  rpc GetDiagnostics(GetDiagnosticsRequest) returns (GetDiagnosticsResponse);
+  rpc CleanupExpired(CleanupExpiredRequest) returns (CleanupExpiredResponse);
+  rpc ForceRemove(ForceRemoveRequest) returns (ForceRemoveResponse);
+  rpc GetStats(GetStatsRequest) returns (GetStatsResponse);
+  rpc ValidateConfiguration(ValidateConfigurationRequest) returns (ValidateConfigurationResponse);
+  rpc CheckHealth(CheckHealthRequest) returns (CheckHealthResponse);
+}
+
+message GetRequest { string key = 1; }
+message GetAndLockRequest { string key = 1; int64 lock_timeout_milliseconds = 2; }
+message SetRequest { string key = 1; bytes value = 2; int64 timeout_milliseconds = 3; }
+message SetAndUnlockRequest { string key = 1; bytes value = 2; int64 timeout_milliseconds = 3; int64 lock_id = 4; }
+message UnlockRequest { string key = 1; int64 lock_id = 2; }
+message RemoveRequest { string key = 1; }
+message RefreshRequest { string key = 1; int64 timeout_milliseconds = 2; }
+message EnumerateRequest {}
+message GetDiagnosticsRequest {}
+message CleanupExpiredRequest { bool quarantine_invalid = 1; }
+message ForceRemoveRequest { string key = 1; }
+message GetStatsRequest {}
+message ValidateConfigurationRequest {}
+message CheckHealthRequest {}
+
+message StateForgeEntryDto {
+  string key = 1;
+  bytes value = 2;
+  int64 created_unix_ms = 3;
+  int64 updated_unix_ms = 4;
+  int64 expires_unix_ms = 5;
+  bool locked = 6;
+  int64 lock_id = 7;
+  bool has_lock_date = 8;
+  int64 lock_date_unix_ms = 9;
+}
+
+message StateForgeEntryInfoDto {
+  string key = 1;
+  int64 created_unix_ms = 2;
+  int64 updated_unix_ms = 3;
+  int64 expires_unix_ms = 4;
+  bool locked = 5;
+  int64 lock_id = 6;
+  string physical_path = 7;
+  int64 payload_length = 8;
+  bool expired = 9;
+  bool compressed = 10;
+  bool encrypted = 11;
+  bool aes_encrypted = 12;
+}
+
+message StateForgeDiagnosticsDto {
+  string root_path = 1;
+  string sessions_path = 2;
+  string temp_path = 3;
+  string backup_path = 4;
+  string quarantine_path = 5;
+  int32 session_file_count = 6;
+  int32 temp_file_count = 7;
+  int32 backup_file_count = 8;
+  int32 quarantine_file_count = 9;
+}
+
+message StateForgeStatsDto {
+  int32 total_sessions = 1;
+  int32 expired_sessions = 2;
+  int32 locked_sessions = 3;
+  int32 compressed_sessions = 4;
+  int32 encrypted_sessions = 5;
+  int32 aes_encrypted_sessions = 6;
+  int64 total_payload_bytes = 7;
+  int64 average_payload_bytes = 8;
+}
+
+message StateForgeValidationDto {
+  repeated string errors = 1;
+  repeated string warnings = 2;
+}
+
+message StateForgeHealthDto {
+  bool can_read = 1;
+  bool can_write = 2;
+  bool can_lock = 3;
+  bool can_enumerate = 4;
+  bool can_cleanup = 5;
+  repeated string errors = 6;
+}
+
+message StateForgeCleanupDto {
+  int32 expired_deleted = 1;
+  int32 invalid_quarantined = 2;
+  int32 invalid_deleted = 3;
+  int32 failed = 4;
+}
+
+message GetResponse { bool found = 1; StateForgeEntryDto entry = 2; }
+message GetAndLockResponse {
+  bool found = 1;
+  bool locked_by_other_request = 2;
+  int64 lock_id = 3;
+  int64 lock_age_milliseconds = 4;
+  StateForgeEntryDto entry = 5;
+}
+message SetResponse {}
+message SetAndUnlockResponse { bool updated = 1; }
+message UnlockResponse { bool unlocked = 1; }
+message RemoveResponse { bool removed = 1; }
+message RefreshResponse { bool refreshed = 1; }
+message EnumerateResponse { repeated StateForgeEntryInfoDto entries = 1; }
+message GetDiagnosticsResponse { StateForgeDiagnosticsDto diagnostics = 1; }
+message CleanupExpiredResponse { StateForgeCleanupDto cleanup = 1; }
+message ForceRemoveResponse { bool removed = 1; }
+message GetStatsResponse { StateForgeStatsDto stats = 1; }
+message ValidateConfigurationResponse { StateForgeValidationDto validation = 1; }
+message CheckHealthResponse { StateForgeHealthDto health = 1; }

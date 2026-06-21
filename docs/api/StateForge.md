@@ -16,3 +16,4 @@ The `StateForge` namespace root groups the public APIs provided by the shipped S
 - <xref:StateForge.Performance>
 - <xref:StateForge.Replication>
 - <xref:StateForge.Snapshots>
+- <xref:StateForge.Remote>

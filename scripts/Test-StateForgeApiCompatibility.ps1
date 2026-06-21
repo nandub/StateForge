@@ -43,7 +43,8 @@ try {
         @{ Name = 'StateForge.Prometheus'; Framework = 'netstandard2.0'; ValidatorFramework = 'net8.0' },
         @{ Name = 'StateForge.Performance'; Framework = 'netstandard2.0'; ValidatorFramework = 'net8.0' },
         @{ Name = 'StateForge.Replication'; Framework = 'netstandard2.0'; ValidatorFramework = 'net8.0' },
-        @{ Name = 'StateForge.Snapshots'; Framework = 'netstandard2.0'; ValidatorFramework = 'net8.0' }
+        @{ Name = 'StateForge.Snapshots'; Framework = 'netstandard2.0'; ValidatorFramework = 'net8.0' },
+        @{ Name = 'StateForge.Remote'; Framework = 'net8.0'; ValidatorFramework = 'net8.0' }
     )
 
     $expectedBaselines = @($packages | ForEach-Object { $_.Name + '.txt' })

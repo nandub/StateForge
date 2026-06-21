@@ -12,6 +12,7 @@
 | `StateForge.Prometheus` | Prometheus text output |
 | `StateForge.Snapshots` | Snapshot, promotion, and failover services |
 | `StateForge.CloudNative` | Cloud-native helpers |
+| `StateForge.Remote` | gRPC/TLS remote store client |
 
 ## Providers
 
@@ -30,6 +31,7 @@
 | `StateForge.Tools` | CLI-style tooling |
 | `StateForge.Replication` | Replication library |
 | `StateForge.Replication.Host` | Replication host executable |
+| `StateForge.Remote.Host` | gRPC/TLS remote store host executable |
 | `StateForge.ReplicaMonitoringTests` | Replica lag, stale-state, and Prometheus validation |
 | `StateForge.QuorumTests` | Cluster membership, quorum, and promotion eligibility validation |
 | `StateForge.WitnessTests` | Witness persistence, health, vote, and quorum validation |

@@ -1,6 +1,6 @@
 # Generated .NET API
 
-This reference is generated from the public types and compiler XML comments in all twelve shipped
+This reference is generated from the public types and compiler XML comments in all thirteen shipped
 StateForge packages.
 
 ## Packages
@@ -17,5 +17,6 @@ StateForge packages.
 - <xref:StateForge.Performance>
 - <xref:StateForge.Replication>
 - <xref:StateForge.Snapshots>
+- <xref:StateForge.Remote>
 
 Use the navigation tree to browse namespaces, types, constructors, properties, and methods.

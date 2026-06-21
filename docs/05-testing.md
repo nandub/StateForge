@@ -13,7 +13,7 @@
 .\scripts\Test-StateForge.ps1 -Suite ApiDocs
 ```
 
-`ApiDocs` restores the repository-pinned DocFX tool, builds generated reference metadata for all twelve
+`ApiDocs` restores the repository-pinned DocFX tool, builds generated reference metadata for all thirteen
 shipped packages, and verifies that Core, Format, and Security retain complete compiler-enforced XML comments.
 
 ## Version Consistency
@@ -103,7 +103,7 @@ Feature-specific scripts remain available for compatibility.
 .\scripts\Test-StateForge.ps1 -Suite ApiCompatibility
 ```
 
-This compiles the runtime API smoke test and compares all twelve package assemblies with the reviewed
+This compiles the runtime API smoke test and compares all thirteen package assemblies with the reviewed
 files under `api-baselines`. Additions, removals, and signature changes fail until the change is reviewed
 and explicitly approved:
 
@@ -148,7 +148,7 @@ per-folder README coverage, and validates safe ASP.NET Framework sample defaults
 .\scripts\Test-StateForge.ps1 -Suite Packages
 ```
 
-This builds all twelve package and symbol artifacts, validates NuGet repository and commit metadata,
+This builds all thirteen package and symbol artifacts, validates NuGet repository and commit metadata,
 inspects portable PDB SourceLink mappings, and builds isolated `net8.0` and `net481` consumers from the
 local package feed.
 

@@ -35,7 +35,7 @@ Do not add one document per feature unless the feature becomes large enough to j
 
 ## Generated .NET API
 
-Build the Microsoft-style generated reference for all twelve shipped packages:
+Build the Microsoft-style generated reference for all thirteen shipped packages:
 
 ```powershell
 .\scripts\Build-StateForgeApiDocs.ps1

@@ -82,6 +82,16 @@ try {
         'src\StateForge.FileStore\StateForge.FileStore.csproj',
         'src\StateForge.AspNet\StateForge.AspNet.csproj',
         'src\StateForge.AspNetCore\StateForge.AspNetCore.csproj',
+        'src\StateForge.Remote\StateForge.Remote.csproj',
+        'src\StateForge.Remote\Protos\stateforge_store.proto',
+        'src\StateForge.Remote\RemoteStateForgeStore.cs',
+        'src\StateForge.Remote\RemoteStateForgeOptions.cs',
+        'src\StateForge.Remote\StateForgeRemoteEndpoint.cs',
+        'src\StateForge.Remote\StateForgeRemoteServiceCollectionExtensions.cs',
+        'src\StateForge.Remote.Host\StateForge.Remote.Host.csproj',
+        'src\StateForge.Remote.Host\Program.cs',
+        'src\StateForge.Remote.Host\StateForgeStoreGrpcService.cs',
+        'src\StateForge.Remote.Host\appsettings.json',
         'src\StateForge.Maintenance\StateForge.Maintenance.csproj',
         'src\StateForge.Maintenance.Host\StateForge.Maintenance.Host.csproj',
         'src\StateForge.Security\StateForge.Security.csproj',
@@ -96,6 +106,8 @@ try {
         'src\StateForge.KestrelHarness\StateForge.KestrelHarness.csproj',
         'src\StateForge.KestrelClientTest\StateForge.KestrelClientTest.csproj',
         'tests\StateForge.FileStore.Tests\StateForge.FileStore.Tests.csproj',
+        'tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj',
+        'tests\StateForge.Remote.Tests\StateForgeRemoteEndpointTests.cs',
 
         'scripts\Build-StateForge.ps1',
         'scripts\Test-StateForgeRelease.ps1',
@@ -204,6 +216,7 @@ try {
         'api-baselines\StateForge.Performance.txt'
         'api-baselines\StateForge.Replication.txt'
         'api-baselines\StateForge.Snapshots.txt'
+        'api-baselines\StateForge.Remote.txt'
         'performance-baselines\README.md'
         'performance-baselines\small.csv'
         'performance-baselines\small.json'

@@ -17,6 +17,7 @@ Current repository version: **1.0.0**
 | ASP.NET Core session or `IDistributedCache` | `StateForge.AspNetCore` |
 | ASP.NET Framework Web Forms or MVC 5 session state | `StateForge.AspNet` |
 | Cloud-native app with environment configuration, health checks, and telemetry | `StateForge.CloudNative` |
+| Client app that must call a central StateForge store over TLS | `StateForge.Remote` and `StateForge.Remote.Host` |
 
 The maintained examples are listed in `samples\README.md`; each sample folder has its own detailed
 `README.md`.
@@ -198,6 +199,43 @@ if (!string.IsNullOrWhiteSpace(aesKey))
 
 New AES records are authenticated. Encryption protects record contents, but it does not replace
 least-privilege filesystem permissions.
+
+## Configure a Remote Store
+
+Use `StateForge.Remote` when an application should keep the `IStateForgeStore` programming model but
+send operations to a central StateForge host over gRPC/TLS. The `tcp:HOST:PORT` endpoint form is only a
+StateForge configuration alias; clients convert it to `https://HOST:PORT` internally.
+
+Client registration:
+
+```csharp
+using StateForge.Remote;
+
+builder.Services.AddRemoteStateForgeStore(options =>
+{
+    options.Endpoint = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_ENDPOINT")
+        ?? "tcp:stateforge.internal:7443";
+    options.BearerToken = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_BEARER_TOKEN");
+    options.CallTimeout = TimeSpan.FromSeconds(5);
+});
+```
+
+Remote host environment:
+
+```powershell
+$env:STATEFORGE_REMOTE_LISTEN = "tcp:0.0.0.0:7443"
+$env:STATEFORGE_REMOTE_TLS_CERT_PATH = "C:\StateForge\certs\stateforge-remote.pfx"
+$env:STATEFORGE_REMOTE_TLS_CERT_PASSWORD = "from-secret-manager"
+$env:STATEFORGE_REMOTE_BEARER_TOKEN = "from-secret-manager"
+$env:STATEFORGE_ROOT_PATH = "C:\StateForge\RemoteStore"
+$env:STATEFORGE_AES_KEY_BASE64 = "BASE64_ENCODED_AES_KEY"
+
+dotnet run --project .\src\StateForge.Remote.Host\StateForge.Remote.Host.csproj
+```
+
+Use a certificate whose subject alternative name matches the hostname or IP address clients use. Store
+the TLS certificate password, bearer token, and AES key in a secret manager or protected environment
+injection, not in source.
 
 ## Configure ASP.NET Core Session State
 

@@ -158,7 +158,7 @@ Encryption is disabled in the generic ConfigMap. To enable AES, populate `statef
 .\scripts\Test-StateForge.ps1 -Suite Packages
 ```
 
-The package suite builds all twelve `.nupkg` and `.snupkg` artifacts, checks repository URL and commit
+The package suite builds all thirteen `.nupkg` and `.snupkg` artifacts, checks repository URL and commit
 metadata, validates portable PDB SourceLink mappings, and restores plus builds isolated `net8.0` and
 `net481` consumer projects from the local package feed.
 

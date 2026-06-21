@@ -100,6 +100,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.SplitBrainTests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.MultiSiteTests", "src\StateForge.MultiSiteTests\StateForge.MultiSiteTests.csproj", "{1D2E0245-37D1-480A-8447-C070515778BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Remote", "src\StateForge.Remote\StateForge.Remote.csproj", "{23FDE231-BA72-4250-BC2E-A0231C7BEA06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Remote.Host", "src\StateForge.Remote.Host\StateForge.Remote.Host.csproj", "{03CB4A29-9B28-4FCD-8C44-D6353D1A2C85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StateForge.Remote.Tests", "tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj", "{B3E2B555-A0F5-4D83-8FD6-601F7E00223B}"
+EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
         Debug|Any CPU = Debug|Any CPU
@@ -302,5 +308,17 @@ Global
         {1D2E0245-37D1-480A-8447-C070515778BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {1D2E0245-37D1-480A-8447-C070515778BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
         {1D2E0245-37D1-480A-8447-C070515778BD}.Release|Any CPU.Build.0 = Release|Any CPU
+        {23FDE231-BA72-4250-BC2E-A0231C7BEA06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {23FDE231-BA72-4250-BC2E-A0231C7BEA06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {23FDE231-BA72-4250-BC2E-A0231C7BEA06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {23FDE231-BA72-4250-BC2E-A0231C7BEA06}.Release|Any CPU.Build.0 = Release|Any CPU
+        {03CB4A29-9B28-4FCD-8C44-D6353D1A2C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {03CB4A29-9B28-4FCD-8C44-D6353D1A2C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {03CB4A29-9B28-4FCD-8C44-D6353D1A2C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {03CB4A29-9B28-4FCD-8C44-D6353D1A2C85}.Release|Any CPU.Build.0 = Release|Any CPU
+        {B3E2B555-A0F5-4D83-8FD6-601F7E00223B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {B3E2B555-A0F5-4D83-8FD6-601F7E00223B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {B3E2B555-A0F5-4D83-8FD6-601F7E00223B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {B3E2B555-A0F5-4D83-8FD6-601F7E00223B}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
 EndGlobal
