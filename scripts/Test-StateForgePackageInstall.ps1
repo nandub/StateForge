@@ -67,6 +67,7 @@ try {
     <PackageReference Include="StateForge.Performance" Version="$Version" />
     <PackageReference Include="StateForge.Replication" Version="$Version" />
     <PackageReference Include="StateForge.Snapshots" Version="$Version" />
+    <PackageReference Include="StateForge.Remote" Version="$Version" />
   </ItemGroup>
 </Project>
 "@

@@ -7,6 +7,7 @@ StateForge is a file-backed state platform composed of small libraries and opera
 ```text
 Applications
   -> ASP.NET / ASP.NET Core providers
+  -> RemoteStateForgeStore over gRPC/TLS
   -> StateForge FileStore
      -> STFG/STFG2 format
      -> Security envelope
@@ -37,6 +38,16 @@ Core projects:
 ## Sharding
 
 Sharding distributes session files into hash-derived folders. This avoids large flat directories and supports rolling migration through fallback reads.
+
+## Remote Store
+
+`StateForge.Remote` preserves the `IStateForgeStore` contract for callers that need to reach a central
+store over the network. The client uses ASP.NET Core gRPC over Kestrel-compatible HTTP/2 with TLS; it
+does not introduce a custom socket protocol. `StateForge.Remote.Host` terminates TLS, validates optional
+bearer authorization, and delegates store operations to `StateForgeFileStore`.
+
+Client endpoints may use `tcp:HOST:PORT` as a StateForge-specific alias, but the client converts that
+form to `https://HOST:PORT` before opening the gRPC channel.
 
 ## Replication
 

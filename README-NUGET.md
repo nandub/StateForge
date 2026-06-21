@@ -16,6 +16,7 @@ StateForge is a file-based session state and distributed cache platform for .NET
 - StateForge.Performance
 - StateForge.Replication
 - StateForge.Snapshots
+- StateForge.Remote
 
 ## ASP.NET Core Example
 

@@ -14,6 +14,7 @@ Implemented areas include:
 - encryption and key-ring support
 - maintenance and health tooling
 - observability and Prometheus metrics
+- remote gRPC/TLS store client and host
 - sharding
 - replication
 - replication manifests

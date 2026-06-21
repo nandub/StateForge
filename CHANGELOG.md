@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-No unreleased changes.
+- Added `StateForge.Remote`, a gRPC/TLS `IStateForgeStore` client with `tcp:HOST:PORT` endpoint aliases mapped to HTTPS.
+- Added `StateForge.Remote.Host`, a Kestrel HTTP/2 TLS host that fronts `StateForgeFileStore` for remote StateForge clients.
+- Added endpoint parsing tests, package/API metadata, DocFX coverage, and source guards for the remote transport.
 
 ## 1.0.0
 

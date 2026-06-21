@@ -1,0 +1,791 @@
+# StateForge.Remote
+
+public sealed class StateForge.Remote.Protocol.CheckHealthRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.CheckHealthRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.CheckHealthRequest>, System.IEquatable<StateForge.Remote.Protocol.CheckHealthRequest>
+  constructor CheckHealthRequest()
+  constructor CheckHealthRequest(StateForge.Remote.Protocol.CheckHealthRequest other)
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.CheckHealthRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.CheckHealthRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.CheckHealthRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.CheckHealthRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.CheckHealthResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.CheckHealthResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.CheckHealthResponse>, System.IEquatable<StateForge.Remote.Protocol.CheckHealthResponse>
+  const System.Int32 HealthFieldNumber = 1
+  constructor CheckHealthResponse()
+  constructor CheckHealthResponse(StateForge.Remote.Protocol.CheckHealthResponse other)
+  property StateForge.Remote.Protocol.StateForgeHealthDto Health { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.CheckHealthResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.CheckHealthResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.CheckHealthResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.CheckHealthResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.CleanupExpiredRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.CleanupExpiredRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.CleanupExpiredRequest>, System.IEquatable<StateForge.Remote.Protocol.CleanupExpiredRequest>
+  const System.Int32 QuarantineInvalidFieldNumber = 1
+  constructor CleanupExpiredRequest()
+  constructor CleanupExpiredRequest(StateForge.Remote.Protocol.CleanupExpiredRequest other)
+  property System.Boolean QuarantineInvalid { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.CleanupExpiredRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.CleanupExpiredRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.CleanupExpiredRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.CleanupExpiredRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.CleanupExpiredResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.CleanupExpiredResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.CleanupExpiredResponse>, System.IEquatable<StateForge.Remote.Protocol.CleanupExpiredResponse>
+  const System.Int32 CleanupFieldNumber = 1
+  constructor CleanupExpiredResponse()
+  constructor CleanupExpiredResponse(StateForge.Remote.Protocol.CleanupExpiredResponse other)
+  property StateForge.Remote.Protocol.StateForgeCleanupDto Cleanup { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.CleanupExpiredResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.CleanupExpiredResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.CleanupExpiredResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.CleanupExpiredResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.EnumerateRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.EnumerateRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.EnumerateRequest>, System.IEquatable<StateForge.Remote.Protocol.EnumerateRequest>
+  constructor EnumerateRequest()
+  constructor EnumerateRequest(StateForge.Remote.Protocol.EnumerateRequest other)
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.EnumerateRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.EnumerateRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.EnumerateRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.EnumerateRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.EnumerateResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.EnumerateResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.EnumerateResponse>, System.IEquatable<StateForge.Remote.Protocol.EnumerateResponse>
+  const System.Int32 EntriesFieldNumber = 1
+  constructor EnumerateResponse()
+  constructor EnumerateResponse(StateForge.Remote.Protocol.EnumerateResponse other)
+  property Google.Protobuf.Collections.RepeatedField<StateForge.Remote.Protocol.StateForgeEntryInfoDto> Entries { get; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.EnumerateResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.EnumerateResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.EnumerateResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.EnumerateResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.ForceRemoveRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.ForceRemoveRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.ForceRemoveRequest>, System.IEquatable<StateForge.Remote.Protocol.ForceRemoveRequest>
+  const System.Int32 KeyFieldNumber = 1
+  constructor ForceRemoveRequest()
+  constructor ForceRemoveRequest(StateForge.Remote.Protocol.ForceRemoveRequest other)
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.ForceRemoveRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.ForceRemoveRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.ForceRemoveRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.ForceRemoveRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.ForceRemoveResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.ForceRemoveResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.ForceRemoveResponse>, System.IEquatable<StateForge.Remote.Protocol.ForceRemoveResponse>
+  const System.Int32 RemovedFieldNumber = 1
+  constructor ForceRemoveResponse()
+  constructor ForceRemoveResponse(StateForge.Remote.Protocol.ForceRemoveResponse other)
+  property System.Boolean Removed { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.ForceRemoveResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.ForceRemoveResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.ForceRemoveResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.ForceRemoveResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetAndLockRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetAndLockRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetAndLockRequest>, System.IEquatable<StateForge.Remote.Protocol.GetAndLockRequest>
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 LockTimeoutMillisecondsFieldNumber = 2
+  constructor GetAndLockRequest()
+  constructor GetAndLockRequest(StateForge.Remote.Protocol.GetAndLockRequest other)
+  property System.Int64 LockTimeoutMilliseconds { get;set; }
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetAndLockRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetAndLockRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetAndLockRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetAndLockRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetAndLockResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetAndLockResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetAndLockResponse>, System.IEquatable<StateForge.Remote.Protocol.GetAndLockResponse>
+  const System.Int32 EntryFieldNumber = 5
+  const System.Int32 FoundFieldNumber = 1
+  const System.Int32 LockAgeMillisecondsFieldNumber = 4
+  const System.Int32 LockIdFieldNumber = 3
+  const System.Int32 LockedByOtherRequestFieldNumber = 2
+  constructor GetAndLockResponse()
+  constructor GetAndLockResponse(StateForge.Remote.Protocol.GetAndLockResponse other)
+  property StateForge.Remote.Protocol.StateForgeEntryDto Entry { get;set; }
+  property System.Boolean Found { get;set; }
+  property System.Boolean LockedByOtherRequest { get;set; }
+  property System.Int64 LockAgeMilliseconds { get;set; }
+  property System.Int64 LockId { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetAndLockResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetAndLockResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetAndLockResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetAndLockResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetDiagnosticsRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetDiagnosticsRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetDiagnosticsRequest>, System.IEquatable<StateForge.Remote.Protocol.GetDiagnosticsRequest>
+  constructor GetDiagnosticsRequest()
+  constructor GetDiagnosticsRequest(StateForge.Remote.Protocol.GetDiagnosticsRequest other)
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetDiagnosticsRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetDiagnosticsRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetDiagnosticsRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetDiagnosticsRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetDiagnosticsResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetDiagnosticsResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetDiagnosticsResponse>, System.IEquatable<StateForge.Remote.Protocol.GetDiagnosticsResponse>
+  const System.Int32 DiagnosticsFieldNumber = 1
+  constructor GetDiagnosticsResponse()
+  constructor GetDiagnosticsResponse(StateForge.Remote.Protocol.GetDiagnosticsResponse other)
+  property StateForge.Remote.Protocol.StateForgeDiagnosticsDto Diagnostics { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetDiagnosticsResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetDiagnosticsResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetDiagnosticsResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetDiagnosticsResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetRequest>, System.IEquatable<StateForge.Remote.Protocol.GetRequest>
+  const System.Int32 KeyFieldNumber = 1
+  constructor GetRequest()
+  constructor GetRequest(StateForge.Remote.Protocol.GetRequest other)
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetResponse>, System.IEquatable<StateForge.Remote.Protocol.GetResponse>
+  const System.Int32 EntryFieldNumber = 2
+  const System.Int32 FoundFieldNumber = 1
+  constructor GetResponse()
+  constructor GetResponse(StateForge.Remote.Protocol.GetResponse other)
+  property StateForge.Remote.Protocol.StateForgeEntryDto Entry { get;set; }
+  property System.Boolean Found { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetStatsRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetStatsRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetStatsRequest>, System.IEquatable<StateForge.Remote.Protocol.GetStatsRequest>
+  constructor GetStatsRequest()
+  constructor GetStatsRequest(StateForge.Remote.Protocol.GetStatsRequest other)
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetStatsRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetStatsRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetStatsRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetStatsRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.GetStatsResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.GetStatsResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.GetStatsResponse>, System.IEquatable<StateForge.Remote.Protocol.GetStatsResponse>
+  const System.Int32 StatsFieldNumber = 1
+  constructor GetStatsResponse()
+  constructor GetStatsResponse(StateForge.Remote.Protocol.GetStatsResponse other)
+  property StateForge.Remote.Protocol.StateForgeStatsDto Stats { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.GetStatsResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.GetStatsResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.GetStatsResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.GetStatsResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.RefreshRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.RefreshRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.RefreshRequest>, System.IEquatable<StateForge.Remote.Protocol.RefreshRequest>
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 TimeoutMillisecondsFieldNumber = 2
+  constructor RefreshRequest()
+  constructor RefreshRequest(StateForge.Remote.Protocol.RefreshRequest other)
+  property System.Int64 TimeoutMilliseconds { get;set; }
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.RefreshRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.RefreshRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.RefreshRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.RefreshRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.RefreshResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.RefreshResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.RefreshResponse>, System.IEquatable<StateForge.Remote.Protocol.RefreshResponse>
+  const System.Int32 RefreshedFieldNumber = 1
+  constructor RefreshResponse()
+  constructor RefreshResponse(StateForge.Remote.Protocol.RefreshResponse other)
+  property System.Boolean Refreshed { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.RefreshResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.RefreshResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.RefreshResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.RefreshResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.RemoveRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.RemoveRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.RemoveRequest>, System.IEquatable<StateForge.Remote.Protocol.RemoveRequest>
+  const System.Int32 KeyFieldNumber = 1
+  constructor RemoveRequest()
+  constructor RemoveRequest(StateForge.Remote.Protocol.RemoveRequest other)
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.RemoveRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.RemoveRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.RemoveRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.RemoveRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.RemoveResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.RemoveResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.RemoveResponse>, System.IEquatable<StateForge.Remote.Protocol.RemoveResponse>
+  const System.Int32 RemovedFieldNumber = 1
+  constructor RemoveResponse()
+  constructor RemoveResponse(StateForge.Remote.Protocol.RemoveResponse other)
+  property System.Boolean Removed { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.RemoveResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.RemoveResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.RemoveResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.RemoveResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.SetAndUnlockRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.SetAndUnlockRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.SetAndUnlockRequest>, System.IEquatable<StateForge.Remote.Protocol.SetAndUnlockRequest>
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 LockIdFieldNumber = 4
+  const System.Int32 TimeoutMillisecondsFieldNumber = 3
+  const System.Int32 ValueFieldNumber = 2
+  constructor SetAndUnlockRequest()
+  constructor SetAndUnlockRequest(StateForge.Remote.Protocol.SetAndUnlockRequest other)
+  property Google.Protobuf.ByteString Value { get;set; }
+  property System.Int64 LockId { get;set; }
+  property System.Int64 TimeoutMilliseconds { get;set; }
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.SetAndUnlockRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.SetAndUnlockRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.SetAndUnlockRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.SetAndUnlockRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.SetAndUnlockResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.SetAndUnlockResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.SetAndUnlockResponse>, System.IEquatable<StateForge.Remote.Protocol.SetAndUnlockResponse>
+  const System.Int32 UpdatedFieldNumber = 1
+  constructor SetAndUnlockResponse()
+  constructor SetAndUnlockResponse(StateForge.Remote.Protocol.SetAndUnlockResponse other)
+  property System.Boolean Updated { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.SetAndUnlockResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.SetAndUnlockResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.SetAndUnlockResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.SetAndUnlockResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.SetRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.SetRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.SetRequest>, System.IEquatable<StateForge.Remote.Protocol.SetRequest>
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 TimeoutMillisecondsFieldNumber = 3
+  const System.Int32 ValueFieldNumber = 2
+  constructor SetRequest()
+  constructor SetRequest(StateForge.Remote.Protocol.SetRequest other)
+  property Google.Protobuf.ByteString Value { get;set; }
+  property System.Int64 TimeoutMilliseconds { get;set; }
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.SetRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.SetRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.SetRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.SetRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.SetResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.SetResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.SetResponse>, System.IEquatable<StateForge.Remote.Protocol.SetResponse>
+  constructor SetResponse()
+  constructor SetResponse(StateForge.Remote.Protocol.SetResponse other)
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.SetResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.SetResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.SetResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.SetResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.StateForgeCleanupDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeCleanupDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeCleanupDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeCleanupDto>
+  const System.Int32 ExpiredDeletedFieldNumber = 1
+  const System.Int32 FailedFieldNumber = 4
+  const System.Int32 InvalidDeletedFieldNumber = 3
+  const System.Int32 InvalidQuarantinedFieldNumber = 2
+  constructor StateForgeCleanupDto()
+  constructor StateForgeCleanupDto(StateForge.Remote.Protocol.StateForgeCleanupDto other)
+  property System.Int32 ExpiredDeleted { get;set; }
+  property System.Int32 Failed { get;set; }
+  property System.Int32 InvalidDeleted { get;set; }
+  property System.Int32 InvalidQuarantined { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeCleanupDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeCleanupDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeCleanupDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeCleanupDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.StateForgeDiagnosticsDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeDiagnosticsDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeDiagnosticsDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeDiagnosticsDto>
+  const System.Int32 BackupFileCountFieldNumber = 8
+  const System.Int32 BackupPathFieldNumber = 4
+  const System.Int32 QuarantineFileCountFieldNumber = 9
+  const System.Int32 QuarantinePathFieldNumber = 5
+  const System.Int32 RootPathFieldNumber = 1
+  const System.Int32 SessionFileCountFieldNumber = 6
+  const System.Int32 SessionsPathFieldNumber = 2
+  const System.Int32 TempFileCountFieldNumber = 7
+  const System.Int32 TempPathFieldNumber = 3
+  constructor StateForgeDiagnosticsDto()
+  constructor StateForgeDiagnosticsDto(StateForge.Remote.Protocol.StateForgeDiagnosticsDto other)
+  property System.Int32 BackupFileCount { get;set; }
+  property System.Int32 QuarantineFileCount { get;set; }
+  property System.Int32 SessionFileCount { get;set; }
+  property System.Int32 TempFileCount { get;set; }
+  property System.String BackupPath { get;set; }
+  property System.String QuarantinePath { get;set; }
+  property System.String RootPath { get;set; }
+  property System.String SessionsPath { get;set; }
+  property System.String TempPath { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeDiagnosticsDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeDiagnosticsDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeDiagnosticsDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeDiagnosticsDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.StateForgeEntryDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeEntryDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeEntryDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeEntryDto>
+  const System.Int32 CreatedUnixMsFieldNumber = 3
+  const System.Int32 ExpiresUnixMsFieldNumber = 5
+  const System.Int32 HasLockDateFieldNumber = 8
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 LockDateUnixMsFieldNumber = 9
+  const System.Int32 LockIdFieldNumber = 7
+  const System.Int32 LockedFieldNumber = 6
+  const System.Int32 UpdatedUnixMsFieldNumber = 4
+  const System.Int32 ValueFieldNumber = 2
+  constructor StateForgeEntryDto()
+  constructor StateForgeEntryDto(StateForge.Remote.Protocol.StateForgeEntryDto other)
+  property Google.Protobuf.ByteString Value { get;set; }
+  property System.Boolean HasLockDate { get;set; }
+  property System.Boolean Locked { get;set; }
+  property System.Int64 CreatedUnixMs { get;set; }
+  property System.Int64 ExpiresUnixMs { get;set; }
+  property System.Int64 LockDateUnixMs { get;set; }
+  property System.Int64 LockId { get;set; }
+  property System.Int64 UpdatedUnixMs { get;set; }
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeEntryDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeEntryDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeEntryDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeEntryDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.StateForgeEntryInfoDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeEntryInfoDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeEntryInfoDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeEntryInfoDto>
+  const System.Int32 AesEncryptedFieldNumber = 12
+  const System.Int32 CompressedFieldNumber = 10
+  const System.Int32 CreatedUnixMsFieldNumber = 2
+  const System.Int32 EncryptedFieldNumber = 11
+  const System.Int32 ExpiredFieldNumber = 9
+  const System.Int32 ExpiresUnixMsFieldNumber = 4
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 LockIdFieldNumber = 6
+  const System.Int32 LockedFieldNumber = 5
+  const System.Int32 PayloadLengthFieldNumber = 8
+  const System.Int32 PhysicalPathFieldNumber = 7
+  const System.Int32 UpdatedUnixMsFieldNumber = 3
+  constructor StateForgeEntryInfoDto()
+  constructor StateForgeEntryInfoDto(StateForge.Remote.Protocol.StateForgeEntryInfoDto other)
+  property System.Boolean AesEncrypted { get;set; }
+  property System.Boolean Compressed { get;set; }
+  property System.Boolean Encrypted { get;set; }
+  property System.Boolean Expired { get;set; }
+  property System.Boolean Locked { get;set; }
+  property System.Int64 CreatedUnixMs { get;set; }
+  property System.Int64 ExpiresUnixMs { get;set; }
+  property System.Int64 LockId { get;set; }
+  property System.Int64 PayloadLength { get;set; }
+  property System.Int64 UpdatedUnixMs { get;set; }
+  property System.String Key { get;set; }
+  property System.String PhysicalPath { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeEntryInfoDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeEntryInfoDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeEntryInfoDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeEntryInfoDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.StateForgeHealthDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeHealthDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeHealthDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeHealthDto>
+  const System.Int32 CanCleanupFieldNumber = 5
+  const System.Int32 CanEnumerateFieldNumber = 4
+  const System.Int32 CanLockFieldNumber = 3
+  const System.Int32 CanReadFieldNumber = 1
+  const System.Int32 CanWriteFieldNumber = 2
+  const System.Int32 ErrorsFieldNumber = 6
+  constructor StateForgeHealthDto()
+  constructor StateForgeHealthDto(StateForge.Remote.Protocol.StateForgeHealthDto other)
+  property Google.Protobuf.Collections.RepeatedField<System.String> Errors { get; }
+  property System.Boolean CanCleanup { get;set; }
+  property System.Boolean CanEnumerate { get;set; }
+  property System.Boolean CanLock { get;set; }
+  property System.Boolean CanRead { get;set; }
+  property System.Boolean CanWrite { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeHealthDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeHealthDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeHealthDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeHealthDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.StateForgeStatsDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeStatsDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeStatsDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeStatsDto>
+  const System.Int32 AesEncryptedSessionsFieldNumber = 6
+  const System.Int32 AveragePayloadBytesFieldNumber = 8
+  const System.Int32 CompressedSessionsFieldNumber = 4
+  const System.Int32 EncryptedSessionsFieldNumber = 5
+  const System.Int32 ExpiredSessionsFieldNumber = 2
+  const System.Int32 LockedSessionsFieldNumber = 3
+  const System.Int32 TotalPayloadBytesFieldNumber = 7
+  const System.Int32 TotalSessionsFieldNumber = 1
+  constructor StateForgeStatsDto()
+  constructor StateForgeStatsDto(StateForge.Remote.Protocol.StateForgeStatsDto other)
+  property System.Int32 AesEncryptedSessions { get;set; }
+  property System.Int32 CompressedSessions { get;set; }
+  property System.Int32 EncryptedSessions { get;set; }
+  property System.Int32 ExpiredSessions { get;set; }
+  property System.Int32 LockedSessions { get;set; }
+  property System.Int32 TotalSessions { get;set; }
+  property System.Int64 AveragePayloadBytes { get;set; }
+  property System.Int64 TotalPayloadBytes { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeStatsDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeStatsDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeStatsDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeStatsDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public static class StateForge.Remote.Protocol.StateForgeStoreRpc
+  static property Google.Protobuf.Reflection.ServiceDescriptor Descriptor { get; }
+
+public class StateForge.Remote.Protocol.StateForgeStoreRpc.StateForgeStoreRpcClient : Grpc.Core.ClientBase<StateForge.Remote.Protocol.StateForgeStoreRpc.StateForgeStoreRpcClient>
+  constructor StateForgeStoreRpcClient(Grpc.Core.CallInvoker callInvoker)
+  constructor StateForgeStoreRpcClient(Grpc.Core.ChannelBase channel)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.CheckHealthResponse> CheckHealthAsync(StateForge.Remote.Protocol.CheckHealthRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.CheckHealthResponse> CheckHealthAsync(StateForge.Remote.Protocol.CheckHealthRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.CleanupExpiredResponse> CleanupExpiredAsync(StateForge.Remote.Protocol.CleanupExpiredRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.CleanupExpiredResponse> CleanupExpiredAsync(StateForge.Remote.Protocol.CleanupExpiredRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.EnumerateResponse> EnumerateAsync(StateForge.Remote.Protocol.EnumerateRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.EnumerateResponse> EnumerateAsync(StateForge.Remote.Protocol.EnumerateRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.ForceRemoveResponse> ForceRemoveAsync(StateForge.Remote.Protocol.ForceRemoveRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.ForceRemoveResponse> ForceRemoveAsync(StateForge.Remote.Protocol.ForceRemoveRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetAndLockResponse> GetAndLockAsync(StateForge.Remote.Protocol.GetAndLockRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetAndLockResponse> GetAndLockAsync(StateForge.Remote.Protocol.GetAndLockRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetDiagnosticsResponse> GetDiagnosticsAsync(StateForge.Remote.Protocol.GetDiagnosticsRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetDiagnosticsResponse> GetDiagnosticsAsync(StateForge.Remote.Protocol.GetDiagnosticsRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetResponse> GetAsync(StateForge.Remote.Protocol.GetRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetResponse> GetAsync(StateForge.Remote.Protocol.GetRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetStatsResponse> GetStatsAsync(StateForge.Remote.Protocol.GetStatsRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.GetStatsResponse> GetStatsAsync(StateForge.Remote.Protocol.GetStatsRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.RefreshResponse> RefreshAsync(StateForge.Remote.Protocol.RefreshRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.RefreshResponse> RefreshAsync(StateForge.Remote.Protocol.RefreshRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.RemoveResponse> RemoveAsync(StateForge.Remote.Protocol.RemoveRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.RemoveResponse> RemoveAsync(StateForge.Remote.Protocol.RemoveRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.SetAndUnlockResponse> SetAndUnlockAsync(StateForge.Remote.Protocol.SetAndUnlockRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.SetAndUnlockResponse> SetAndUnlockAsync(StateForge.Remote.Protocol.SetAndUnlockRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.SetResponse> SetAsync(StateForge.Remote.Protocol.SetRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.SetResponse> SetAsync(StateForge.Remote.Protocol.SetRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.UnlockResponse> UnlockAsync(StateForge.Remote.Protocol.UnlockRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.UnlockResponse> UnlockAsync(StateForge.Remote.Protocol.UnlockRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.ValidateConfigurationResponse> ValidateConfigurationAsync(StateForge.Remote.Protocol.ValidateConfigurationRequest request, Grpc.Core.CallOptions options)
+  virtual method Grpc.Core.AsyncUnaryCall<StateForge.Remote.Protocol.ValidateConfigurationResponse> ValidateConfigurationAsync(StateForge.Remote.Protocol.ValidateConfigurationRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.CheckHealthResponse CheckHealth(StateForge.Remote.Protocol.CheckHealthRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.CheckHealthResponse CheckHealth(StateForge.Remote.Protocol.CheckHealthRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.CleanupExpiredResponse CleanupExpired(StateForge.Remote.Protocol.CleanupExpiredRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.CleanupExpiredResponse CleanupExpired(StateForge.Remote.Protocol.CleanupExpiredRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.EnumerateResponse Enumerate(StateForge.Remote.Protocol.EnumerateRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.EnumerateResponse Enumerate(StateForge.Remote.Protocol.EnumerateRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.ForceRemoveResponse ForceRemove(StateForge.Remote.Protocol.ForceRemoveRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.ForceRemoveResponse ForceRemove(StateForge.Remote.Protocol.ForceRemoveRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.GetAndLockResponse GetAndLock(StateForge.Remote.Protocol.GetAndLockRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.GetAndLockResponse GetAndLock(StateForge.Remote.Protocol.GetAndLockRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.GetDiagnosticsResponse GetDiagnostics(StateForge.Remote.Protocol.GetDiagnosticsRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.GetDiagnosticsResponse GetDiagnostics(StateForge.Remote.Protocol.GetDiagnosticsRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.GetResponse Get(StateForge.Remote.Protocol.GetRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.GetResponse Get(StateForge.Remote.Protocol.GetRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.GetStatsResponse GetStats(StateForge.Remote.Protocol.GetStatsRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.GetStatsResponse GetStats(StateForge.Remote.Protocol.GetStatsRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.RefreshResponse Refresh(StateForge.Remote.Protocol.RefreshRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.RefreshResponse Refresh(StateForge.Remote.Protocol.RefreshRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.RemoveResponse Remove(StateForge.Remote.Protocol.RemoveRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.RemoveResponse Remove(StateForge.Remote.Protocol.RemoveRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.SetAndUnlockResponse SetAndUnlock(StateForge.Remote.Protocol.SetAndUnlockRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.SetAndUnlockResponse SetAndUnlock(StateForge.Remote.Protocol.SetAndUnlockRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.SetResponse Set(StateForge.Remote.Protocol.SetRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.SetResponse Set(StateForge.Remote.Protocol.SetRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.UnlockResponse Unlock(StateForge.Remote.Protocol.UnlockRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.UnlockResponse Unlock(StateForge.Remote.Protocol.UnlockRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+  virtual method StateForge.Remote.Protocol.ValidateConfigurationResponse ValidateConfiguration(StateForge.Remote.Protocol.ValidateConfigurationRequest request, Grpc.Core.CallOptions options)
+  virtual method StateForge.Remote.Protocol.ValidateConfigurationResponse ValidateConfiguration(StateForge.Remote.Protocol.ValidateConfigurationRequest request, Grpc.Core.Metadata headers, System.Nullable<System.DateTime> deadline, System.Threading.CancellationToken cancellationToken)
+
+public sealed class StateForge.Remote.Protocol.StateForgeValidationDto : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.StateForgeValidationDto>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.StateForgeValidationDto>, System.IEquatable<StateForge.Remote.Protocol.StateForgeValidationDto>
+  const System.Int32 ErrorsFieldNumber = 1
+  const System.Int32 WarningsFieldNumber = 2
+  constructor StateForgeValidationDto()
+  constructor StateForgeValidationDto(StateForge.Remote.Protocol.StateForgeValidationDto other)
+  property Google.Protobuf.Collections.RepeatedField<System.String> Errors { get; }
+  property Google.Protobuf.Collections.RepeatedField<System.String> Warnings { get; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.StateForgeValidationDto> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.StateForgeValidationDto Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.StateForgeValidationDto other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.StateForgeValidationDto other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public static class StateForge.Remote.Protocol.StateforgeStoreReflection
+  static property Google.Protobuf.Reflection.FileDescriptor Descriptor { get; }
+
+public sealed class StateForge.Remote.Protocol.UnlockRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.UnlockRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.UnlockRequest>, System.IEquatable<StateForge.Remote.Protocol.UnlockRequest>
+  const System.Int32 KeyFieldNumber = 1
+  const System.Int32 LockIdFieldNumber = 2
+  constructor UnlockRequest()
+  constructor UnlockRequest(StateForge.Remote.Protocol.UnlockRequest other)
+  property System.Int64 LockId { get;set; }
+  property System.String Key { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.UnlockRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.UnlockRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.UnlockRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.UnlockRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.UnlockResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.UnlockResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.UnlockResponse>, System.IEquatable<StateForge.Remote.Protocol.UnlockResponse>
+  const System.Int32 UnlockedFieldNumber = 1
+  constructor UnlockResponse()
+  constructor UnlockResponse(StateForge.Remote.Protocol.UnlockResponse other)
+  property System.Boolean Unlocked { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.UnlockResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.UnlockResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.UnlockResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.UnlockResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.ValidateConfigurationRequest : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.ValidateConfigurationRequest>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.ValidateConfigurationRequest>, System.IEquatable<StateForge.Remote.Protocol.ValidateConfigurationRequest>
+  constructor ValidateConfigurationRequest()
+  constructor ValidateConfigurationRequest(StateForge.Remote.Protocol.ValidateConfigurationRequest other)
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.ValidateConfigurationRequest> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.ValidateConfigurationRequest Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.ValidateConfigurationRequest other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.ValidateConfigurationRequest other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.Protocol.ValidateConfigurationResponse : Google.Protobuf.IBufferMessage, Google.Protobuf.IDeepCloneable<StateForge.Remote.Protocol.ValidateConfigurationResponse>, Google.Protobuf.IMessage, Google.Protobuf.IMessage<StateForge.Remote.Protocol.ValidateConfigurationResponse>, System.IEquatable<StateForge.Remote.Protocol.ValidateConfigurationResponse>
+  const System.Int32 ValidationFieldNumber = 1
+  constructor ValidateConfigurationResponse()
+  constructor ValidateConfigurationResponse(StateForge.Remote.Protocol.ValidateConfigurationResponse other)
+  property StateForge.Remote.Protocol.StateForgeValidationDto Validation { get;set; }
+  static property Google.Protobuf.MessageParser<StateForge.Remote.Protocol.ValidateConfigurationResponse> Parser { get; }
+  static property Google.Protobuf.Reflection.MessageDescriptor Descriptor { get; }
+  method StateForge.Remote.Protocol.ValidateConfigurationResponse Clone()
+  method System.Boolean Equals(StateForge.Remote.Protocol.ValidateConfigurationResponse other)
+  method System.Boolean Equals(System.Object other)
+  method System.Int32 CalculateSize()
+  method System.Int32 GetHashCode()
+  method System.String ToString()
+  method System.Void MergeFrom(Google.Protobuf.CodedInputStream input)
+  method System.Void MergeFrom(StateForge.Remote.Protocol.ValidateConfigurationResponse other)
+  method System.Void WriteTo(Google.Protobuf.CodedOutputStream output)
+
+public sealed class StateForge.Remote.RemoteStateForgeOptions
+  constructor RemoteStateForgeOptions()
+  property System.String BearerToken { get;set; }
+  property System.String Endpoint { get;set; }
+  property System.TimeSpan CallTimeout { get;set; }
+
+public sealed class StateForge.Remote.RemoteStateForgeStore : StateForge.Core.IStateForgeAdminStore, StateForge.Core.IStateForgeStore
+  constructor RemoteStateForgeStore(StateForge.Remote.Protocol.StateForgeStoreRpc.StateForgeStoreRpcClient client, Microsoft.Extensions.Options.IOptions<StateForge.Remote.RemoteStateForgeOptions> options)
+  method StateForge.Core.StateForgeCleanupResult CleanupExpired(System.Boolean quarantineInvalid)
+  method StateForge.Core.StateForgeEntry Get(System.String key)
+  method StateForge.Core.StateForgeHealthResult CheckHealth()
+  method StateForge.Core.StateForgeLockResult GetAndLock(System.String key, System.TimeSpan lockTimeout)
+  method StateForge.Core.StateForgeStoreDiagnostics GetDiagnostics()
+  method StateForge.Core.StateForgeStoreStats GetStats()
+  method StateForge.Core.StateForgeValidationResult ValidateConfiguration()
+  method System.Boolean ForceRemove(System.String key)
+  method System.Boolean Refresh(System.String key, System.TimeSpan timeout)
+  method System.Boolean Remove(System.String key)
+  method System.Boolean SetAndUnlock(System.String key, System.Byte[] value, System.TimeSpan timeout, System.Int64 lockId)
+  method System.Boolean Unlock(System.String key, System.Int64 lockId)
+  method System.Collections.Generic.IEnumerable<StateForge.Core.StateForgeEntryInfo> Enumerate()
+  method System.Void Set(System.String key, System.Byte[] value, System.TimeSpan timeout)
+
+public static class StateForge.Remote.StateForgeRemoteEndpoint
+  static method System.Uri ToGrpcAddress(System.String endpoint)
+
+public static class StateForge.Remote.StateForgeRemoteServiceCollectionExtensions
+  static method Microsoft.Extensions.DependencyInjection.IServiceCollection AddRemoteStateForgeStore(Microsoft.Extensions.DependencyInjection.IServiceCollection services, System.Action<StateForge.Remote.RemoteStateForgeOptions> configure)

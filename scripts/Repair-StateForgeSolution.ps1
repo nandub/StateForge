@@ -47,7 +47,10 @@ try {
         @{ Name = 'StateForge.AspNetHarness'; Path = 'src\StateForge.AspNetHarness\StateForge.AspNetHarness.csproj'; Guid = '{EA3E214E-BC15-4B03-A62F-419FB48A004D}' },
         @{ Name = 'StateForge.KestrelHarness'; Path = 'src\StateForge.KestrelHarness\StateForge.KestrelHarness.csproj'; Guid = '{5FA39EB2-3ACB-46AE-A973-A3A1E4C1A04C}' },
         @{ Name = 'StateForge.KestrelClientTest'; Path = 'src\StateForge.KestrelClientTest\StateForge.KestrelClientTest.csproj'; Guid = '{9543AE54-B23B-4754-88CD-F78E508C3727}' },
-        @{ Name = 'StateForge.FileStore.Tests'; Path = 'tests\StateForge.FileStore.Tests\StateForge.FileStore.Tests.csproj'; Guid = '{7921F885-D1CC-4F77-A707-A38964BA1A13}' }
+        @{ Name = 'StateForge.FileStore.Tests'; Path = 'tests\StateForge.FileStore.Tests\StateForge.FileStore.Tests.csproj'; Guid = '{7921F885-D1CC-4F77-A707-A38964BA1A13}' },
+        @{ Name = 'StateForge.Remote'; Path = 'src\StateForge.Remote\StateForge.Remote.csproj'; Guid = '{23FDE231-BA72-4250-BC2E-A0231C7BEA06}' },
+        @{ Name = 'StateForge.Remote.Host'; Path = 'src\StateForge.Remote.Host\StateForge.Remote.Host.csproj'; Guid = '{03CB4A29-9B28-4FCD-8C44-D6353D1A2C85}' },
+        @{ Name = 'StateForge.Remote.Tests'; Path = 'tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj'; Guid = '{B3E2B555-A0F5-4D83-8FD6-601F7E00223B}' }
     )
 
     $lines = New-Object System.Collections.Generic.List[string]

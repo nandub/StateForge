@@ -26,3 +26,5 @@
   href: xref:StateForge.Replication
 - name: StateForge.Snapshots
   href: xref:StateForge.Snapshots
+- name: StateForge.Remote
+  href: xref:StateForge.Remote

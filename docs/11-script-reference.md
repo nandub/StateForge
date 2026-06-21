@@ -184,7 +184,7 @@ SourceLink mappings, and the exact repository commit in package metadata.
 .\scripts\Test-StateForgeApiCompatibility.ps1
 ```
 
-The default mode compares all twelve package assemblies with `api-baselines`. For a reviewed intentional
+The default mode compares all thirteen package assemblies with `api-baselines`. For a reviewed intentional
 change, regenerate the baselines explicitly:
 
 ```powershell
@@ -198,7 +198,7 @@ change, regenerate the baselines explicitly:
 .\scripts\Test-StateForge.ps1 -Suite ApiDocs
 ```
 
-DocFX extracts public API metadata from all twelve package projects and writes the site to
+DocFX extracts public API metadata from all thirteen package projects and writes the site to
 `artifacts\docfx\site`. The local tool manifest pins the DocFX version used by development and validation.
 
 ## Rolling Upgrade Compatibility

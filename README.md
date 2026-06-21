@@ -10,6 +10,7 @@ Current version: **1.0.0**
 - STFG/STFG2 format support
 - ASP.NET Framework provider
 - ASP.NET Core provider
+- Remote gRPC/TLS store client and host
 - Security envelope helpers
 - Telemetry and Prometheus metrics
 - Directory sharding

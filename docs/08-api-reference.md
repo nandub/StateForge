@@ -13,12 +13,12 @@ StateForge also produces a Microsoft-style DocFX reference for every shipped pac
 
 Open [`artifacts\docfx\site\index.html`](index.md) after the build, then select
 [Generated .NET API](api/index.md). Public type and member pages are generated from
-compiler XML comments. Missing comments fail the build for all twelve shipped packages.
+compiler XML comments. Missing comments fail the build for all thirteen shipped packages.
 
 Selected high-value APIs also include rendered C# examples. The curated set covers direct file storage,
 lock-token updates, ASP.NET Framework and ASP.NET Core registration, cloud-native health endpoints,
 STFG2 envelopes, AES key-ring lifecycle, telemetry and performance snapshots, Prometheus endpoints,
-replication, and snapshots. `Test-StateForgeApiDocs.ps1` verifies that these examples remain present
+replication, snapshots, and remote gRPC clients. `Test-StateForgeApiDocs.ps1` verifies that these examples remain present
 in their generated API pages.
 
 Implementation references are cited only where they materially inform behavior:
@@ -63,6 +63,17 @@ compatibility with legacy AES records that do not set the flag.
 
 The cache adapter preserves sliding expiration and absolute expiration independently. Refresh extends the
 sliding window without extending an absolute expiration deadline.
+
+## Remote Store
+
+- <xref:StateForge.Remote.RemoteStateForgeStore>
+- <xref:StateForge.Remote.RemoteStateForgeOptions>
+- <xref:StateForge.Remote.StateForgeRemoteEndpoint>
+- <xref:StateForge.Remote.StateForgeRemoteServiceCollectionExtensions>
+
+`StateForge.Remote` is a client package. The `tcp:HOST:PORT` endpoint form is accepted as a configuration
+alias and converted to `https://HOST:PORT` for gRPC/TLS. Client endpoints must name a concrete host or IP;
+wildcards such as `*`, `0.0.0.0`, and `[::]` are rejected.
 
 ## Replication
 

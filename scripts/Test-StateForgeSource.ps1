@@ -1191,7 +1191,8 @@ foreach ($packageNamespace in @(
     'StateForge.Prometheus',
     'StateForge.Performance',
     'StateForge.Replication',
-    'StateForge.Snapshots'
+    'StateForge.Snapshots',
+    'StateForge.Remote'
 )) {
     if ($docfxText -notmatch [regex]::Escape($packageNamespace)) {
         throw "DocFX metadata does not include package namespace: $packageNamespace"
@@ -1305,6 +1306,85 @@ if ($soakValidationScriptText -notmatch 'errorCount' -or
     $monitoringRunnerText -notmatch 'Invoke-SoakSuite' -or
     $monitoringRunnerText -notmatch 'function\s+Invoke-ReleaseSuite\s*\{[\s\S]*Invoke-PerformanceSuite\s+Invoke-SoakSuite\s+Invoke-SnapshotsSuite') {
     throw 'Test-StateForge.ps1 must expose the Soak suite and validate soak reports.'
+}
+
+# Validate remote gRPC/TLS store implementation.
+$remoteProjectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote\StateForge.Remote.csproj'
+$remoteStorePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote\RemoteStateForgeStore.cs'
+$remoteEndpointPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote\StateForgeRemoteEndpoint.cs'
+$remoteProtoPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote\Protos\stateforge_store.proto'
+$remoteHostProjectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote.Host\StateForge.Remote.Host.csproj'
+$remoteHostProgramPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote.Host\Program.cs'
+$remoteGrpcServicePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote.Host\StateForgeStoreGrpcService.cs'
+
+foreach ($remotePath in @(
+    $remoteProjectPath,
+    $remoteStorePath,
+    $remoteEndpointPath,
+    $remoteProtoPath,
+    $remoteHostProjectPath,
+    $remoteHostProgramPath,
+    $remoteGrpcServicePath
+)) {
+    if (-not (Test-Path -LiteralPath $remotePath)) {
+        throw "Missing remote StateForge asset: $remotePath"
+    }
+}
+
+$remoteProjectText = Get-Content -LiteralPath $remoteProjectPath -Raw
+$remoteStoreText = Get-Content -LiteralPath $remoteStorePath -Raw
+$remoteEndpointText = Get-Content -LiteralPath $remoteEndpointPath -Raw
+$remoteProtoText = Get-Content -LiteralPath $remoteProtoPath -Raw
+$remoteHostProgramText = Get-Content -LiteralPath $remoteHostProgramPath -Raw
+$remoteGrpcServiceText = Get-Content -LiteralPath $remoteGrpcServicePath -Raw
+
+if ($remoteProjectText -notmatch 'Grpc\.Net\.ClientFactory' -or
+    $remoteProjectText -notmatch 'Grpc\.Tools' -or
+    $remoteProjectText -notmatch 'StateForge\.Core') {
+    throw 'StateForge.Remote must use the gRPC client toolchain and the core store contract.'
+}
+
+foreach ($requiredRpc in @(
+    'rpc Get',
+    'rpc GetAndLock',
+    'rpc Set',
+    'rpc SetAndUnlock',
+    'rpc Unlock',
+    'rpc Remove',
+    'rpc Refresh',
+    'rpc ValidateConfiguration',
+    'rpc CheckHealth'
+)) {
+    if ($remoteProtoText -notmatch [regex]::Escape($requiredRpc)) {
+        throw "Remote proto is missing required RPC: $requiredRpc"
+    }
+}
+
+if ($remoteEndpointText -notmatch 'UriSchemeHttps' -or
+    $remoteEndpointText -notmatch 'tcp:' -or
+    $remoteEndpointText -notmatch '0\.0\.0\.0' -or
+    $remoteEndpointText -notmatch '\*') {
+    throw 'Remote endpoint parser must map tcp aliases to HTTPS and reject non-concrete client targets.'
+}
+
+if ($remoteStoreText -notmatch 'IStateForgeStore' -or
+    $remoteStoreText -notmatch 'StateForgeStoreRpcClient' -or
+    $remoteStoreText -notmatch 'CreateDeadline') {
+    throw 'Remote store must implement IStateForgeStore over the generated gRPC client with deadlines.'
+}
+
+if ($remoteHostProgramText -notmatch 'HttpProtocols\.Http2' -or
+    $remoteHostProgramText -notmatch 'UseHttps' -or
+    $remoteHostProgramText -notmatch 'STATEFORGE_REMOTE_TLS_CERT_PATH' -or
+    $remoteHostProgramText -notmatch 'STATEFORGE_AES_KEY_BASE64' -or
+    $remoteHostProgramText -notmatch 'STATEFORGE_REMOTE_BEARER_TOKEN') {
+    throw 'Remote host must run HTTP/2 over TLS, keep at-rest AES enabled, and support bearer authorization.'
+}
+
+if ($remoteGrpcServiceText -notmatch 'StateForgeStoreRpcBase' -or
+    $remoteGrpcServiceText -notmatch 'IStateForgeStore' -or
+    $remoteGrpcServiceText -notmatch 'StatusCode\.InvalidArgument') {
+    throw 'Remote gRPC service must expose the store contract and translate invalid input to gRPC errors.'
 }
 
 # Validate v1 disaster-recovery drill documentation.

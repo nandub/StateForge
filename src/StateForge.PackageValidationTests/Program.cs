@@ -41,7 +41,8 @@ string[] packageIds =
     "StateForge.Prometheus",
     "StateForge.Performance",
     "StateForge.Replication",
-    "StateForge.Snapshots"
+    "StateForge.Snapshots",
+    "StateForge.Remote"
 };
 
 foreach (string packageId in packageIds)
