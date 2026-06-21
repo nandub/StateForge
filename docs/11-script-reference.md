@@ -31,6 +31,7 @@ Use `Test-StateForge.ps1` for validation suites:
 .\scripts\Test-StateForge.ps1 -Suite Witness
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
+.\scripts\Test-StateForge.ps1 -Suite Remote
 .\scripts\Test-StateForge.ps1 -Suite Deployment
 .\scripts\Test-StateForge.ps1 -Suite Packages
 .\scripts\Test-StateForge.ps1 -Suite Release
@@ -163,6 +164,22 @@ See `docs\14-replica-catch-up.md`.
 .\scripts\Test-StateForgeDeployment.ps1
 docker build --tag stateforge-kestrel:1.0.0 .
 kubectl apply -k .\deploy\k8s
+```
+
+## Remote Store
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Remote
+.\scripts\Test-StateForgeRemote.ps1
+```
+
+The default remote suite builds the remote projects and runs endpoint validation. For full remote-host
+TLS coverage, run the integration category directly:
+
+```powershell
+dotnet test .\tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj `
+  --configuration Release `
+  --filter TestCategory=Integration
 ```
 
 ## NuGet Packages and SourceLink

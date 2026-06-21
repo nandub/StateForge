@@ -108,6 +108,7 @@ try {
         'tests\StateForge.FileStore.Tests\StateForge.FileStore.Tests.csproj',
         'tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj',
         'tests\StateForge.Remote.Tests\StateForgeRemoteEndpointTests.cs',
+        'tests\StateForge.Remote.Tests\StateForgeRemoteIntegrationTests.cs',
 
         'scripts\Build-StateForge.ps1',
         'scripts\Test-StateForgeRelease.ps1',
@@ -140,6 +141,7 @@ try {
         'scripts\Test-StateForgeWitness.ps1',
         'scripts\Test-StateForgeSplitBrain.ps1',
         'scripts\Test-StateForgeMultiSite.ps1',
+        'scripts\Test-StateForgeRemote.ps1',
         'scripts\Test-StateForgeDeployment.ps1',
         'deploy\k8s\kustomization.yaml',
         'scripts\Test-StateForgeDashboard.ps1',

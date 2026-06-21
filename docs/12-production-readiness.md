@@ -32,6 +32,7 @@ This suite validates:
 - smoke tests
 - observability
 - replication
+- remote gRPC/TLS store validation
 - snapshots
 - recovery flow
 - package metadata
@@ -151,6 +152,52 @@ registry-qualified image in remote clusters.
 Encryption is disabled in the generic ConfigMap. To enable AES, populate `stateforge-secret` with
 `STATEFORGE_AES_KEY_BASE64`, then set `STATEFORGE_ENCRYPTION=true` and
 `STATEFORGE_PROTECTION_MODE=aes`. Do not commit the key.
+
+## Remote Store Host
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Remote
+dotnet test .\tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj `
+  --configuration Release `
+  --filter TestCategory=Integration
+```
+
+`StateForge.Remote.Host` is a separate Kestrel HTTP/2 endpoint for clients that use
+`RemoteStateForgeStore` instead of writing to the filesystem directly. The client accepts
+`tcp:HOST:PORT` as a StateForge endpoint alias, but the transport is still `https://HOST:PORT` gRPC over
+TLS.
+
+Required host settings:
+
+| Variable | Purpose |
+|---|---|
+| `STATEFORGE_REMOTE_LISTEN` | Listen address in `tcp:IP:PORT` form. Defaults to `tcp:0.0.0.0:7443`. |
+| `STATEFORGE_REMOTE_TLS_CERT_PATH` | PFX certificate path for Kestrel TLS. |
+| `STATEFORGE_REMOTE_TLS_CERT_PASSWORD` | TLS certificate password. |
+| `STATEFORGE_REMOTE_TLS_CERT_PEM_PATH` | PEM certificate path for Kestrel TLS. Set with `STATEFORGE_REMOTE_TLS_KEY_PEM_PATH` instead of the PFX variables. |
+| `STATEFORGE_REMOTE_TLS_KEY_PEM_PATH` | PEM private-key path for Kestrel TLS. Set with `STATEFORGE_REMOTE_TLS_CERT_PEM_PATH`. |
+| `STATEFORGE_REMOTE_BEARER_TOKEN` | Optional bearer token required for gRPC calls when set. |
+| `STATEFORGE_ROOT_PATH` | FileStore root used by the remote host. Defaults to `/data/stateforge`. |
+| `STATEFORGE_AES_KEY_BASE64` | AES key used for at-rest StateForge records. |
+
+Use a certificate whose SAN matches the hostname or IP address clients use. The host supports either a
+PFX certificate plus password or a PEM certificate/key pair. Store the certificate, certificate password,
+bearer token, and AES key in a secret manager or Kubernetes Secret; do not store them in source, image
+layers, ConfigMaps, or the StateForge data root.
+
+The bearer token is a minimum integration point for private service-to-service deployments. Prefer mTLS,
+workload identity, or a private service mesh before exposing the remote host outside a trusted network.
+Bind the host to a private interface or private load balancer, and treat `/livez` as the only unauthenticated
+endpoint.
+
+When deploying the remote host separately in Docker or Kubernetes:
+
+- publish or package `src\StateForge.Remote.Host` as its own service image or process
+- mount the PFX or PEM certificate material as read-only secrets
+- mount `STATEFORGE_ROOT_PATH` on persistent storage
+- use storage with locking and atomic replace semantics compatible with StateForgeFileStore
+- use `ReadWriteMany` storage only when multiple host replicas intentionally share one root
+- keep all replicas on the same shard depth, compression, expiration, and AES settings
 
 ## Package and SourceLink Validation
 

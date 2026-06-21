@@ -1316,6 +1316,8 @@ $remoteProtoPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote\P
 $remoteHostProjectPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote.Host\StateForge.Remote.Host.csproj'
 $remoteHostProgramPath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote.Host\Program.cs'
 $remoteGrpcServicePath = Join-Path -Path $repoRoot -ChildPath 'src\StateForge.Remote.Host\StateForgeStoreGrpcService.cs'
+$remoteTestScriptPath = Join-Path -Path $repoRoot -ChildPath 'scripts\Test-StateForgeRemote.ps1'
+$remoteIntegrationTestPath = Join-Path -Path $repoRoot -ChildPath 'tests\StateForge.Remote.Tests\StateForgeRemoteIntegrationTests.cs'
 
 foreach ($remotePath in @(
     $remoteProjectPath,
@@ -1324,7 +1326,9 @@ foreach ($remotePath in @(
     $remoteProtoPath,
     $remoteHostProjectPath,
     $remoteHostProgramPath,
-    $remoteGrpcServicePath
+    $remoteGrpcServicePath,
+    $remoteTestScriptPath,
+    $remoteIntegrationTestPath
 )) {
     if (-not (Test-Path -LiteralPath $remotePath)) {
         throw "Missing remote StateForge asset: $remotePath"
@@ -1337,6 +1341,8 @@ $remoteEndpointText = Get-Content -LiteralPath $remoteEndpointPath -Raw
 $remoteProtoText = Get-Content -LiteralPath $remoteProtoPath -Raw
 $remoteHostProgramText = Get-Content -LiteralPath $remoteHostProgramPath -Raw
 $remoteGrpcServiceText = Get-Content -LiteralPath $remoteGrpcServicePath -Raw
+$remoteTestScriptText = Get-Content -LiteralPath $remoteTestScriptPath -Raw
+$remoteIntegrationTestText = Get-Content -LiteralPath $remoteIntegrationTestPath -Raw
 
 if ($remoteProjectText -notmatch 'Grpc\.Net\.ClientFactory' -or
     $remoteProjectText -notmatch 'Grpc\.Tools' -or
@@ -1376,6 +1382,8 @@ if ($remoteStoreText -notmatch 'IStateForgeStore' -or
 if ($remoteHostProgramText -notmatch 'HttpProtocols\.Http2' -or
     $remoteHostProgramText -notmatch 'UseHttps' -or
     $remoteHostProgramText -notmatch 'STATEFORGE_REMOTE_TLS_CERT_PATH' -or
+    $remoteHostProgramText -notmatch 'STATEFORGE_REMOTE_TLS_CERT_PEM_PATH' -or
+    $remoteHostProgramText -notmatch 'STATEFORGE_REMOTE_TLS_KEY_PEM_PATH' -or
     $remoteHostProgramText -notmatch 'STATEFORGE_AES_KEY_BASE64' -or
     $remoteHostProgramText -notmatch 'STATEFORGE_REMOTE_BEARER_TOKEN') {
     throw 'Remote host must run HTTP/2 over TLS, keep at-rest AES enabled, and support bearer authorization.'
@@ -1385,6 +1393,31 @@ if ($remoteGrpcServiceText -notmatch 'StateForgeStoreRpcBase' -or
     $remoteGrpcServiceText -notmatch 'IStateForgeStore' -or
     $remoteGrpcServiceText -notmatch 'StatusCode\.InvalidArgument') {
     throw 'Remote gRPC service must expose the store contract and translate invalid input to gRPC errors.'
+}
+
+if ($remoteTestScriptText -notmatch 'Start-Process' -or
+    $remoteTestScriptText -notmatch "'dotnet'" -or
+    $remoteTestScriptText -notmatch 'IncludeIntegration' -or
+    $remoteTestScriptText -notmatch 'TestCategory!=Integration' -or
+    $remoteTestScriptText -notmatch 'StateForge.Remote.Tests.csproj') {
+    throw 'Remote validation script must run the remote test project.'
+}
+
+if ($remoteIntegrationTestText -notmatch 'StateForge.Remote.Host' -or
+    $remoteIntegrationTestText -notmatch 'X509Certificate2' -or
+    $remoteIntegrationTestText -notmatch 'GrpcChannel.ForAddress' -or
+    $remoteIntegrationTestText -notmatch 'BearerTokenHandler' -or
+    $remoteIntegrationTestText -notmatch 'RemoteStateForgeStore' -or
+    $remoteIntegrationTestText -notmatch 'STATEFORGE_REMOTE_TLS_CERT_PATH' -or
+    $remoteIntegrationTestText -notmatch 'STATEFORGE_REMOTE_TLS_CERT_PASSWORD' -or
+    $remoteIntegrationTestText -notmatch 'STATEFORGE_REMOTE_BEARER_TOKEN') {
+    throw 'Remote integration tests must exercise the TLS gRPC host, bearer authorization, and remote store client.'
+}
+
+if ($monitoringRunnerText -notmatch "'Remote'" -or
+    $monitoringRunnerText -notmatch 'Invoke-RemoteSuite' -or
+    $monitoringRunnerText -notmatch 'Test-StateForgeRemote\.ps1') {
+    throw 'Test-StateForge.ps1 must expose and run the Remote suite.'
 }
 
 # Validate v1 disaster-recovery drill documentation.

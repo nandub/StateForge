@@ -12,14 +12,20 @@ using StateForge.Remote.Host;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 string endpoint = ReadRequired("STATEFORGE_REMOTE_LISTEN", "tcp:0.0.0.0:7443");
-string certificatePath = ReadRequired("STATEFORGE_REMOTE_TLS_CERT_PATH", null);
-string certificatePassword = ReadRequired("STATEFORGE_REMOTE_TLS_CERT_PASSWORD", null);
+string certificatePath = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_TLS_CERT_PATH") ?? string.Empty;
+string certificatePassword = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_TLS_CERT_PASSWORD") ?? string.Empty;
+string certificatePemPath = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_TLS_CERT_PEM_PATH") ?? string.Empty;
+string certificateKeyPemPath = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_TLS_KEY_PEM_PATH") ?? string.Empty;
 string rootPath = ReadRequired("STATEFORGE_ROOT_PATH", "/data/stateforge");
 string aesKey = ReadRequired("STATEFORGE_AES_KEY_BASE64", null);
 string bearerToken = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_BEARER_TOKEN") ?? string.Empty;
 
 Uri listenAddress = ParseListenEndpoint(endpoint);
-X509Certificate2 certificate = new X509Certificate2(certificatePath, certificatePassword);
+X509Certificate2 certificate = LoadTlsCertificate(
+    certificatePath,
+    certificatePassword,
+    certificatePemPath,
+    certificateKeyPemPath);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -95,6 +101,39 @@ static string ReadRequired(string name, string fallback)
     }
 
     throw new InvalidOperationException(name + " is required.");
+}
+
+static X509Certificate2 LoadTlsCertificate(
+    string certificatePath,
+    string certificatePassword,
+    string certificatePemPath,
+    string certificateKeyPemPath)
+{
+    if (!string.IsNullOrWhiteSpace(certificatePemPath) ||
+        !string.IsNullOrWhiteSpace(certificateKeyPemPath))
+    {
+        if (string.IsNullOrWhiteSpace(certificatePemPath) ||
+            string.IsNullOrWhiteSpace(certificateKeyPemPath))
+        {
+            throw new InvalidOperationException(
+                "STATEFORGE_REMOTE_TLS_CERT_PEM_PATH and STATEFORGE_REMOTE_TLS_KEY_PEM_PATH must be set together.");
+        }
+
+        return X509Certificate2.CreateFromPemFile(certificatePemPath, certificateKeyPemPath);
+    }
+
+    if (string.IsNullOrWhiteSpace(certificatePath))
+    {
+        throw new InvalidOperationException(
+            "STATEFORGE_REMOTE_TLS_CERT_PATH or STATEFORGE_REMOTE_TLS_CERT_PEM_PATH is required.");
+    }
+
+    if (string.IsNullOrWhiteSpace(certificatePassword))
+    {
+        throw new InvalidOperationException("STATEFORGE_REMOTE_TLS_CERT_PASSWORD is required for PFX certificates.");
+    }
+
+    return new X509Certificate2(certificatePath, certificatePassword);
 }
 
 static Uri ParseListenEndpoint(string endpoint)

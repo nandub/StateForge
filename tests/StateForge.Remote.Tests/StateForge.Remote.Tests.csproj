@@ -8,9 +8,11 @@
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.64.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.5.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.5.2" />
     <ProjectReference Include="..\..\src\StateForge.Remote\StateForge.Remote.csproj" />
+    <ProjectReference Include="..\..\src\StateForge.Remote.Host\StateForge.Remote.Host.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
 </Project>

@@ -51,6 +51,7 @@ param(
         'Witness',
         'SplitBrain',
         'MultiSite',
+        'Remote',
         'Deployment',
         'Packages',
         'Performance',
@@ -211,6 +212,10 @@ function Invoke-MultiSiteSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeMultiSite.ps1'
 }
 
+function Invoke-RemoteSuite {
+    Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeRemote.ps1' -Arguments @{ Configuration = $Configuration }
+}
+
 function Invoke-DeploymentSuite {
     Invoke-StateForgeScript -Path '.\scripts\Test-StateForgeDeployment.ps1'
 }
@@ -272,6 +277,7 @@ function Invoke-ProductionSuite {
     Invoke-WitnessSuite
     Invoke-SplitBrainSuite
     Invoke-MultiSiteSuite
+    Invoke-RemoteSuite
     Invoke-DeploymentSuite
     Invoke-PackagesSuite
     Invoke-PerformanceSuite
@@ -300,6 +306,7 @@ function Invoke-ReleaseSuite {
     Invoke-WitnessSuite
     Invoke-SplitBrainSuite
     Invoke-MultiSiteSuite
+    Invoke-RemoteSuite
     Invoke-DeploymentSuite
     Invoke-PackagesSuite
     Invoke-PerformanceSuite
@@ -330,6 +337,7 @@ try {
         'Witness' { Invoke-WitnessSuite }
         'SplitBrain' { Invoke-SplitBrainSuite }
         'MultiSite' { Invoke-MultiSiteSuite }
+        'Remote' { Invoke-RemoteSuite }
         'Deployment' { Invoke-DeploymentSuite }
         'Packages' { Invoke-PackagesSuite }
         'Performance' { Invoke-PerformanceSuite }

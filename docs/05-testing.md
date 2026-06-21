@@ -49,6 +49,7 @@ shipped packages, and verifies that Core, Format, and Security retain complete c
 .\scripts\Test-StateForgeWitness.ps1
 .\scripts\Test-StateForgeSplitBrain.ps1
 .\scripts\Test-StateForgeMultiSite.ps1
+.\scripts\Test-StateForgeRemote.ps1
 .\scripts\Test-StateForgeDeployment.ps1
 .\scripts\Test-StateForgeSnapshotServices.ps1
 .\scripts\Test-StateForgeAutomaticFailover.ps1
@@ -87,6 +88,7 @@ StateForge uses a single suite-based validation runner:
 .\scripts\Test-StateForge.ps1 -Suite Witness
 .\scripts\Test-StateForge.ps1 -Suite SplitBrain
 .\scripts\Test-StateForge.ps1 -Suite MultiSite
+.\scripts\Test-StateForge.ps1 -Suite Remote
 .\scripts\Test-StateForge.ps1 -Suite Deployment
 .\scripts\Test-StateForge.ps1 -Suite Packages
 .\scripts\Test-StateForge.ps1 -Suite Snapshots
@@ -151,6 +153,25 @@ per-folder README coverage, and validates safe ASP.NET Framework sample defaults
 This builds all thirteen package and symbol artifacts, validates NuGet repository and commit metadata,
 inspects portable PDB SourceLink mappings, and builds isolated `net8.0` and `net481` consumers from the
 local package feed.
+
+## Remote Store Validation
+
+```powershell
+.\scripts\Test-StateForge.ps1 -Suite Remote
+.\scripts\Test-StateForgeRemote.ps1
+```
+
+The default suite builds the remote projects and runs stable endpoint validation. Run the full TLS/gRPC
+integration test directly when reviewing remote-host changes:
+
+```powershell
+dotnet test .\tests\StateForge.Remote.Tests\StateForge.Remote.Tests.csproj `
+  --configuration Release `
+  --filter TestCategory=Integration
+```
+
+The integration test starts `StateForge.Remote.Host` and exercises `RemoteStateForgeStore` over
+gRPC/HTTP2 against a temporary AES-protected FileStore root.
 
 ## Performance Baseline
 
