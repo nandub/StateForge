@@ -176,16 +176,20 @@ Required host settings:
 | `STATEFORGE_REMOTE_TLS_CERT_PASSWORD` | TLS certificate password. |
 | `STATEFORGE_REMOTE_TLS_CERT_PEM_PATH` | PEM certificate path for Kestrel TLS. Set with `STATEFORGE_REMOTE_TLS_KEY_PEM_PATH` instead of the PFX variables. |
 | `STATEFORGE_REMOTE_TLS_KEY_PEM_PATH` | PEM private-key path for Kestrel TLS. Set with `STATEFORGE_REMOTE_TLS_CERT_PEM_PATH`. |
-| `STATEFORGE_REMOTE_BEARER_TOKEN` | Optional bearer token required for gRPC calls when set. |
+| `STATEFORGE_REMOTE_BEARER_TOKEN` | Required bearer token for data-plane gRPC calls. |
+| `STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN` | Optional distinct bearer token for admin-plane gRPC calls such as diagnostics, enumeration, cleanup, force-remove, stats, validation, and health. Admin RPCs are forbidden when this token is not set. |
+| `STATEFORGE_REMOTE_ALLOW_UNAUTHENTICATED` | Explicit development-only opt-out for remote bearer authentication. Do not set in production. |
 | `STATEFORGE_ROOT_PATH` | FileStore root used by the remote host. Defaults to `/data/stateforge`. |
 | `STATEFORGE_AES_KEY_BASE64` | AES key used for at-rest StateForge records. |
 
 Use a certificate whose SAN matches the hostname or IP address clients use. The host supports either a
 PFX certificate plus password or a PEM certificate/key pair. Store the certificate, certificate password,
-bearer token, and AES key in a secret manager or Kubernetes Secret; do not store them in source, image
+bearer tokens, and AES key in a secret manager or Kubernetes Secret; do not store them in source, image
 layers, ConfigMaps, or the StateForge data root.
 
-The bearer token is a minimum integration point for private service-to-service deployments. Prefer mTLS,
+Bearer authentication is a minimum integration point for private service-to-service deployments. Use a
+data token for application clients and a separate admin token only for operators or maintenance clients
+that need diagnostics, enumeration, cleanup, force-remove, stats, validation, or health RPCs. Prefer mTLS,
 workload identity, or a private service mesh before exposing the remote host outside a trusted network.
 Bind the host to a private interface or private load balancer, and treat `/livez` as the only unauthenticated
 endpoint.

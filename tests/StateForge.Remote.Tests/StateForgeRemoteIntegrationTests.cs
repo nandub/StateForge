@@ -33,6 +33,7 @@ namespace StateForge.Remote.Tests
             string certificatePath = Path.Combine(temporaryRoot, "stateforge-remote-test.pfx");
             string certificatePassword = Guid.NewGuid().ToString("N");
             string bearerToken = "remote-integration-" + Guid.NewGuid().ToString("N");
+            string adminBearerToken = "remote-admin-" + Guid.NewGuid().ToString("N");
             string aesKey = CreateAesKey();
             string certificateThumbprint = CreateCertificate(certificatePath, certificatePassword);
             int port = GetFreeTcpPort();
@@ -50,6 +51,7 @@ namespace StateForge.Remote.Tests
                     certificatePassword,
                     aesKey,
                     bearerToken,
+                    adminBearerToken,
                     output);
 
                 WaitForHost(port, certificateThumbprint, hostProcess, output);
@@ -82,13 +84,68 @@ namespace StateForge.Remote.Tests
                     Assert.IsNotNull(updatedEntry, GetHostOutput(output));
                     CollectionAssert.AreEqual(updatedValue, updatedEntry.Value);
 
-                    StateForgeStoreStats stats = store.GetStats();
-                    Assert.IsTrue(stats.TotalSessions >= 1, GetHostOutput(output));
-                    Assert.IsTrue(stats.AesEncryptedSessions >= 1, GetHostOutput(output));
-
                     Assert.IsTrue(store.Remove(key), GetHostOutput(output));
                     Assert.IsNull(store.Get(key), GetHostOutput(output));
                 }
+
+                using (GrpcChannel channel = CreateChannel(port, certificateThumbprint, bearerToken))
+                {
+                    var client = new StateForgeStoreRpc.StateForgeStoreRpcClient(channel);
+                    RpcException ex = Assert.ThrowsException<RpcException>(
+                        delegate { client.GetStats(new GetStatsRequest()); },
+                        GetHostOutput(output));
+
+                    Assert.AreEqual(StatusCode.PermissionDenied, ex.StatusCode, GetHostOutput(output));
+                }
+
+                using (GrpcChannel channel = CreateChannel(port, certificateThumbprint, adminBearerToken))
+                {
+                    var client = new StateForgeStoreRpc.StateForgeStoreRpcClient(channel);
+                    GetStatsResponse response = client.GetStats(new GetStatsRequest());
+                    Assert.IsNotNull(response.Stats, GetHostOutput(output));
+                }
+            }
+            finally
+            {
+                StopProcess(hostProcess);
+                TryDeleteDirectory(temporaryRoot);
+            }
+        }
+
+        [TestMethod]
+        [TestCategory("Integration")]
+        public void RemoteHostRequiresBearerTokenByDefault()
+        {
+            string temporaryRoot = Path.Combine(Path.GetTempPath(), "StateForgeRemoteTests", Guid.NewGuid().ToString("N"));
+            string storeRoot = Path.Combine(temporaryRoot, "store");
+            string certificatePath = Path.Combine(temporaryRoot, "stateforge-remote-test.pfx");
+            string certificatePassword = Guid.NewGuid().ToString("N");
+            string aesKey = CreateAesKey();
+            CreateCertificate(certificatePath, certificatePassword);
+            int port = GetFreeTcpPort();
+            StringBuilder output = new StringBuilder();
+            Process hostProcess = null;
+
+            Directory.CreateDirectory(storeRoot);
+
+            try
+            {
+                hostProcess = StartRemoteHostWithoutBearerToken(
+                    port,
+                    storeRoot,
+                    certificatePath,
+                    certificatePassword,
+                    aesKey,
+                    output);
+
+                Assert.IsTrue(
+                    hostProcess.WaitForExit(10000),
+                    "StateForge.Remote.Host did not exit after missing bearer-token configuration." +
+                    Environment.NewLine +
+                    GetHostOutput(output));
+
+                Assert.AreNotEqual(0, hostProcess.ExitCode, GetHostOutput(output));
+                StringAssert.Contains(GetHostOutput(output), "STATEFORGE_REMOTE_BEARER_TOKEN is required");
             }
             finally
             {
@@ -104,6 +161,7 @@ namespace StateForge.Remote.Tests
             string certificatePassword,
             string aesKey,
             string bearerToken,
+            string adminBearerToken,
             StringBuilder output)
         {
             string hostPath = GetHostAssemblyPath();
@@ -121,6 +179,59 @@ namespace StateForge.Remote.Tests
             startInfo.EnvironmentVariables["STATEFORGE_ROOT_PATH"] = storeRoot;
             startInfo.EnvironmentVariables["STATEFORGE_AES_KEY_BASE64"] = aesKey;
             startInfo.EnvironmentVariables["STATEFORGE_REMOTE_BEARER_TOKEN"] = bearerToken;
+            startInfo.EnvironmentVariables["STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN"] = adminBearerToken;
+
+            Process process = Process.Start(startInfo);
+            if (process == null)
+            {
+                Assert.Fail("Failed to start StateForge.Remote.Host.");
+            }
+
+            process.OutputDataReceived += delegate(object sender, DataReceivedEventArgs args)
+            {
+                if (args.Data != null)
+                {
+                    output.AppendLine(args.Data);
+                }
+            };
+            process.ErrorDataReceived += delegate(object sender, DataReceivedEventArgs args)
+            {
+                if (args.Data != null)
+                {
+                    output.AppendLine(args.Data);
+                }
+            };
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+
+            return process;
+        }
+
+        private static Process StartRemoteHostWithoutBearerToken(
+            int port,
+            string storeRoot,
+            string certificatePath,
+            string certificatePassword,
+            string aesKey,
+            StringBuilder output)
+        {
+            string hostPath = GetHostAssemblyPath();
+            var startInfo = new ProcessStartInfo("dotnet", "\"" + hostPath + "\"")
+            {
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            startInfo.EnvironmentVariables["STATEFORGE_REMOTE_LISTEN"] = "tcp:127.0.0.1:" + port.ToString(CultureInfo.InvariantCulture);
+            startInfo.EnvironmentVariables["STATEFORGE_REMOTE_TLS_CERT_PATH"] = certificatePath;
+            startInfo.EnvironmentVariables["STATEFORGE_REMOTE_TLS_CERT_PASSWORD"] = certificatePassword;
+            startInfo.EnvironmentVariables["STATEFORGE_ROOT_PATH"] = storeRoot;
+            startInfo.EnvironmentVariables["STATEFORGE_AES_KEY_BASE64"] = aesKey;
+            startInfo.EnvironmentVariables.Remove("STATEFORGE_REMOTE_BEARER_TOKEN");
+            startInfo.EnvironmentVariables.Remove("STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN");
+            startInfo.EnvironmentVariables.Remove("STATEFORGE_REMOTE_ALLOW_UNAUTHENTICATED");
 
             Process process = Process.Start(startInfo);
             if (process == null)

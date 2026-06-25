@@ -72,6 +72,15 @@ namespace StateForge.FileStore.Tests
         }
 
         [TestMethod]
+        public void SetAndUnlock_Does_Not_Create_Missing_Entry()
+        {
+            StateForgeFileStore store = CreateStore(false);
+
+            Assert.IsFalse(store.SetAndUnlock("missing", new byte[] { 1 }, TimeSpan.FromMinutes(20), 123));
+            Assert.IsNull(store.Get("missing"));
+        }
+
+        [TestMethod]
         public void Refresh_Does_Not_Revive_Expired_Entry()
         {
             StateForgeFileStore store = CreateStore(false);

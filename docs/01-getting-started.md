@@ -226,7 +226,8 @@ Remote host environment:
 $env:STATEFORGE_REMOTE_LISTEN = "tcp:0.0.0.0:7443"
 $env:STATEFORGE_REMOTE_TLS_CERT_PATH = "C:\StateForge\certs\stateforge-remote.pfx"
 $env:STATEFORGE_REMOTE_TLS_CERT_PASSWORD = "from-secret-manager"
-$env:STATEFORGE_REMOTE_BEARER_TOKEN = "from-secret-manager"
+$env:STATEFORGE_REMOTE_BEARER_TOKEN = "data-client-token-from-secret-manager"
+$env:STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN = "admin-token-from-secret-manager"
 $env:STATEFORGE_ROOT_PATH = "C:\StateForge\RemoteStore"
 $env:STATEFORGE_AES_KEY_BASE64 = "BASE64_ENCODED_AES_KEY"
 
@@ -234,8 +235,12 @@ dotnet run --project .\src\StateForge.Remote.Host\StateForge.Remote.Host.csproj
 ```
 
 Use a certificate whose subject alternative name matches the hostname or IP address clients use. Store
-the TLS certificate password, bearer token, and AES key in a secret manager or protected environment
-injection, not in source.
+the TLS certificate password, bearer tokens, and AES key in a secret manager or protected environment
+injection, not in source. Data clients use `STATEFORGE_REMOTE_BEARER_TOKEN`. Diagnostics, enumeration,
+cleanup, force-remove, stats, validation, and health RPCs require the distinct
+`STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN`; if it is not set, those admin RPCs are forbidden. The remote host
+requires bearer authentication by default. `STATEFORGE_REMOTE_ALLOW_UNAUTHENTICATED=true` is only for
+isolated development.
 
 ## Configure ASP.NET Core Session State
 

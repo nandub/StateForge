@@ -8,7 +8,11 @@ namespace StateForge.Remote
         /// <summary>Gets or sets the remote endpoint in <c>tcp:HOST:PORT</c> or <c>https://HOST:PORT</c> form.</summary>
         public string Endpoint { get; set; }
 
-        /// <summary>Gets or sets the optional bearer token used for service-to-service authorization.</summary>
+        /// <summary>
+        /// Gets or sets the bearer token used for service-to-service authorization. Use a data-plane token for
+        /// ordinary store calls and a distinct admin token only for diagnostics, enumeration, cleanup, force-remove,
+        /// stats, validation, and health calls.
+        /// </summary>
         public string BearerToken { get; set; }
 
         /// <summary>Gets or sets the per-call deadline.</summary>

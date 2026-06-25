@@ -173,7 +173,7 @@ namespace StateForge.FileStore
                 DateTimeOffset now = DateTimeOffset.UtcNow;
                 StateForgeEntry existing = ReadEntryByHash(hash);
 
-                if (existing != null && (!existing.Locked || existing.LockId != lockId))
+                if (existing == null || !existing.Locked || existing.LockId != lockId)
                 {
                     return false;
                 }
@@ -181,11 +181,11 @@ namespace StateForge.FileStore
                 StateForgeEntry entry = new StateForgeEntry();
                 entry.Key = key;
                 entry.Value = value ?? new byte[0];
-                entry.CreatedUtc = existing == null ? now : existing.CreatedUtc;
+                entry.CreatedUtc = existing.CreatedUtc;
                 entry.UpdatedUtc = now;
                 entry.ExpiresUtc = now.Add(timeout);
                 entry.Locked = false;
-                entry.LockId = existing == null ? lockId : existing.LockId;
+                entry.LockId = existing.LockId;
                 entry.LockDateUtc = null;
 
                 WriteEntryAtomicByHash(entry, hash);

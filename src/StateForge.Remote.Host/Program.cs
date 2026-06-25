@@ -1,6 +1,8 @@
 using System;
 using System.Net;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -19,6 +21,20 @@ string certificateKeyPemPath = Environment.GetEnvironmentVariable("STATEFORGE_RE
 string rootPath = ReadRequired("STATEFORGE_ROOT_PATH", "/data/stateforge");
 string aesKey = ReadRequired("STATEFORGE_AES_KEY_BASE64", null);
 string bearerToken = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_BEARER_TOKEN") ?? string.Empty;
+string adminBearerToken = Environment.GetEnvironmentVariable("STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN") ?? string.Empty;
+bool allowUnauthenticated = ReadBooleanEnvironment("STATEFORGE_REMOTE_ALLOW_UNAUTHENTICATED");
+
+if (!allowUnauthenticated && string.IsNullOrWhiteSpace(bearerToken))
+{
+    throw new InvalidOperationException(
+        "STATEFORGE_REMOTE_BEARER_TOKEN is required. Set STATEFORGE_REMOTE_ALLOW_UNAUTHENTICATED=true only for isolated development.");
+}
+
+if (!string.IsNullOrWhiteSpace(adminBearerToken) &&
+    string.Equals(bearerToken, adminBearerToken, StringComparison.Ordinal))
+{
+    throw new InvalidOperationException("STATEFORGE_REMOTE_ADMIN_BEARER_TOKEN must be distinct from STATEFORGE_REMOTE_BEARER_TOKEN.");
+}
 
 Uri listenAddress = ParseListenEndpoint(endpoint);
 X509Certificate2 certificate = LoadTlsCertificate(
@@ -57,7 +73,7 @@ builder.Services.AddSingleton<IStateForgeStore>(_ =>
 
 WebApplication app = builder.Build();
 
-if (!string.IsNullOrWhiteSpace(bearerToken))
+if (!allowUnauthenticated)
 {
     app.Use(async (context, next) =>
     {
@@ -68,12 +84,21 @@ if (!string.IsNullOrWhiteSpace(bearerToken))
             return;
         }
 
-        string expected = "Bearer " + bearerToken;
-        string actual = context.Request.Headers["Authorization"].ToString();
-        if (!string.Equals(actual, expected, StringComparison.Ordinal))
+        bool isAdminRequest = IsAdminRequest(context.Request.Path);
+        bool authorized = IsAuthorized(context, bearerToken) ||
+            (!string.IsNullOrWhiteSpace(adminBearerToken) && IsAuthorized(context, adminBearerToken));
+
+        if (!authorized)
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             await context.Response.WriteAsync("Unauthorized");
+            return;
+        }
+
+        if (isAdminRequest && !IsAuthorized(context, adminBearerToken))
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("Forbidden");
             return;
         }
 
@@ -101,6 +126,46 @@ static string ReadRequired(string name, string fallback)
     }
 
     throw new InvalidOperationException(name + " is required.");
+}
+
+static bool ReadBooleanEnvironment(string name)
+{
+    string value = Environment.GetEnvironmentVariable(name);
+    return string.Equals(value, "true", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "1", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "yes", StringComparison.OrdinalIgnoreCase);
+}
+
+static bool IsAdminRequest(PathString path)
+{
+    string value = path.Value ?? string.Empty;
+    return string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/Enumerate", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/GetDiagnostics", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/CleanupExpired", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/ForceRemove", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/GetStats", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/ValidateConfiguration", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(value, "/stateforge.remote.v1.StateForgeStoreRpc/CheckHealth", StringComparison.OrdinalIgnoreCase);
+}
+
+static bool IsAuthorized(HttpContext context, string token)
+{
+    if (string.IsNullOrWhiteSpace(token))
+    {
+        return false;
+    }
+
+    string header = context.Request.Headers["Authorization"].ToString();
+    const string bearerPrefix = "Bearer ";
+    if (header.Length <= bearerPrefix.Length ||
+        !header.StartsWith(bearerPrefix, StringComparison.OrdinalIgnoreCase))
+    {
+        return false;
+    }
+
+    byte[] actual = Encoding.UTF8.GetBytes(header.Substring(bearerPrefix.Length));
+    byte[] expected = Encoding.UTF8.GetBytes(token);
+    return CryptographicOperations.FixedTimeEquals(actual, expected);
 }
 
 static X509Certificate2 LoadTlsCertificate(
