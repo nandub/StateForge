@@ -1,6 +1,6 @@
 # Production Readiness
 
-StateForge v1.0.0 includes multi-site disaster-recovery validation in the production-readiness layer.
+StateForge v1.0.1 includes multi-site disaster-recovery validation in the production-readiness layer.
 
 ## Production Suite
 
@@ -139,7 +139,7 @@ duration, recovery-point age, and post-recovery validation output.
 
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Deployment
-docker build --tag stateforge-kestrel:1.0.0 .
+docker build --tag stateforge-kestrel:1.0.1 .
 ```
 
 The image runs as the .NET `app` user, listens on port `8080`, and uses `/data/stateforge` for cache data

@@ -2,6 +2,7 @@
 
 | Version | Summary |
 |---|---|
+| v1.0.1 | Remote gRPC/TLS store client and host, required bearer authentication, separate admin token support, and lock-fencing hardening |
 | v1.0.0 | Production release with long-duration soak evidence, Production suite validation, package verification, deployment validation, and recovery-flow coverage |
 | v0.35.0 | Site metadata, cross-site recovery policy, restore drills, fenced site failover, and soak cleanup hardening |
 | v0.34.0 | Primary leases, quorum-gated promotion fencing, and stale-primary takeover |

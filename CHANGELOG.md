@@ -2,11 +2,14 @@
 
 ## Unreleased
 
+## 1.0.1
+
 - Added `StateForge.Remote`, a gRPC/TLS `IStateForgeStore` client with `tcp:HOST:PORT` endpoint aliases mapped to HTTPS.
 - Added `StateForge.Remote.Host`, a Kestrel HTTP/2 TLS host that fronts `StateForgeFileStore` for remote StateForge clients.
 - Added endpoint parsing tests, end-to-end TLS/gRPC host validation, package/API metadata, DocFX coverage, and source guards for the remote transport.
 - Added the `Remote` suite to Production and Release validation.
 - Hardened `StateForge.Remote.Host` so remote bearer authentication is required by default, admin RPCs require a distinct admin token, bearer-token checks use fixed-time comparison, and `SetAndUnlock` cannot recreate missing records.
+- Supersedes the initial `v1.0.0` tag as the recommended first install target.
 
 ## 1.0.0
 

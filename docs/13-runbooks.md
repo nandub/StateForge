@@ -313,7 +313,7 @@ candidate explicitly, and the cross-site result must match the promoted replica 
 
 ## Kubernetes Deployment
 
-1. Build and publish `stateforge-kestrel:1.0.0` to the target registry.
+1. Build and publish `stateforge-kestrel:1.0.1` to the target registry.
 2. Replace the image reference in `deploy\k8s\deployment.yaml`.
 3. Confirm a `ReadWriteMany` storage class and set `storageClassName` on the PVC if required.
 4. Leave encryption disabled initially, or provision the AES secret before enabling it.

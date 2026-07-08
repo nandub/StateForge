@@ -1,6 +1,6 @@
 # Roadmap
 
-This roadmap reflects the current StateForge direction after the v1.0.0 production release.
+This roadmap reflects the current StateForge direction after the v1.0.1 hardening release.
 
 ## Completed
 
@@ -25,10 +25,12 @@ This roadmap reflects the current StateForge direction after the v1.0.0 producti
 | v0.34.0 | Primary leases, promotion fencing, and stale-primary takeover |
 | v0.35.0 | Site metadata, cross-site recovery policy, restore drills, and fenced site failover |
 | v1.0.0 | Production release: soak evidence, package validation, deployment validation, performance gate, and recovery flow |
+| v1.0.1 | Remote gRPC/TLS store client and host with required bearer authentication, separate admin token support, and lock-fencing hardening |
 
 ## Current Stable Release
 
-`v1.0.0` is the current stable production release baseline.
+`v1.0.1` is the current stable production release baseline. It supersedes the initial `v1.0.0` tag as
+the recommended first install target.
 
 It validates:
 
@@ -59,6 +61,7 @@ It validates:
 - reviewed public API compatibility baselines
 - rolling-upgrade and migration compatibility
 - authenticated AES record and key-ring security validation
+- remote gRPC/TLS store validation with required data-plane bearer authentication and separate admin token support
 - long-duration soak evidence with final replication and snapshot
 
 ## Completed v1 Readiness Gates
@@ -89,6 +92,16 @@ Completed release gates:
 - documented disaster-recovery drill evidence checklist
 - package, deployment, performance, snapshot, and recovery-flow validation
 
+## v1.0.1 — Remote Store Hardening Release
+
+Completed release gates:
+
+- remote gRPC/TLS client and host documentation, package metadata, and API docs
+- required bearer authentication for remote data-plane calls
+- distinct admin-token authorization for diagnostics, enumeration, cleanup, force-remove, stats, validation, and health RPCs
+- fixed-time bearer-token comparison
+- `SetAndUnlock` protection against recreating missing records with stale lock tokens
+
 ## Post-1.0 Roadmap
 
-Define post-1.0 roadmap items after the production release is tagged and published.
+Define post-1.0 roadmap items after the hardening release is tagged and published.

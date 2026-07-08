@@ -28,7 +28,7 @@ Implemented areas include:
 
 ## Current Version
 
-Current repository version target: **1.0.0**
+Current repository version target: **1.0.1**
 
 When making release changes, keep project versions and validation defaults aligned.
 
@@ -164,22 +164,24 @@ The deterministic test fixture in `StateForge.ReplicaCatchUpTests` must remain i
 
 ## Current Roadmap
 
-Next recommended milestone:
+Current release target:
 
 ```text
-v1.0.0 — Production Release
+v1.0.1 — Remote Store Hardening Release
 ```
 
 Expected areas:
 
-- performance review
-- long-duration soak tests
+- remote gRPC/TLS store documentation
+- required remote bearer authentication
+- separate remote admin-token authorization
+- lock-fencing hardening
 - Production suite validation
 
 Later milestones:
 
 ```text
-Post-1.0 roadmap to be defined after production release.
+Post-1.0 roadmap to be defined after the hardening release.
 ```
 
 ## Safety Rules

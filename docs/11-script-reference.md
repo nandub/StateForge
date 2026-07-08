@@ -162,7 +162,7 @@ See `docs\14-replica-catch-up.md`.
 ```powershell
 .\scripts\Test-StateForge.ps1 -Suite Deployment
 .\scripts\Test-StateForgeDeployment.ps1
-docker build --tag stateforge-kestrel:1.0.0 .
+docker build --tag stateforge-kestrel:1.0.1 .
 kubectl apply -k .\deploy\k8s
 ```
 

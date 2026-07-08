@@ -21,7 +21,7 @@ param(
     [string]$PackagePath,
 
     [Parameter()]
-    [string]$Version = '1.0.0'
+    [string]$Version = '1.0.1'
 )
 
 Set-StrictMode -Version 2.0
